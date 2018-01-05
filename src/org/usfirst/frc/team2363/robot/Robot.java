@@ -2,7 +2,6 @@
 package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
-
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;

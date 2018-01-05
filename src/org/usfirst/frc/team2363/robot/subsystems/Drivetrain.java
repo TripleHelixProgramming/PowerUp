@@ -8,13 +8,13 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
 import org.usfirst.frc.team2363.robot.Robot;
-import org.usfirst.frc.team2363.robot.commands.drivetrain.TractionDrive;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
+
 import org.usfirst.frc.team2363.util.DrivetrainMath;
 
 public class Drivetrain extends Subsystem {
@@ -22,6 +22,7 @@ public class Drivetrain extends Subsystem {
 	// Constants
 	private static final int ENCODER_TICKS = 4096;
 	private static final double GEAR_RATIO = 1;
+	public static final int MAX_RPM = 735;
 	
 	// Talons
 	private CANTalon frontLeft = new CANTalon(FRONT_LEFT_TALON_ID);
@@ -32,16 +33,12 @@ public class Drivetrain extends Subsystem {
 	private CANTalon middleRight = new CANTalon(MIDDLE_RIGHT_TALON_ID);
 	private CANTalon rearRight = new CANTalon(REAR_RIGHT_TALON_ID);
 
-	// Solenoids
-	private Solenoid omni = new Solenoid(PCM_0, DROP_DOWN);
-
 	// navX Gryo
 	private static AHRS ahrs;
 
 	// Drivetrain
 	private RobotDrive robotDrive = new RobotDrive(frontLeft, frontRight);
-
-
+	
 	public Drivetrain() {
 
 		Robot.LOG.addSource("LEFT1 Current", frontLeft, f -> "" + ((CANTalon)(f)).getOutputCurrent());
@@ -62,8 +59,6 @@ public class Drivetrain extends Subsystem {
 		
 		Robot.LOG.addSource("Left Drivetrain Speed", frontLeft, f -> "" + ((CANTalon)(f)).getSpeed());
 		Robot.LOG.addSource("Right Drivetrain Speed", frontRight, f -> "" + ((CANTalon)(f)).getSpeed());
-		
-		Robot.LOG.addSource("Drop Downs", omni, f -> "" + ((Solenoid)f).get());
 
 		robotDrive.setSafetyEnabled(false);
 
@@ -116,16 +111,6 @@ public class Drivetrain extends Subsystem {
 		robotDrive.tankDrive(left, right, false);
 	}
 
-	public void deployOmnis() {
-		// deploy front & back Omni wheels
-		omni.set(true);
-	}
-
-	public void retractOmnis() {
-		// retract front & back Omni wheels
-		omni.set(false);
-	}
-
 	public void driveMotors(double lSpeed, double rSpeed) {
 		frontLeft.set(lSpeed);
 		frontRight.set(rSpeed);
@@ -134,7 +119,7 @@ public class Drivetrain extends Subsystem {
 	@Override
 	protected void initDefaultCommand() {
 		// sets the default drive mode to Colson drive
-		setDefaultCommand(new TractionDrive());
+		setDefaultCommand(new JoystickDrive());
 	}
 
 	public void setUpAutoControl() {
@@ -175,15 +160,17 @@ public class Drivetrain extends Subsystem {
 		return frontRight;
 	}
 
-	public boolean getOmniState() {
-		return omni.get();
-	}
-
 	public double getLeftError() {
 		return frontLeft.getError();
 	}
 
 	public double getRightError() {
 		return frontRight.getError();
+	}	
+	
+	public double getAverageSpeed() {
+		return (frontLeft.getSpeed() + frontRight.getSpeed()) / 2;
 	}
+	
+	
 }
