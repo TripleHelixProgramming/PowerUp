@@ -31,7 +31,8 @@ public class OI {
 	
 	// speed
 	public double getThrottle () {
-		return driverController.getRawAxis(LEFT_STICK_Y);
+		return driverController.getRawAxis(LEFT_STICK_Y); //Left joystick
+//		return driverController.getRawAxis(RIGHT_TRIGGER) - driverController.getRawAxis(LEFT_TRIGGER); //Triggers
 	}
 	
 	// turn angle
