@@ -15,8 +15,6 @@ public class RobotMap {
 	//Controllers
 	public static final int DRIVER_PORT = 0;
 	public static final int OPERATOR_PORT = 1;
-	public static final int DRIVER_RUMBLE_PORT = 4;
-	public static final int OPERATOR_RUMBLE_PORT =5;
 		
 	//XboxOne Joysticks
 	public static final int LEFT_STICK_X = 0;
@@ -39,12 +37,12 @@ public class RobotMap {
 	public static final int RIGHT_STICK_BUTTON = 10;
 
 	//Drivetrain Talons
-	public static final int FRONT_LEFT_TALON_ID = 11;
-	public static final int MIDDLE_LEFT_TALON_ID = 14;
-	public static final int REAR_LEFT_TALON_ID = 10;
-	public static final int FRONT_RIGHT_TALON_ID = 13;
-	public static final int MIDDLE_RIGHT_TALON_ID = 15;
-	public static final int REAR_RIGHT_TALON_ID = 12;
+	public static final int FRONT_LEFT_TALON_ID = 10;
+	public static final int MIDDLE_LEFT_TALON_ID = 12;
+	public static final int REAR_LEFT_TALON_ID = 14;
+	public static final int FRONT_RIGHT_TALON_ID = 11;
+	public static final int MIDDLE_RIGHT_TALON_ID = 13;
+	public static final int REAR_RIGHT_TALON_ID = 15;
 
 	//PCMs Currently using PCM_0 but is ready for use in the event that we could need 2 PCMs
 	public static final int PCM_0 = 0;

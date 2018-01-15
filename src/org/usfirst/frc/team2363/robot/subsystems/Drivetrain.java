@@ -153,7 +153,7 @@ public class Drivetrain extends Subsystem {
 	    }
 
 	    frontLeft.set(ControlMode.PercentOutput, leftMotorSpeed);
-	    frontRight.set(ControlMode.PercentOutput, rightMotorSpeed);
+	    frontRight.set(ControlMode.PercentOutput, -rightMotorSpeed);
 	}
 
 	public void tankDrive(double left, double right) {
@@ -179,7 +179,7 @@ public class Drivetrain extends Subsystem {
 	public void setUpManualControl() {
 		frontLeft.setNeutralMode(NeutralMode.Brake);
 		frontRight.setNeutralMode(NeutralMode.Brake);
-		frontRight.setInverted(true);
+		frontRight.setInverted(false);
 	}
 
 	public double getAngle() {
