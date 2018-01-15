@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ctre.CANTalon.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SrxPathReader {
@@ -15,7 +16,7 @@ public class SrxPathReader {
 			TrajectoryPoint trajectoryPoint = new TrajectoryPoint();
 			trajectoryPoint.position = point.getPosition();
 			trajectoryPoint.velocity = point.getRpm();
-			trajectoryPoint.timeDurMs = point.getDt();
+			trajectoryPoint.timeDur = point.getDt();
 			trajectoryPoints.add(trajectoryPoint);
 		}
 		if (!trajectoryPoints.isEmpty()) {
@@ -24,7 +25,7 @@ public class SrxPathReader {
 			trajectoryPoint.isLastPoint = true;
 			trajectoryPoint.position = trajectoryPoints.get(trajectoryPoints.size() - 1).position;
 			trajectoryPoint.velocity = 0.0;
-			trajectoryPoint.timeDurMs = 0;
+			trajectoryPoint.timeDur = TrajectoryDuration.Trajectory_Duration_0ms;
 			trajectoryPoints.add(trajectoryPoint);
 		}
 		return trajectoryPoints;
@@ -44,7 +45,7 @@ public class SrxPathReader {
 		BoTHTrajectory trajectory = importSrxTrajectory("scaling_calibration");
 		List<TrajectoryPoint> left = getTrajectoryPoints(trajectory.getTrajectory().getLeftProfile());
 		for (TrajectoryPoint point : left) {
-			System.out.println(point.timeDurMs);
+			System.out.println(point.timeDur);
 		}
 	}
 }

@@ -1,8 +1,10 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,75 +27,80 @@ public class Drivetrain extends Subsystem {
 	public static final int MAX_RPM = 735;
 	
 	// Talons
-	private CANTalon frontLeft = new CANTalon(FRONT_LEFT_TALON_ID);
-	private CANTalon middleLeft = new CANTalon(MIDDLE_LEFT_TALON_ID);
-	private CANTalon rearLeft = new CANTalon(REAR_LEFT_TALON_ID);
+	private TalonSRX frontLeft = new TalonSRX(FRONT_LEFT_TALON_ID);
+	private TalonSRX middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
+	private TalonSRX rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
 
-	private CANTalon frontRight = new CANTalon(FRONT_RIGHT_TALON_ID);
-	private CANTalon middleRight = new CANTalon(MIDDLE_RIGHT_TALON_ID);
-	private CANTalon rearRight = new CANTalon(REAR_RIGHT_TALON_ID);
+	private TalonSRX frontRight = new TalonSRX(FRONT_RIGHT_TALON_ID);
+	private TalonSRX middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
+	private TalonSRX rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
 
 	// navX Gryo
 	private static AHRS ahrs;
-
-	// Drivetrain
-	private RobotDrive robotDrive = new RobotDrive(frontLeft, frontRight);
 	
 	public Drivetrain() {
 
-		Robot.LOG.addSource("LEFT1 Current", frontLeft, f -> "" + ((CANTalon)(f)).getOutputCurrent());
-		Robot.LOG.addSource("LEFT2 Current", middleLeft, f -> "" + ((CANTalon)(f)).getOutputCurrent());
-		Robot.LOG.addSource("LEFT3 Current", rearLeft, f -> "" + ((CANTalon)(f)).getOutputCurrent());
+		Robot.LOG.addSource("LEFT1 Current", frontLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("LEFT2 Current", middleLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("LEFT3 Current", rearLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
 		
-		Robot.LOG.addSource("LEFT1 Voltage", frontLeft, f -> "" + ((CANTalon)(f)).getOutputVoltage());
-		Robot.LOG.addSource("LEFT2 Voltage", middleLeft, f -> "" + ((CANTalon)(f)).getOutputVoltage());
-		Robot.LOG.addSource("LEFT3 Voltage", rearLeft, f -> "" + ((CANTalon)(f)).getOutputVoltage());
+		Robot.LOG.addSource("LEFT1 Voltage", frontLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("LEFT2 Voltage", middleLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("LEFT3 Voltage", rearLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 
-		Robot.LOG.addSource("RIGHT1 Current", frontRight, f -> "" + ((CANTalon)(f)).getOutputCurrent());
-		Robot.LOG.addSource("RIGHT2 Current", middleRight, f -> "" + ((CANTalon)(f)).getOutputCurrent());
-		Robot.LOG.addSource("RIGHT3 Current", rearRight, f -> "" + ((CANTalon)(f)).getOutputCurrent());
+		Robot.LOG.addSource("RIGHT1 Current", frontRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("RIGHT2 Current", middleRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("RIGHT3 Current", rearRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
 		
-		Robot.LOG.addSource("RIGHT1 Voltage", frontRight, f -> "" + ((CANTalon)(f)).getOutputVoltage());
-		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((CANTalon)(f)).getOutputVoltage());
-		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((CANTalon)(f)).getOutputVoltage());
+		Robot.LOG.addSource("RIGHT1 Voltage", frontRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+
+//		frontLeft.changeControlMode(TalonControlMode.PercentVbus);
+//		frontLeft.setVoltageRampRate(30);
+//		frontLeft.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));
 		
-		Robot.LOG.addSource("Left Drivetrain Speed", frontLeft, f -> "" + ((CANTalon)(f)).getSpeed());
-		Robot.LOG.addSource("Right Drivetrain Speed", frontRight, f -> "" + ((CANTalon)(f)).getSpeed());
+		//  Configure Front Left Master
+		frontLeft.selectProfileSlot(0, 0);
+		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		// Make sure to set Sensor phase appropriately for each master 
+		frontLeft.setSensorPhase(true);
+		frontLeft.configOpenloopRamp(0.4, 10);
+		frontLeft.config_kF(0, 0.20388, 10);
+		frontLeft.config_kP(0, 0.05, 10);
+		frontLeft.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
+		
+		/* status 10 provides the trajectory target for motion profile AND motion magic */
+		frontLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 
-		robotDrive.setSafetyEnabled(false);
+		// Configure Front Right Master
+//		frontRight.changeControlMode(TalonControlMode.PercentVbus);
+//		frontRight.setVoltageRampRate(30);
+//		frontRight.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));	
+		
+		frontRight.selectProfileSlot(0, 0);
+		frontRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		// Make sure to set Sensor phase appropriately for each master 
+		frontRight.setSensorPhase(true); 
+		frontRight.configOpenloopRamp(0.4, 10);
+		frontRight.config_kF(0, 0.20388, 10);
+		frontRight.config_kP(0, 0.05, 10);
+		frontRight.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
+		/* status 10 provides the trajectory target for motion profile AND motion magic */
+		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 
-		frontLeft.setProfile(0);
-		frontLeft.changeControlMode(TalonControlMode.PercentVbus);
-		frontLeft.setVoltageRampRate(30);
-		frontLeft.setF(0.20388);
-		frontLeft.setP(0.05);
-		frontLeft.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		frontLeft.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));
 
-		frontRight.setProfile(0);
-		frontRight.changeControlMode(TalonControlMode.PercentVbus);
-		frontRight.setVoltageRampRate(30);
-		frontRight.setF(0.20388);
-		frontRight.setP(0.05);
-		frontRight.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-		frontRight.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));
-		frontRight.reverseSensor(true);
+		middleLeft.set(ControlMode.Follower, frontLeft.getDeviceID());
+		middleLeft.setNeutralMode(NeutralMode.Brake);
 
-		middleLeft.changeControlMode(TalonControlMode.Follower);
-		middleLeft.set(frontLeft.getDeviceID());
-		middleLeft.enableBrakeMode(true);
-
-		middleRight.changeControlMode(TalonControlMode.Follower);
-		middleRight.set(frontRight.getDeviceID());
-		middleRight.enableBrakeMode(true);
-
-		rearLeft.changeControlMode(TalonControlMode.Follower);
-		rearLeft.set(frontLeft.getDeviceID());
-		rearLeft.enableBrakeMode(true);
-
-		rearRight.changeControlMode(TalonControlMode.Follower);
-		rearRight.set(frontRight.getDeviceID());
-		rearRight.enableBrakeMode(true);
+		middleRight.set(ControlMode.Follower, frontRight.getDeviceID());
+		middleRight.setNeutralMode(NeutralMode.Brake);
+		
+		rearLeft.set(ControlMode.Follower, frontLeft.getDeviceID());
+		rearLeft.setNeutralMode(NeutralMode.Brake);
+		
+		rearRight.set(ControlMode.Follower, frontRight.getDeviceID());
+		rearRight.setNeutralMode(NeutralMode.Brake);
 		
 		// Instantiate the NavMXP Gyro
 		try {
@@ -103,17 +110,55 @@ public class Drivetrain extends Subsystem {
 		}
 	}
 
-	public void arcadeDrive(double throttle, double turn) {
-		robotDrive.arcadeDrive(throttle, turn, false);
+	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
+		
+		double leftMotorSpeed;
+	    double rightMotorSpeed;
+	    
+//	    Limit used if expected values are greater than 1 or less than -1
+//	    throttle = limit(throttle);
+//	    turn = limit(turn);
+
+	    if (squaredInputs) {
+	      // square the inputs (while preserving the sign) to increase fine control
+	      // while permitting full power
+	      if (throttle >= 0.0) {
+	        throttle = throttle * throttle;
+	      } else {
+	        throttle = -(throttle * throttle);
+	      }
+	      if (turn >= 0.0) {
+	        turn = turn * turn;
+	      } else {
+	        turn = -(turn * turn);
+	      }
+	    }
+
+	    if (throttle > 0.0) {
+	      if (turn > 0.0) {
+	        leftMotorSpeed = throttle - turn;
+	        rightMotorSpeed = Math.max(throttle, turn);
+	      } else {
+	        leftMotorSpeed = Math.max(throttle, -turn);
+	        rightMotorSpeed = throttle + turn;
+	      }
+	    } else {
+	      if (turn > 0.0) {
+	        leftMotorSpeed = -Math.max(-throttle, turn);
+	        rightMotorSpeed = throttle + turn;
+	      } else {
+	        leftMotorSpeed = throttle - turn;
+	        rightMotorSpeed = -Math.max(-throttle, -turn);
+	      }
+	    }
+
+	    frontLeft.set(ControlMode.PercentOutput, leftMotorSpeed);
+	    frontRight.set(ControlMode.PercentOutput, rightMotorSpeed);
 	}
 
 	public void tankDrive(double left, double right) {
-		robotDrive.tankDrive(left, right, false);
-	}
-
-	public void driveMotors(double lSpeed, double rSpeed) {
-		frontLeft.set(lSpeed);
-		frontRight.set(rSpeed);
+		frontLeft.set(ControlMode.PercentOutput, left);
+		frontLeft.set(ControlMode.PercentOutput, right);
 	}
 
 	@Override
@@ -121,27 +166,20 @@ public class Drivetrain extends Subsystem {
 		// sets the default drive mode to Colson drive
 		setDefaultCommand(new JoystickDrive());
 	}
-
+	
 	public void setUpAutoControl() {
-		frontLeft.setProfile(0);		
-		frontLeft.enableBrakeMode(true);
+		frontLeft.selectProfileSlot(0, 0);	
+		frontLeft.setNeutralMode(NeutralMode.Brake);
 		
-		frontRight.setProfile(0);
-		frontRight.enableBrakeMode(true);
-		frontRight.reverseOutput(true);
+		frontRight.selectProfileSlot(0, 0);
+		frontRight.setNeutralMode(NeutralMode.Brake);
+		frontRight.setInverted(true);
 	}
 
 	public void setUpManualControl() {
-		frontLeft.changeControlMode(TalonControlMode.PercentVbus);
-		frontRight.changeControlMode(TalonControlMode.PercentVbus);
-		frontLeft.enableBrakeMode(true);
-		frontRight.enableBrakeMode(true);
-		frontRight.reverseOutput(false);
-	}
-
-	public void setSpeeds(double leftSpeed, double rightSpeed) {
-		frontLeft.set(-leftSpeed);
-		frontRight.set(rightSpeed);
+		frontLeft.setNeutralMode(NeutralMode.Brake);
+		frontRight.setNeutralMode(NeutralMode.Brake);
+		frontRight.setInverted(true);
 	}
 
 	public double getAngle() {
@@ -152,24 +190,24 @@ public class Drivetrain extends Subsystem {
 		ahrs.zeroYaw();
 	}
 
-	public CANTalon getLeft() {
+	public TalonSRX getLeft() {
 		return frontLeft;
 	}
 
-	public CANTalon getRight() {
+	public TalonSRX getRight() {
 		return frontRight;
 	}
-
+	
 	public double getLeftError() {
-		return frontLeft.getError();
+		return frontLeft.getClosedLoopError(0);
 	}
 
 	public double getRightError() {
-		return frontRight.getError();
+		return frontRight.getClosedLoopError(0);
 	}	
 	
 	public double getAverageSpeed() {
-		return (frontLeft.getSpeed() + frontRight.getSpeed()) / 2;
+		return (frontLeft.getMotorOutputPercent() + frontRight.getMotorOutputPercent()) / 2;
 	}
 	
 	
