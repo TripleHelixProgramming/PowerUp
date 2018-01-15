@@ -6,10 +6,11 @@ import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.util.pathplanning.BoTHTrajectory;
 import org.usfirst.frc.team2363.util.pathplanning.SrxPathReader;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.MotionProfileStatus;
-import com.ctre.CANTalon.TalonControlMode;
-import com.ctre.CANTalon.TrajectoryPoint;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
+import com.ctre.phoenix.motion.TrajectoryPoint;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -64,13 +65,13 @@ public class PathRunner extends Command {
     
     private class ProfileLoader extends Thread {
     	
-    	private final CANTalon talon;
+    	private final TalonSRX talon;
     	private final List<TrajectoryPoint> points;
     	private boolean right_motor;
     	
     	private boolean started = false;
     	
-    	public ProfileLoader(CANTalon talon, List<TrajectoryPoint> points, boolean right_motor) {
+    	public ProfileLoader(TalonSRX talon, List<TrajectoryPoint> points, boolean right_motor) {
     		this.talon = talon;
     		this.points = points;
     		this.right_motor = right_motor;
@@ -79,7 +80,6 @@ public class PathRunner extends Command {
 		@Override
 		public void run() {
 			//setup talon
-			talon.changeControlMode(TalonControlMode.MotionProfile);
 			talon.changeMotionControlFramePeriod(5);
 			talon.clearMotionProfileTrajectories();
 			
@@ -91,7 +91,7 @@ public class PathRunner extends Command {
 				
 				int bufferCount = status.topBufferCnt;
 				if (!started && bufferCount > 5) {
-					talon.set(CANTalon.SetValueMotionProfile.Enable.value);
+					talon.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
 					started = true;
 				}
 				
@@ -114,7 +114,7 @@ public class PathRunner extends Command {
 					run = false;
 				}
 			}
-			while (run && !status.activePoint.isLastPoint) {
+			while (run && !status.isLast) {
 				talon.getMotionProfileStatus(status);
 				talon.processMotionProfileBuffer();
 				//sleep for 10ms
@@ -126,10 +126,9 @@ public class PathRunner extends Command {
 			}
 			
 			//finish the motion profile
-			talon.set(CANTalon.SetValueMotionProfile.Disable.value);
+			talon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
 			talon.clearMotionProfileTrajectories();
-			talon.changeControlMode(TalonControlMode.PercentVbus);
-			talon.set(0);
+			talon.set(ControlMode.PercentOutput, 0);
 			
 			if (right_motor) {
 				rightIsFinished = true;
