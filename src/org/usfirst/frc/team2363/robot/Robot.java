@@ -2,6 +2,7 @@
 package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
+import org.usfirst.frc.team2363.robot.commands.autonomous.AutoGroup;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
@@ -78,9 +79,22 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+		String switchHeight;
+		String scaleHeight;
 		
 		autonomousCommand = new PathRunner("scaling_calibration");
 //		autonomousCommand = new FollowTrajectory("scaling_calibration");
+		
+		AutoGroup centerswitchleft = new AutoGroup(centerSwitchLeftPath, switchHeight);
+		AutoGroup centerswitchright = new AutoGroup(centerSwitchRightPath, switchHeight);
+		AutoGroup leftswitchleft = new AutoGroup(leftSwitchPath, switchHeight);
+		AutoGroup rightswitchright = new AutoGroup(rightSwitchPath, switchHeight);
+		AutoGroup leftscaleleft = new AutoGroup(leftScaleRightPath, scaleHeight);
+		AutoGroup leftscaleright = new AutoGroup(leftScaleRightPath, scaleHeight);
+		AutoGroup rightscaleright = new AutoGroup(rightScaleRightPath, scaleHeight);
+		AutoGroup rightscaleleft = new AutoGroup(rightScaleLeftPath, scaleHeight);
+
+		
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}
