@@ -40,7 +40,7 @@ public class OI {
 	}
 	
 	public double getFullSpeedPercentage() {
-		return Math.min(1, Robot.drivetrain.getAverageSpeed());
+		return Math.min(1, Robot.drivetrain.getRobotSpeedPercent());
 	}
 	
 	public static double getTurnScaling(double x) {

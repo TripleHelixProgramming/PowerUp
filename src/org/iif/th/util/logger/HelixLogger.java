@@ -1,10 +1,7 @@
 package org.iif.th.util.logger;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +11,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,11 +20,7 @@ public class HelixLogger {
 
 	private final List<LogSource> dataSources = new ArrayList<>();
 	private Path file;
-	private boolean logWhenNotConnected;
 	
-	private String eventName;
-	private int matchNumber;
-	private final Properties prop = new Properties();
 	private String loggingLocation = "/home/lvuser/logs/";
 	
 	public HelixLogger(){
@@ -36,31 +28,8 @@ public class HelixLogger {
 		if (usb1.exists()) {
 			loggingLocation = "/media/sda1/logs/";
 		}
-		getConfig();
 	}
 	
-	private void getConfig() {
-		InputStream input = null;
-		try {
-			input = new FileInputStream("/home/lvuser/logs/logger.properties");
-			prop.load(input);
-			logWhenNotConnected = Boolean.valueOf(prop.getProperty("logWhenNotConnected", "false"));
-			if (logWhenNotConnected) {
-				eventName = "test";
-			} else {
-				eventName = prop.getProperty("eventName", "default");
-			}
-			matchNumber = Integer.valueOf(prop.getProperty("matchNumber", "0"));
-		} catch (IOException ex) { 
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) { }
-			}
-		}
-	}
 	
 	private void createLogDirectory() throws IOException {
 		File logDirectory = new File(loggingLocation);
@@ -73,13 +42,16 @@ public class HelixLogger {
 		Writer output = null;
 		try {
 			createLogDirectory();
-			file = Paths.get(loggingLocation + eventName + "_"+ matchNumber + ".csv");
+			if (DriverStation.getInstance().isFMSAttached()) {
+				file = Paths.get(loggingLocation + 
+						DriverStation.getInstance().getEventName() + "_"+ 
+						DriverStation.getInstance().getMatchType() + 
+						DriverStation.getInstance().getMatchNumber() + ".csv");
+			} else {
+				file = Paths.get(loggingLocation + "test.csv");
+			}
 			Files.createFile(file);
-			prop.setProperty("matchNumber", "" + (matchNumber + 1));
 			saveTitles();
-			output = new FileWriter("/home/lvuser/logs/logger.properties");
-			prop.store(output, "");
-			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -96,10 +68,6 @@ public class HelixLogger {
 	}
 
 	public void saveLogs() {
-		if (!logWhenNotConnected && !DriverStation.getInstance().isFMSAttached()) {
-			return;
-		}
-		
 		try {
 			if (file == null) {
 				createFile();
