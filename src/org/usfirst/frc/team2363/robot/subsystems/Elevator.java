@@ -39,15 +39,16 @@ public class Elevator extends Subsystem {
 
 	public void elevate (double power) {
 		leftMotor.set(ControlMode.PercentOutput, power);
+		rightMotor.set(ControlMode.Follower, leftMotor.getDeviceID());
 	}
 	
 	public void goTo (Height height) {
 		leftMotor.set(ControlMode.Position, height.getHeight());
 	}
 	
+	
     public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        goTo(Height.GROUND);
     }
 }
 
