@@ -47,14 +47,25 @@ public class RobotMap {
 	//PCMs Currently using PCM_0 but is ready for use in the event that we could need 2 PCMs
 	public static final int PCM_0 = 0;
 	public static final int PCM_1 = 1;
+
+	//Solenoids
+	public static final int CLAWS = 0;
+	public static final int WRIST = 2;
 	
+	//Digital IO
+	public static final int HASCUBE = 0;
+  
+  //Elevator Digital IO
+	public static final int DEFAULT_POSITION = 1;
+  
+	// Gripper TalonSRX
+	public static final int LEFTWHEEL = 20;
+	public static final int RIGHTWHEEL = 21;
+
 	//Elevator Motors
 	public static final int LEFT_ELEVATOR_MOTOR = 30;
 	public static final int RIGHT_ELEVATOR_MOTOR = 31;
-	
-	//Elevator Digital IO
-	public static final int DEFAULT_POSITION = 1;
-
+  
 }	
 
 
