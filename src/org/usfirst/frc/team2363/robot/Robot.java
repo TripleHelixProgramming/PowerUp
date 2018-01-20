@@ -3,9 +3,10 @@ package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
-import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
+import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
 	public static Drivetrain drivetrain;
 	private final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private final Compressor compressor = new Compressor();
+	public static Gripper gripper = new Gripper();
 	public static Tramps tramps;
 	
 	// declare SmartDashboard tools
