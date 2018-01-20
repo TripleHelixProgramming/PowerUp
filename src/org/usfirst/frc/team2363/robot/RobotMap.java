@@ -47,4 +47,7 @@ public class RobotMap {
 	//PCMs Currently using PCM_0 but is ready for use in the event that we could need 2 PCMs
 	public static final int PCM_0 = 0;
 	public static final int PCM_1 = 1;
+	
+	//Analog Switch
+	public static final int ANALOG_INPUT = 0;
 }	
