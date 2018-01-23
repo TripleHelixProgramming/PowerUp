@@ -57,6 +57,9 @@ public class Drivetrain extends Subsystem {
 		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 
+		Robot.LOG.addSource("RightRPM", frontRight, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
+		Robot.LOG.addSource("LeftRPM", frontLeft, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
+
 		//  Configure Front Left Master
 		frontLeft.selectProfileSlot(0, 0);
 		frontLeft.configOpenloopRamp(30, 10);
