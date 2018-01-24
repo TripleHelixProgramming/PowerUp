@@ -86,7 +86,7 @@ public class HelixLogger {
 	private void saveTitles() throws IOException {
 		StringBuilder titles = new StringBuilder();
 		titles.append("Timestamp,");
-		titles.append("match_time");
+		titles.append("match_time,");
 		titles.append(dataSources.stream().map(t -> t.name).collect(Collectors.joining(","))).append(",");
 		Files.write(file, Collections.singletonList(titles.toString()), StandardOpenOption.APPEND);
 	}
