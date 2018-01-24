@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2363.robot.commands.drivetrain;
+package org.usfirst.frc.team2363.robot.commands.gripper;
 
 import edu.wpi.first.wpilibj.command.Command;
 import static org.usfirst.frc.team2363.robot.Robot.*;
@@ -6,11 +6,15 @@ import static org.usfirst.frc.team2363.robot.Robot.*;
 /**
  *
  */
-public class JoystickDrive extends Command {
-
-    public JoystickDrive() {
+public class IntakeCube extends Command {
+	
+	private boolean state;
+	
+    public IntakeCube() {
         // Use requires() here to declare subsystem dependencies
-        requires(drivetrain);
+        // eg. requires(chassis);
+    	requires(gripper);
+    	this.state = state;
     }
 
     // Called just before this Command runs the first time
@@ -19,7 +23,11 @@ public class JoystickDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.arcadeDrive(oi.getThrottle(), oi.getTurn(), false);
+    	if(state == true) {
+        	gripper.intake();
+    	} else {
+    		gripper.stop();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
