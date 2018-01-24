@@ -1,30 +1,32 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.command.Subsystem;
-
-import static org.usfirst.frc.team2363.robot.RobotMap.*;
+import static org.usfirst.frc.team2363.robot.RobotMap.FRONT_LEFT_TALON_ID;
+import static org.usfirst.frc.team2363.robot.RobotMap.FRONT_RIGHT_TALON_ID;
+import static org.usfirst.frc.team2363.robot.RobotMap.MIDDLE_LEFT_TALON_ID;
+import static org.usfirst.frc.team2363.robot.RobotMap.MIDDLE_RIGHT_TALON_ID;
+import static org.usfirst.frc.team2363.robot.RobotMap.REAR_LEFT_TALON_ID;
+import static org.usfirst.frc.team2363.robot.RobotMap.REAR_RIGHT_TALON_ID;
 
 import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 
-import org.usfirst.frc.team2363.util.DrivetrainMath;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
 	// Constants
-	private static final int ENCODER_TICKS = 4096;
-	private static final double GEAR_RATIO = 1;
-	public static final int MAX_RPM = 735;
+	private static final int ENCODER_TICKS = 120;
+	public static final int MAX_RPM = 3900;
 	
 	// Talons
 	private TalonSRX frontLeft = new TalonSRX(FRONT_LEFT_TALON_ID);
@@ -56,12 +58,12 @@ public class Drivetrain extends Subsystem {
 		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 
-//		frontLeft.changeControlMode(TalonControlMode.PercentVbus);
-//		frontLeft.setVoltageRampRate(30);
-//		frontLeft.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));
-		
+		Robot.LOG.addSource("RightRPM", frontRight, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
+		Robot.LOG.addSource("LeftRPM", frontLeft, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
+
 		//  Configure Front Left Master
 		frontLeft.selectProfileSlot(0, 0);
+		frontLeft.configOpenloopRamp(30, 10);
 		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
@@ -79,6 +81,7 @@ public class Drivetrain extends Subsystem {
 //		frontRight.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));	
 		
 		frontRight.selectProfileSlot(0, 0);
+		frontRight.configOpenloopRamp(30, 10);
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
@@ -108,6 +111,11 @@ public class Drivetrain extends Subsystem {
 		} catch (RuntimeException ex ) {
 			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
 		}
+	}
+	
+	public void periodic() {
+		SmartDashboard.putNumber("Drivetrain Left RPM", getRPM(frontLeft.getSelectedSensorVelocity(0)));
+		SmartDashboard.putNumber("Drivetrain Right RPM", getRPM(frontRight.getSelectedSensorVelocity(0)));
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
@@ -206,9 +214,18 @@ public class Drivetrain extends Subsystem {
 		return frontRight.getClosedLoopError(0);
 	}	
 	
-	public double getAverageSpeed() {
-		return (frontLeft.getMotorOutputPercent() + frontRight.getMotorOutputPercent()) / 2;
+	public double getRobotSpeedPercent() {
+		if(frontLeft.getSelectedSensorVelocity(0) * frontRight.getSelectedSensorVelocity(0) > 0) {
+			return 0;
+		} else {
+			return getRPM(
+					Math.abs((frontLeft.getSelectedSensorVelocity(0) + 
+					frontRight.getSelectedSensorVelocity(0)) / 2)) 
+					/ MAX_RPM;	
+		}	
 	}
 	
-	
+	private int getRPM(int sensorVelocity) {
+		return sensorVelocity * (600 / ENCODER_TICKS);
+	}
 }
