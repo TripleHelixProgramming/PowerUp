@@ -20,12 +20,13 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
 	// Constants
 	private static final int ENCODER_TICKS = 120;
-	public static final int MAX_RPM = 735;
+	public static final int MAX_RPM = 3900;
 	
 	// Talons
 	private TalonSRX frontLeft = new TalonSRX(FRONT_LEFT_TALON_ID);
@@ -110,6 +111,11 @@ public class Drivetrain extends Subsystem {
 		} catch (RuntimeException ex ) {
 			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
 		}
+	}
+	
+	public void periodic() {
+		SmartDashboard.putNumber("Drivetrain Left RPM", getRPM(frontLeft.getSelectedSensorVelocity(0)));
+		SmartDashboard.putNumber("Drivetrain Right RPM", getRPM(frontRight.getSelectedSensorVelocity(0)));
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
@@ -209,10 +215,14 @@ public class Drivetrain extends Subsystem {
 	}	
 	
 	public double getRobotSpeedPercent() {
-		return getRPM(
-				Math.abs((frontLeft.getSelectedSensorVelocity(0) + 
-				frontRight.getSelectedSensorVelocity(0)) / 2)) 
-				/ MAX_RPM;
+		if(frontLeft.getSelectedSensorVelocity(0) * frontRight.getSelectedSensorVelocity(0) > 0) {
+			return 0;
+		} else {
+			return getRPM(
+					Math.abs((frontLeft.getSelectedSensorVelocity(0) + 
+					frontRight.getSelectedSensorVelocity(0)) / 2)) 
+					/ MAX_RPM;	
+		}	
 	}
 	
 	private int getRPM(int sensorVelocity) {
