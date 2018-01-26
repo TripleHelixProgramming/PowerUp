@@ -4,6 +4,7 @@ package org.usfirst.frc.team2363.robot;
 import org.iif.th.util.logger.HelixLogger;
 
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
@@ -91,6 +92,9 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		// Create the controller interface
 		oi = new OI();
+		autonomousCommand = new PathRunner("scaling_calibration");
+		
+		
 		
 		CameraServer.getInstance().startAutomaticCapture();
 	}
@@ -114,19 +118,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
-		autonomousCommand = new PathRunner("scaling_calibration");
 //		autonomousCommand = new FollowTrajectory("scaling_calibration");
 		//Plate States
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
-		AutoGroup centerswitchleft = new AutoGroup(centerSwitchLeftPath, switchHeight);
-		AutoGroup centerswitchright = new AutoGroup(centerSwitchRightPath, switchHeight);
-		AutoGroup leftswitchleft = new AutoGroup(leftSwitchPath, switchHeight);
-		AutoGroup rightswitchright = new AutoGroup(rightSwitchPath, switchHeight);
-		AutoGroup leftscaleleft = new AutoGroup(leftScaleLeftPath, scaleHeight);
-		AutoGroup leftscaleright = new AutoGroup(leftScaleRightPath, scaleHeight);
-		AutoGroup rightscaleright = new AutoGroup(rightScaleRightPath, scaleHeight);
-		AutoGroup rightscaleleft = new AutoGroup(rightScaleLeftPath, scaleHeight);
+		AutoGroup centerswitchleft = new AutoGroup(centerSwitchLeftPath, Height.SWITCH);
+		AutoGroup centerswitchright = new AutoGroup(centerSwitchRightPath, Height.SWITCH);
+		AutoGroup leftswitchleft = new AutoGroup(leftSwitchPath, Height.SWITCH);
+		AutoGroup rightswitchright = new AutoGroup(rightSwitchPath, Height.SWITCH);
+		AutoGroup leftscaleleft = new AutoGroup(leftScaleLeftPath, Height.SCALE);
+		AutoGroup leftscaleright = new AutoGroup(leftScaleRightPath, Height.SCALE);
+		AutoGroup rightscaleright = new AutoGroup(rightScaleRightPath, Height.SCALE);
+		AutoGroup rightscaleleft = new AutoGroup(rightScaleLeftPath, Height.SCALE);
 		BaselineAutoGroup baseline = new BaselineAutoGroup(baselinePath);
 		AutoGroup sideswitch = null;
 		AutoGroup samesidescale = null;
