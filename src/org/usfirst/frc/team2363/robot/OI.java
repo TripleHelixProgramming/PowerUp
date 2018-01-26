@@ -27,6 +27,8 @@ public class OI {
 		Robot.LOG.addSource("Scaled Throttle", this, f -> "" + ((OI)f).getThrottle() * Math.abs(((OI)f).getThrottle()));
 		Robot.LOG.addSource("Scaled Turn", this, f -> "" + ((OI)f).getTurn() * Math.abs(((OI)f).getTurn()));
 		
+		
+		
 	}
 	
 	// speed
@@ -39,6 +41,10 @@ public class OI {
 		return driverController.getRawAxis(RIGHT_STICK_X) * getTurnScaling(getFullSpeedPercentage());
 	}
 	
+	public double getElevatorPower() {
+		return operatorController.getRawAxis(LEFT_STICK_Y);
+	}
+	
 	public double getFullSpeedPercentage() {
 		return Math.min(1, Robot.drivetrain.getRobotSpeedPercent());
 	}
@@ -46,6 +52,8 @@ public class OI {
 	public static double getTurnScaling(double x) {
 		return -Math.abs(LOW_SPEED_SCALING - HIGH_SPEED_SCALING) * Math.abs(x) + LOW_SPEED_SCALING;
 	}
+	
+	
 	
 	/**
 	 * Turns on and off the rumble function on the driver and operator controllers
