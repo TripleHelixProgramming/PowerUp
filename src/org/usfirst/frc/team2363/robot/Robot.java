@@ -8,6 +8,7 @@ import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
+import org.usfirst.frc.team2363.util.pathplanning.AutoRoutines;
 import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -43,15 +44,7 @@ public class Robot extends IterativeRobot {
 	public static Gripper gripper = new Gripper();
 	public static Tramps tramps;
 	
-	
-	
-	private final DigitalInput autoLeft = new DigitalInput(0);
-	private final DigitalInput autoMiddle = new DigitalInput(1);
-	private final DigitalInput autoRight = new DigitalInput(2);
-	private final DigitalInput autoSwitch = new DigitalInput(3);
-	private final DigitalInput autoSwitchScaleBaseline = new DigitalInput(4);
-	private final DigitalInput autoSwitchScaleScale = new DigitalInput(5);
-	private final DigitalInput autoScale = new DigitalInput(6);
+	public static AutoRoutines autoRoutines;
 	
 	// declare SmartDashboard tools
 	Command autonomousCommand;
@@ -61,17 +54,17 @@ public class Robot extends IterativeRobot {
 	
 	
 	//Placeholder Variables
-	String switchHeight;
-	String scaleHeight;
-	String centerSwitchLeftPath;
-	String centerSwitchRightPath;
-	String leftSwitchPath;
-	String rightSwitchPath;
-	String leftScaleLeftPath;
-	String leftScaleRightPath;
-	String rightScaleRightPath;
-	String rightScaleLeftPath;
-	String baselinePath;
+//	String switchHeight;
+//	String scaleHeight;
+//	String centerSwitchLeft;
+//	String centerSwitchRight;
+//	String leftSwitch;
+//	String rightSwitch;
+//	String leftScaleLeft;
+//	String leftScaleRight;
+//	String rightScaleRight;
+//	String rightScaleLeft;
+//	String baseline;
 	
 	public Robot() {
       
@@ -79,7 +72,8 @@ public class Robot extends IterativeRobot {
 	  
 		drivetrain = new Drivetrain();
 		tramps = new Tramps();
-
+		autoRoutines = new AutoRoutines();
+		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("Compressor State", compressor, f -> "" + ((Compressor)f).enabled());
 	}
@@ -93,8 +87,6 @@ public class Robot extends IterativeRobot {
 		// Create the controller interface
 		oi = new OI();
 		autonomousCommand = new PathRunner("scaling_calibration");
-		
-		
 		
 		CameraServer.getInstance().startAutomaticCapture();
 	}
@@ -117,70 +109,76 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+			
+		//   Set plate states
+		autoRoutines.obtainPlateStates();
 		
-//		autonomousCommand = new FollowTrajectory("scaling_calibration");
-		//Plate States
-		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-		
-		AutoGroup centerswitchleft = new AutoGroup(centerSwitchLeftPath, Height.SWITCH);
-		AutoGroup centerswitchright = new AutoGroup(centerSwitchRightPath, Height.SWITCH);
-		AutoGroup leftswitchleft = new AutoGroup(leftSwitchPath, Height.SWITCH);
-		AutoGroup rightswitchright = new AutoGroup(rightSwitchPath, Height.SWITCH);
-		AutoGroup leftscaleleft = new AutoGroup(leftScaleLeftPath, Height.SCALE);
-		AutoGroup leftscaleright = new AutoGroup(leftScaleRightPath, Height.SCALE);
-		AutoGroup rightscaleright = new AutoGroup(rightScaleRightPath, Height.SCALE);
-		AutoGroup rightscaleleft = new AutoGroup(rightScaleLeftPath, Height.SCALE);
-		BaselineAutoGroup baseline = new BaselineAutoGroup(baselinePath);
-		AutoGroup sideswitch = null;
-		AutoGroup samesidescale = null;
-		AutoGroup oppositesidescale = null;
-		AutoGroup scale = null;
-	
-		char robotPosition = 0;
-		if (autoLeft.get()) {
-			robotPosition = 'L';
-			sideswitch = leftswitchleft;
-			samesidescale = leftscaleleft;
-			oppositesidescale = leftscaleright;
-		} else if (!autoRight.get()) {
-			robotPosition = 'R';
-			sideswitch = rightswitchright;
-			samesidescale = rightscaleright;
-			oppositesidescale = rightscaleleft;
-		}
-		
-		if (autoSwitch.get()) {
-			if (gameData.charAt(0) == 'L') {
-				autonomousCommand = centerswitchleft;
-			} else {
-				autonomousCommand = centerswitchright;
-			}
-		} else if (autoSwitchScaleBaseline.get()) {
-			if (gameData.charAt(0) == robotPosition) {
-				autonomousCommand = sideswitch;
-			} else if (gameData.charAt(1) == robotPosition) {
-				autonomousCommand = samesidescale;
-			} else {
-				autonomousCommand = baseline;
-			}
-		} else if (autoSwitchScaleScale.get()) {
-			if (gameData.charAt(0) == robotPosition) {
-				autonomousCommand = sideswitch;
-			} else if (gameData.charAt(1) == robotPosition){
-				autonomousCommand = samesidescale;
-			} else {
-				autonomousCommand = oppositesidescale;
-			}
-		} else {
-			if (gameData.charAt(1) == robotPosition){
-				autonomousCommand = samesidescale;
-			} else {
-				autonomousCommand = oppositesidescale;
-			}
-		}
+		AutoGroup autoGroup = new AutoGroup(autoRoutines.getPath(), autoRoutines.getHeight(), autoRoutines.getReverse());
+		autonomousCommand = autoGroup;
+//		autonomousCommand = new PathRunner("scaling_calibration");
 		
 		if (autonomousCommand != null)
 			autonomousCommand.start();
+		
+
+		
+//		AutoGroup centerswitchleft = new AutoGroup(centerSwitchLeft, Height.SWITCH);
+//		AutoGroup centerswitchright = new AutoGroup(centerSwitchRight, Height.SWITCH);
+//		AutoGroup leftswitchleft = new AutoGroup(leftSwitch, Height.SWITCH);
+//		AutoGroup rightswitchright = new AutoGroup(rightSwitch, Height.SWITCH);
+//		AutoGroup leftscaleleft = new AutoGroup(leftScaleLeft, Height.SCALE);
+//		AutoGroup leftscaleright = new AutoGroup(leftScaleRight, Height.SCALE);
+//		AutoGroup rightscaleright = new AutoGroup(rightScaleRight, Height.SCALE);
+//		AutoGroup rightscaleleft = new AutoGroup(rightScaleLeft, Height.SCALE);
+//		BaselineAutoGroup baseline = new BaselineAutoGroup(baseline);
+//		AutoGroup sideswitch = null;
+//		AutoGroup samesidescale = null;
+//		AutoGroup oppositesidescale = null;
+//		AutoGroup scale = null;
+//	
+//		char robotPosition = 0;
+//		if (autoLeft.get()) {
+//			robotPosition = 'L';
+//			sideswitch = leftswitchleft;
+//			samesidescale = leftscaleleft;
+//			oppositesidescale = leftscaleright;
+//		} else if (!autoRight.get()) {
+//			robotPosition = 'R';
+//			sideswitch = rightswitchright;
+//			samesidescale = rightscaleright;
+//			oppositesidescale = rightscaleleft;
+//		}
+//		
+//		if (autoSwitch.get()) {
+//			if (gameData.charAt(0) == 'L') {
+//				autonomousCommand = centerswitchleft;
+//			} else {
+//				autonomousCommand = centerswitchright;
+//			}
+//		} else if (autoSwitchScaleBaseline.get()) {
+//			if (gameData.charAt(0) == robotPosition) {
+//				autonomousCommand = sideswitch;
+//			} else if (gameData.charAt(1) == robotPosition) {
+//				autonomousCommand = samesidescale;
+//			} else {
+//				autonomousCommand = baseline;
+//			}
+//		} else if (autoSwitchScaleScale.get()) {
+//			if (gameData.charAt(0) == robotPosition) {
+//				autonomousCommand = sideswitch;
+//			} else if (gameData.charAt(1) == robotPosition){
+//				autonomousCommand = samesidescale;
+//			} else {
+//				autonomousCommand = oppositesidescale;
+//			}
+//		} else {
+//			if (gameData.charAt(1) == robotPosition){
+//				autonomousCommand = samesidescale;
+//			} else {
+//				autonomousCommand = oppositesidescale;
+//			}
+//		}
+
 	}
 
 	/**
@@ -221,6 +219,5 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		// brings up a window with the state of the robot parts
-		LiveWindow.run();
 	}
 }

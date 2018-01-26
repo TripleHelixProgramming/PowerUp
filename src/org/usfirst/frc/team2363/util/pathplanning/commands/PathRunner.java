@@ -21,6 +21,8 @@ public class PathRunner extends Command {
 	
 	private final String pathName;
 	private boolean run;
+	private boolean reverse;
+	private BoTHTrajectory path;
 
 	private volatile boolean leftIsFinished = false;
 	private volatile boolean rightIsFinished = false;
@@ -28,17 +30,37 @@ public class PathRunner extends Command {
     public PathRunner(String pathName) {
         requires(Robot.drivetrain);
         this.pathName = pathName;
+        this.path = null;
+        this.reverse = false;
+    }
+    
+    public PathRunner(BoTHTrajectory path, boolean reverse) {
+        requires(Robot.drivetrain);
+        this.path = path;
+        this.reverse = reverse;
+        this.pathName = null;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	run = true;
     	Robot.drivetrain.setUpAutoControl();
-    	BoTHTrajectory path = SrxPathReader.importSrxTrajectory(pathName);
-    	new ProfileLoader(Robot.drivetrain.getLeft(), 
+    	
+    	if (pathName != null ) {
+    		path = SrxPathReader.importSrxTrajectory(pathName);
+    	}
+    	
+    	if (reverse) {
+    		new ProfileLoader(Robot.drivetrain.getLeft(), 
+        		SrxPathReader.getTrajectoryPoints(path.getTrajectory().getRightProfile()), false).start();
+        	new ProfileLoader(Robot.drivetrain.getRight(), 
+        		SrxPathReader.getTrajectoryPoints(path.getTrajectory().getLeftProfile()), true).start();
+    	} else {
+    		new ProfileLoader(Robot.drivetrain.getLeft(), 
     			SrxPathReader.getTrajectoryPoints(path.getTrajectory().getLeftProfile()), false).start();
-    	new ProfileLoader(Robot.drivetrain.getRight(), 
+    		new ProfileLoader(Robot.drivetrain.getRight(), 
     			SrxPathReader.getTrajectoryPoints(path.getTrajectory().getRightProfile()), true).start();
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
