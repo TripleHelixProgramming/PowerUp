@@ -4,7 +4,7 @@ package org.usfirst.frc.team2363.robot;
 import org.iif.th.util.logger.HelixLogger;
 
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -43,6 +42,7 @@ public class Robot extends IterativeRobot {
 	private final Compressor compressor = new Compressor();
 	public static Gripper gripper = new Gripper();
 	public static Tramps tramps;
+	public static Elevator elevator = new Elevator();
 	
 	public static AutoRoutines autoRoutines;
 	

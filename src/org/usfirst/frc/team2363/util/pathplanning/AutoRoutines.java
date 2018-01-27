@@ -12,12 +12,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class AutoRoutines {
 	
 	// AutoType Order must match paths order below.
-	private enum AutoTypeEnum {
+	public enum AutoTypeEnum {
 		CENTER_SWITCH,
 		SAME_SIDE_SWITCH,
 		SAME_SIDE_SCALE,
 		OPPOSITE_SIDE_SCALE,
-		BASELINE
+		BASELINE,
+		PATH_TO_CUBE,
+		SHORT_PATH
 	}
 	/*
 	 * Names of autonomous path files. Order must match AutoType enum above.  Use
@@ -31,7 +33,9 @@ public class AutoRoutines {
 		"SameSideSwitch",
 		"SameSideScale",
 		"OppositeSideScale",
-		"Baseline"
+		"Baseline",
+		"PathToCube",
+		"ShortPath",
 	};
 	
 	private AutoTypeEnum autoType = AutoTypeEnum.BASELINE;
@@ -146,6 +150,10 @@ public class AutoRoutines {
 	}
 	
 	public BoTHTrajectory getPath () {
+		return (BoTHTrajectory) (autoMap.get(paths[autoType.ordinal()]));
+	}
+	
+	public BoTHTrajectory getPath (String path) {
 		return (BoTHTrajectory) (autoMap.get(paths[autoType.ordinal()]));
 	}
 	

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2363.robot.commands.autonomous;
 
+import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.LowerWrist;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
