@@ -2,11 +2,13 @@
 package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
+
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
+import org.usfirst.frc.team2363.util.pathplanning.AutoRoutines;
 import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -15,8 +17,12 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+
+import org.usfirst.frc.team2363.robot.commands.autonomous.AutoGroup;
+import org.usfirst.frc.team2363.robot.commands.autonomous.BaselineAutoGroup;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,6 +44,8 @@ public class Robot extends IterativeRobot {
 	public static Tramps tramps;
 	public static Elevator elevator = new Elevator();
 	
+	public static AutoRoutines autoRoutines;
+	
 	// declare SmartDashboard tools
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
@@ -50,7 +58,8 @@ public class Robot extends IterativeRobot {
 	  
 		drivetrain = new Drivetrain();
 		tramps = new Tramps();
-
+		autoRoutines = new AutoRoutines();
+		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("Compressor State", compressor, f -> "" + ((Compressor)f).enabled());
 	}
@@ -63,6 +72,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		// Create the controller interface
 		oi = new OI();
+		autonomousCommand = new PathRunner("scaling_calibration");
 		
 		CameraServer.getInstance().startAutomaticCapture();
 	}
@@ -85,11 +95,17 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+			
+		//   Set plate states
+		autoRoutines.obtainPlateStates();
 		
-		autonomousCommand = new PathRunner("scaling_calibration");
-//		autonomousCommand = new FollowTrajectory("scaling_calibration");
+		AutoGroup autoGroup = new AutoGroup(autoRoutines.getPath(), autoRoutines.getHeight(), autoRoutines.getReverse());
+		autonomousCommand = autoGroup;
+//		autonomousCommand = new PathRunner("scaling_calibration");
+		
 		if (autonomousCommand != null)
 			autonomousCommand.start();
+		
 	}
 
 	/**
@@ -130,6 +146,5 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		// brings up a window with the state of the robot parts
-		LiveWindow.run();
 	}
 }
