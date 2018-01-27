@@ -58,7 +58,7 @@ public class Robot extends IterativeRobot {
 	  
 		drivetrain = new Drivetrain();
 		tramps = new Tramps();
-		autoRoutines = new AutoRoutines();
+//		autoRoutines = new AutoRoutines();
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("Compressor State", compressor, f -> "" + ((Compressor)f).enabled());
@@ -97,10 +97,10 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 			
 		//   Set plate states
-		autoRoutines.obtainPlateStates();
+//		autoRoutines.obtainPlateStates();
 		
-		AutoGroup autoGroup = new AutoGroup(autoRoutines.getPath(), autoRoutines.getHeight(), autoRoutines.getReverse());
-		autonomousCommand = autoGroup;
+//		AutoGroup autoGroup = new AutoGroup(autoRoutines.getPath(), autoRoutines.getHeight(), autoRoutines.getReverse());
+//		autonomousCommand = autoGroup;
 //		autonomousCommand = new PathRunner("scaling_calibration");
 		
 		if (autonomousCommand != null)
