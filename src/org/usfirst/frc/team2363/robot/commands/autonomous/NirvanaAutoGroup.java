@@ -28,7 +28,7 @@ public class NirvanaAutoGroup extends CommandGroup {
         addSequential(new TurnToAngle(180));
         addParallel(new RaiseElevator(Height.GROUND));
         addParallel(new IntakeCube());
-//        addSequential(new PathRunner(autoRoutines.getPath(AutoTypeEnum.PATH_TO_CUBE), reverse));
+//        addSequential(new PathRunner(autoRoutines.getPath(AutoTypeEnum.PATH_TO_CUBE), false));
         addSequential(new RaiseElevator(Height.SWITCH));
         addSequential(new PathRunner(shortPath));
         addParallel(new EjectCube());

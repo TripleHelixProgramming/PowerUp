@@ -153,7 +153,7 @@ public class AutoRoutines {
 		return (BoTHTrajectory) (autoMap.get(paths[autoType.ordinal()]));
 	}
 	
-	public BoTHTrajectory getPath (String path) {
+	public BoTHTrajectory getPath (AutoTypeEnum autoType) {
 		return (BoTHTrajectory) (autoMap.get(paths[autoType.ordinal()]));
 	}
 	

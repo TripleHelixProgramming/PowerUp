@@ -52,20 +52,6 @@ public class Robot extends IterativeRobot {
 	
 	public static HelixLogger LOG;
 	
-	
-	//Placeholder Variables
-//	String switchHeight;
-//	String scaleHeight;
-//	String centerSwitchLeft;
-//	String centerSwitchRight;
-//	String leftSwitch;
-//	String rightSwitch;
-//	String leftScaleLeft;
-//	String leftScaleRight;
-//	String rightScaleRight;
-//	String rightScaleLeft;
-//	String baseline;
-	
 	public Robot() {
       
 		LOG = new HelixLogger();
@@ -120,65 +106,6 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 		
-
-		
-//		AutoGroup centerswitchleft = new AutoGroup(centerSwitchLeft, Height.SWITCH);
-//		AutoGroup centerswitchright = new AutoGroup(centerSwitchRight, Height.SWITCH);
-//		AutoGroup leftswitchleft = new AutoGroup(leftSwitch, Height.SWITCH);
-//		AutoGroup rightswitchright = new AutoGroup(rightSwitch, Height.SWITCH);
-//		AutoGroup leftscaleleft = new AutoGroup(leftScaleLeft, Height.SCALE);
-//		AutoGroup leftscaleright = new AutoGroup(leftScaleRight, Height.SCALE);
-//		AutoGroup rightscaleright = new AutoGroup(rightScaleRight, Height.SCALE);
-//		AutoGroup rightscaleleft = new AutoGroup(rightScaleLeft, Height.SCALE);
-//		BaselineAutoGroup baseline = new BaselineAutoGroup(baseline);
-//		AutoGroup sideswitch = null;
-//		AutoGroup samesidescale = null;
-//		AutoGroup oppositesidescale = null;
-//		AutoGroup scale = null;
-//	
-//		char robotPosition = 0;
-//		if (autoLeft.get()) {
-//			robotPosition = 'L';
-//			sideswitch = leftswitchleft;
-//			samesidescale = leftscaleleft;
-//			oppositesidescale = leftscaleright;
-//		} else if (!autoRight.get()) {
-//			robotPosition = 'R';
-//			sideswitch = rightswitchright;
-//			samesidescale = rightscaleright;
-//			oppositesidescale = rightscaleleft;
-//		}
-//		
-//		if (autoSwitch.get()) {
-//			if (gameData.charAt(0) == 'L') {
-//				autonomousCommand = centerswitchleft;
-//			} else {
-//				autonomousCommand = centerswitchright;
-//			}
-//		} else if (autoSwitchScaleBaseline.get()) {
-//			if (gameData.charAt(0) == robotPosition) {
-//				autonomousCommand = sideswitch;
-//			} else if (gameData.charAt(1) == robotPosition) {
-//				autonomousCommand = samesidescale;
-//			} else {
-//				autonomousCommand = baseline;
-//			}
-//		} else if (autoSwitchScaleScale.get()) {
-//			if (gameData.charAt(0) == robotPosition) {
-//				autonomousCommand = sideswitch;
-//			} else if (gameData.charAt(1) == robotPosition){
-//				autonomousCommand = samesidescale;
-//			} else {
-//				autonomousCommand = oppositesidescale;
-//			}
-//		} else {
-//			if (gameData.charAt(1) == robotPosition){
-//				autonomousCommand = samesidescale;
-//			} else {
-//				autonomousCommand = oppositesidescale;
-//			}
-//		}
-
 	}
 
 	/**
