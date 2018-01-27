@@ -3,6 +3,7 @@ package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
 	private final Compressor compressor = new Compressor();
 	public static Gripper gripper = new Gripper();
 	public static Tramps tramps;
+	public static Elevator elevator = new Elevator();
 	
 	// declare SmartDashboard tools
 	Command autonomousCommand;
