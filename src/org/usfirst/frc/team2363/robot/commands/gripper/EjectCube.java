@@ -8,13 +8,11 @@ import static org.usfirst.frc.team2363.robot.Robot.*;
  */
 public class EjectCube extends Command {
 
-	private boolean state;
 	
     public EjectCube() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(gripper);
-    	this.state = state;
     }
 
     // Called just before this Command runs the first time
@@ -23,13 +21,8 @@ public class EjectCube extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(state == true) {
-    		gripper.eject();
-    	} else {
-    		gripper.stop();
-    	}
+    	gripper.eject();
     }
-
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;
