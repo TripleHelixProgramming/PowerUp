@@ -8,26 +8,21 @@ import static org.usfirst.frc.team2363.robot.Robot.*;
  */
 public class IntakeCube extends Command {
 	
-	private boolean state;
 	
     public IntakeCube() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(gripper);
-    	this.state = state;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	gripper.lower();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(state == true) {
-        	gripper.intake();
-    	} else {
-    		gripper.stop();
-    	}
+    	gripper.intake();
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
 import org.usfirst.frc.team2363.robot.RobotMap;
+import org.usfirst.frc.team2363.robot.commands.gripper.StopWheels;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -14,8 +15,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Gripper extends Subsystem {
 	
-	private TalonSRX leftWheel = new TalonSRX(20);
-	private TalonSRX rightWheel = new TalonSRX(21);
+	private TalonSRX leftWheel = new TalonSRX(RobotMap.LEFTWHEEL);
+	private TalonSRX rightWheel = new TalonSRX(RobotMap.RIGHTWHEEL);
 	private Solenoid wrist = new Solenoid(RobotMap.WRIST);
 	private Solenoid claws = new Solenoid(RobotMap.CLAWS);
 	private DigitalInput hasCube = new DigitalInput(0);
@@ -24,11 +25,18 @@ public class Gripper extends Subsystem {
     // here. Call these from Commands.
 	
 	public void gripper() {
+		leftWheel.configContinuousCurrentLimit(5, 10);
+		leftWheel.configPeakCurrentLimit(20, 10);
+		leftWheel.configPeakCurrentDuration(1000, 10);
+		
+		rightWheel.configContinuousCurrentLimit(5, 10);
+		rightWheel.configPeakCurrentLimit(20, 10);
+		rightWheel.configPeakCurrentDuration(1000, 10);
 	}
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+//        setDefaultCommand(new StopWheels());
     }
     
     public void intake() {
@@ -60,5 +68,9 @@ public class Gripper extends Subsystem {
     
     public void raise() {
     	wrist.set(false);
+    }
+    
+    public boolean isDown() {
+    	return wrist.get();
     }
 }
