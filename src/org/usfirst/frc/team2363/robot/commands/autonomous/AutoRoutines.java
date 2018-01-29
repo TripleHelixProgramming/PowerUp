@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
-import org.usfirst.frc.team2363.util.pathplanning.BoTHTrajectory;
 import org.usfirst.frc.team319.models.SrxTrajectory;
 import org.usfirst.frc.team319.utils.SrxTrajectoryImporter;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoRoutines {
 	
@@ -44,7 +44,6 @@ public class AutoRoutines {
 	
 	// Hash map allowing look ups of path object based on autonomous path file name. 
 	Map<AutoType, SrxTrajectory> autoMap = new HashMap<AutoType, SrxTrajectory>();
-	BoTHTrajectory auto;
 	
 	public AutoRoutines() {
 		loadPaths();
@@ -55,7 +54,6 @@ public class AutoRoutines {
 	 * This routine should be called in RobotInit.
 	 */
 	public void loadPaths() {
-		readAutoSwitch();
 		try {
 			for (AutoType path: AutoType.values()) {
 				autoMap.put(path, importer.importSrxTrajectory(path.getFileName()));
@@ -66,12 +64,31 @@ public class AutoRoutines {
 	}
 	
 	/* 
+	 * Get the locations of the switches and scale with respect to our alliance wall. 
+	 */
+	public void obtainPlateStates() {
+
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
+		ourSwitch = gameData.charAt(0);
+		scale = gameData.charAt(1);
+		opponentSwitch = gameData.charAt(2);
+		
+		
+		// Read the switch setting and plan auto routes based on plate locations above.
+		determineAutoRoute();
+		
+		updateSmartDashboard();
+		
+	}
+	
+	/* 
 	 * Base on Robot Position on the alliance wall & plates states, determines 
 	 * which auto routine to run, gripper height, and whether left & right motion
 	 * profiles need to be reverse base on field symmetry.
 	 * 
 	 */
-	public void readAutoSwitch () {
+	public void determineAutoRoute () {
 		
 		DigitalInput Left = new DigitalInput(0);
 		DigitalInput Right = new DigitalInput(1);
@@ -136,19 +153,6 @@ public class AutoRoutines {
 		}
 	}
 	
-	/* 
-	 * Get the locations of the switches and scale with respect to our alliance wall. 
-	 */
-	public void obtainPlateStates() {
-
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		
-		ourSwitch = gameData.charAt(0);
-		scale = gameData.charAt(1);
-		opponentSwitch = gameData.charAt(2);
-		
-	}
-	
 	public SrxTrajectory getPath () {
 		return autoMap.get(autoType);
 	}
@@ -163,5 +167,17 @@ public class AutoRoutines {
 	
 	public boolean getReverse() {
 		return reverse;
+	}
+	
+	private void updateSmartDashboard () {
+		
+		SmartDashboard.putString("Game Specific Message", gameData);
+		SmartDashboard.putString("Our Switch Location", (ourSwitch == 'L')? "Left" : "Right");
+		SmartDashboard.putString("Scale Location", (scale == 'L')? "Left" : "Right");
+		SmartDashboard.putString("Opponent Switch Location", (opponentSwitch == 'L')? "Left" : "Right");
+		
+		SmartDashboard.putString("Robot Position", (robotPosition == 'L')? "Left" : (robotPosition == 'R')? "Right" : "Center");
+		SmartDashboard.putString("Auto Routine Chosen", autoType.getFileName());
+		SmartDashboard.putString("Gripper Height", height.toString());
 	}
 }
