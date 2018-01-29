@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.util.pathplanning.BoTHTrajectory;
-import org.usfirst.frc.team2363.util.pathplanning.SrxPathReader;
 import org.usfirst.frc.team319.models.SrxTrajectory;
+import org.usfirst.frc.team319.utils.SrxTrajectoryImporter;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -14,40 +14,36 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class AutoRoutines {
 	
 	// AutoType Order must match paths order below.
-	public enum AutoTypeEnum {
-		CENTER_SWITCH,
-		SAME_SIDE_SWITCH,
-		SAME_SIDE_SCALE,
-		OPPOSITE_SIDE_SCALE,
-		BASELINE,
-		PATH_TO_CUBE,
-		SHORT_PATH
+	public enum AutoType {
+		CENTER_SWITCH("CameraSwitch"),
+		SAME_SIDE_SWITCH("SameSideSwitch"),
+		SAME_SIDE_SCALE("SameSideScale"),
+		OPPOSITE_SIDE_SCALE("OpposideSideScale"),
+		BASELINE("Baseline"),
+		PATH_TO_CUBE("PathToCube"),
+		SHORT_PATH("ShortPath");
+		
+		private String fileName;
+		
+		AutoType(String fileName) {
+			this.fileName = fileName;
+		}
+		
+		public String getFileName() {
+			return fileName;
+		}
 	}
-	/*
-	 * Names of autonomous path files. Order must match AutoType enum above.  Use
-	 * the BobTracjectory tool in the ui_refactor branch to create the left robot position
-	 * version for all these paths.  Right robot positions are executed by inverting the 
-	 * right & left motor profiles.
-	 */
 	
-	private String[] paths = {
-		"CenterSwitch",
-		"SameSideSwitch",
-		"SameSideScale",
-		"OppositeSideScale",
-		"Baseline",
-		"PathToCube",
-		"ShortPath",
-	};
+	private SrxTrajectoryImporter importer = new SrxTrajectoryImporter("/home/lvuser");
 	
-	private AutoTypeEnum autoType = AutoTypeEnum.BASELINE;
+	private AutoType autoType = AutoType.BASELINE;
 	private String gameData;
     char ourSwitch, opponentSwitch, scale, robotPosition;
 	private Height height;
 	private Boolean reverse = false;
 	
 	// Hash map allowing look ups of path object based on autonomous path file name. 
-	Map<String, SrxTrajectory> autoMap = new HashMap<String, SrxTrajectory>();
+	Map<AutoType, SrxTrajectory> autoMap = new HashMap<AutoType, SrxTrajectory>();
 	BoTHTrajectory auto;
 	
 	public AutoRoutines() {
@@ -59,11 +55,13 @@ public class AutoRoutines {
 	 * This routine should be called in RobotInit.
 	 */
 	public void loadPaths() {
-		
 		readAutoSwitch();
-		for (String path: paths) {
-			auto = SrxPathReader.importSrxTrajectory(path);
-			autoMap.put(path, auto);
+		try {
+			for (AutoType path: AutoType.values()) {
+				autoMap.put(path, importer.importSrxTrajectory(path.getFileName()));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -101,39 +99,39 @@ public class AutoRoutines {
 		height = Height.SWITCH;	
 		
 		if (CenterSwitch.get()) {
-			autoType = AutoTypeEnum.CENTER_SWITCH;
+			autoType = AutoType.CENTER_SWITCH;
 		} else if (OurSideOnly.get()) {  // Our Side only auto
 			if (ourSwitch == robotPosition) {
 				// Switch is on our side. Go for the switch first over the scale.
-				autoType = AutoTypeEnum.SAME_SIDE_SWITCH;
+				autoType = AutoType.SAME_SIDE_SWITCH;
 			} else if (scale == robotPosition) {
 				// Switch is not on our side, but scale is.
-				autoType = AutoTypeEnum.SAME_SIDE_SCALE;
+				autoType = AutoType.SAME_SIDE_SCALE;
 				height = Height.SCALE;
 			} else {  
 				// Neither the Switch nor the Scale are on our side.
-				autoType = AutoTypeEnum.BASELINE;
+				autoType = AutoType.BASELINE;
 				height = Height.GROUND;
 			}
 		} else if (SwitchScaleScale.get()) { 
 			if (ourSwitch == robotPosition) {
 				// Switch is on our side. Go for the switch first over the scale.
-				autoType = AutoTypeEnum.SAME_SIDE_SWITCH;
+				autoType = AutoType.SAME_SIDE_SWITCH;
 			} else if (scale == robotPosition){
 				// Switch is not on our side, but scale is. Go for scale.
-				autoType = AutoTypeEnum.SAME_SIDE_SCALE;
+				autoType = AutoType.SAME_SIDE_SCALE;
 				height = Height.SCALE;
 			} else { 
 				// Neither the Switch nor the Scale are on our side. Go for opposite side scale. 
-				autoType = AutoTypeEnum.OPPOSITE_SIDE_SCALE;
+				autoType = AutoType.OPPOSITE_SIDE_SCALE;
 				height = Height.SCALE;
 			}
 		} else {  // ScaleOnly run
 			height = Height.SCALE;
 			if (scale == robotPosition){
-				autoType = AutoTypeEnum.SAME_SIDE_SCALE;
+				autoType = AutoType.SAME_SIDE_SCALE;
 			} else {
-				autoType = AutoTypeEnum.OPPOSITE_SIDE_SCALE;
+				autoType = AutoType.OPPOSITE_SIDE_SCALE;
 			}
 		}
 	}
@@ -151,12 +149,12 @@ public class AutoRoutines {
 		
 	}
 	
-	public BoTHTrajectory getPath () {
-		return (BoTHTrajectory) (autoMap.get(paths[autoType.ordinal()]));
+	public SrxTrajectory getPath () {
+		return autoMap.get(autoType);
 	}
 	
-	public BoTHTrajectory getPath (AutoTypeEnum autoType) {
-		return (BoTHTrajectory) (autoMap.get(paths[autoType.ordinal()]));
+	public SrxTrajectory getPath (AutoType autoType) {
+		return autoMap.get(autoType);
 	}
 	
 	public Height getHeight() {
