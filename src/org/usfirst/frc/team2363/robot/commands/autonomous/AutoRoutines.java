@@ -1,10 +1,12 @@
-package org.usfirst.frc.team2363.util.pathplanning;
+package org.usfirst.frc.team2363.robot.commands.autonomous;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
+import org.usfirst.frc.team2363.util.pathplanning.BoTHTrajectory;
 import org.usfirst.frc.team2363.util.pathplanning.SrxPathReader;
+import org.usfirst.frc.team319.models.SrxTrajectory;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -45,7 +47,7 @@ public class AutoRoutines {
 	private Boolean reverse = false;
 	
 	// Hash map allowing look ups of path object based on autonomous path file name. 
-	Map<String, BoTHTrajectory> autoMap = new HashMap<String, BoTHTrajectory>();
+	Map<String, SrxTrajectory> autoMap = new HashMap<String, SrxTrajectory>();
 	BoTHTrajectory auto;
 	
 	public AutoRoutines() {

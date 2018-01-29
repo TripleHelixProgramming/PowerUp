@@ -2,14 +2,12 @@
 package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
-
+import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
-import org.usfirst.frc.team2363.util.pathplanning.AutoRoutines;
-import org.usfirst.frc.team2363.util.pathplanning.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -18,11 +16,6 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
-
-import org.usfirst.frc.team2363.robot.commands.autonomous.AutoGroup;
-import org.usfirst.frc.team2363.robot.commands.autonomous.BaselineAutoGroup;
 
 /**
  * The VM is configured to automatically run this class, and to call the
