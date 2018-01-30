@@ -33,13 +33,19 @@ public class Elevator extends Subsystem {
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
 	private TalonSRX rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	private DigitalInput defaultPosition = new DigitalInput(RobotMap.DEFAULT_POSITION);
-
+	private DigitalInput groundLimit = new DigitalInput(RobotMap.ELEVATOR_GROUND_LIMIT_CHANNEL);
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
 	public void elevate (double power) {
-		leftMotor.set(ControlMode.PercentOutput, power);
 		rightMotor.set(ControlMode.Follower, leftMotor.getDeviceID());
+		
+		if (isAtGroundLimit() == true)  {
+			leftMotor.set(ControlMode.PercentOutput, 0);
+		} else {
+			leftMotor.set(ControlMode.PercentOutput, power);
+		}
+		
 	}
 	
 	public void goTo (Height height) {
@@ -50,5 +56,10 @@ public class Elevator extends Subsystem {
     public void initDefaultCommand() {
         goTo(Height.GROUND);
     }
+    
+    public boolean isAtGroundLimit () {
+    	return groundLimit.get();
+    }
+     
 }
 

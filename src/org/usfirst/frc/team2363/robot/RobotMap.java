@@ -68,6 +68,9 @@ public class RobotMap {
 	//Elevator Motors
 	public static final int LEFT_ELEVATOR_MOTOR = 30;
 	public static final int RIGHT_ELEVATOR_MOTOR = 31;
+	
+	//LIMIT SWITCHES
+	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 0;
 
 }	
 
