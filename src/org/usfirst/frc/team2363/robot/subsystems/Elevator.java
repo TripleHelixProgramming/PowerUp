@@ -3,6 +3,7 @@ package org.usfirst.frc.team2363.robot.subsystems;
 import org.usfirst.frc.team2363.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -34,6 +35,7 @@ public class Elevator extends Subsystem {
 	private TalonSRX rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	private DigitalInput defaultPosition = new DigitalInput(RobotMap.DEFAULT_POSITION);
 	private DigitalInput groundLimit = new DigitalInput(RobotMap.ELEVATOR_GROUND_LIMIT_CHANNEL);
+	private DigitalInput upperLimit = new DigitalInput(RobotMap.ELEVATOR_UPPER_LIMIT_CHANNEL);
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
@@ -45,7 +47,11 @@ public class Elevator extends Subsystem {
 		} else {
 			leftMotor.set(ControlMode.PercentOutput, power);
 		}
-		
+	}
+	private void getPosition() {
+		return TalonSRX.getSelectedSensorPosition(0);	        
+	   
+	        
 	}
 	
 	public void goTo (Height height) {
@@ -60,6 +66,7 @@ public class Elevator extends Subsystem {
     public boolean isAtGroundLimit () {
     	return groundLimit.get();
     }
-     
+ 
+       
 }
 

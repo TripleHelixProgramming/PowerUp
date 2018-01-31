@@ -71,7 +71,7 @@ public class RobotMap {
 	
 	//LIMIT SWITCHES
 	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 0;
-
+	public static final int ELEVATOR_UPPER_LIMIT_CHANNEL = 1;
 }	
 
 
