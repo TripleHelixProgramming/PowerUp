@@ -1,6 +1,8 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
 import org.usfirst.frc.team2363.robot.RobotMap;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
+import org.usfirst.frc.team2363.robot.commands.elevator.OperateElevator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -48,20 +50,20 @@ public class Elevator extends Subsystem {
 			leftMotor.set(ControlMode.PercentOutput, power);
 		}
 	}
-	private void getPosition() {
-		return TalonSRX.getSelectedSensorPosition(0);	        
+//	private void getPosition() {
+//		return TalonSRX.getSelectedSensorPosition(0);	        
 	   
 	        
-	}
+//	}
 	
 	public void goTo (Height height) {
 		leftMotor.set(ControlMode.Position, height.getHeight());
 	}
+	protected void initDefaultCommand() {
+		// sets the default drive mode to Colson drive
+		setDefaultCommand(new OperateElevator());
+	}
 	
-	
-    public void initDefaultCommand() {
-        goTo(Height.GROUND);
-    }
     
     public boolean isAtGroundLimit () {
     	return groundLimit.get();
