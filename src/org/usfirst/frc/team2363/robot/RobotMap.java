@@ -70,8 +70,8 @@ public class RobotMap {
 	public static final int RIGHT_ELEVATOR_MOTOR = 31;
 	
 	//LIMIT SWITCHES
-	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 0;
-	public static final int ELEVATOR_UPPER_LIMIT_CHANNEL = 1;
+	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 2;
+	public static final int ELEVATOR_UPPER_LIMIT_CHANNEL = 3;
 }	
 
 
