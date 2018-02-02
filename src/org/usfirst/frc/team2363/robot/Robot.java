@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		autonomousCommand = new FollowTrajectory("scaling_calibration");
 		
-		CameraServer.getInstance().startAutomaticCapture();
+//		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**

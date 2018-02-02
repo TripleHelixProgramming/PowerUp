@@ -44,7 +44,7 @@ public class PathRunner extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	run = true;
-    	Robot.drivetrain.setUpAutoControl();
+//    	Robot.drivetrain.setUpAutoControl();
     	
     	if (pathName != null ) {
     		path = SrxPathReader.importSrxTrajectory(pathName);
@@ -76,7 +76,7 @@ public class PathRunner extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	run = false;
-    	Robot.drivetrain.setUpManualControl();
+//    	Robot.drivetrain.setUpManualControl();
     }
 
     // Called when another command which requires one or more of the same

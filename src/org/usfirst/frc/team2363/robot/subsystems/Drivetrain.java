@@ -63,14 +63,16 @@ public class Drivetrain extends Subsystem {
 
 		//  Configure Front Left Master
 		frontLeft.selectProfileSlot(0, 0);
-		frontLeft.configOpenloopRamp(30, 10);
-		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		// Make sure to set Sensor phase appropriately for each master 
-		frontLeft.setSensorPhase(true);
 		frontLeft.configOpenloopRamp(0.4, 10);
-		frontLeft.config_kF(0, 0.20388, 10);
-		frontLeft.config_kP(0, 0.05, 10);
+		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+		// Make sure to set Sensor phase appropriately for each master 
+		frontLeft.setSensorPhase(false);
+		frontLeft.config_kF(0, 1.3, 10);
+		frontLeft.config_kP(0, 1.5, 10);
 		frontLeft.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
+		frontLeft.setInverted(true);
+		middleLeft.setInverted(true);
+		rearLeft.setInverted(true);
 		
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
@@ -81,13 +83,12 @@ public class Drivetrain extends Subsystem {
 //		frontRight.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));	
 		
 		frontRight.selectProfileSlot(0, 0);
-		frontRight.configOpenloopRamp(30, 10);
-		frontRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		// Make sure to set Sensor phase appropriately for each master 
-		frontRight.setSensorPhase(true); 
 		frontRight.configOpenloopRamp(0.4, 10);
-		frontRight.config_kF(0, 0.20388, 10);
-		frontRight.config_kP(0, 0.05, 10);
+		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+		// Make sure to set Sensor phase appropriately for each master 
+		frontRight.setSensorPhase(false); 
+		frontRight.config_kF(0, 1.3, 10);
+		frontRight.config_kP(0, 1.5, 10);
 		frontRight.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
@@ -106,11 +107,11 @@ public class Drivetrain extends Subsystem {
 		rearRight.setNeutralMode(NeutralMode.Brake);
 		
 		// Instantiate the NavMXP Gyro
-		try {
-			ahrs = new AHRS(SPI.Port.kMXP); 
-		} catch (RuntimeException ex ) {
-			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-		}
+//		try {
+//			ahrs = new AHRS(SPI.Port.kMXP); 
+//		} catch (RuntimeException ex ) {
+//			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+//		}
 	}
 	
 	public void periodic() {
@@ -160,7 +161,7 @@ public class Drivetrain extends Subsystem {
 	      }
 	    }
 
-	    frontLeft.set(ControlMode.PercentOutput, leftMotorSpeed);
+	    frontLeft.set(ControlMode.PercentOutput, -leftMotorSpeed);
 	    frontRight.set(ControlMode.PercentOutput, -rightMotorSpeed);
 	}
 
@@ -175,21 +176,6 @@ public class Drivetrain extends Subsystem {
 		setDefaultCommand(new JoystickDrive());
 	}
 	
-	public void setUpAutoControl() {
-		frontLeft.selectProfileSlot(0, 0);	
-		frontLeft.setNeutralMode(NeutralMode.Brake);
-		
-		frontRight.selectProfileSlot(0, 0);
-		frontRight.setNeutralMode(NeutralMode.Brake);
-		frontRight.setInverted(true);
-	}
-
-	public void setUpManualControl() {
-		frontLeft.setNeutralMode(NeutralMode.Brake);
-		frontRight.setNeutralMode(NeutralMode.Brake);
-		frontRight.setInverted(false);
-	}
-
 	public double getAngle() {
 		return ahrs.getAngle();
 	}
