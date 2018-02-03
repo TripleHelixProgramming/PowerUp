@@ -40,7 +40,7 @@ public class OI {
 	}
 	
 	public double getElevatorPower() {
-		return operatorController.getRawAxis(LEFT_STICK_Y);
+		return -operatorController.getRawAxis(LEFT_STICK_Y);
 	}
 	
 	public double getFullSpeedPercentage() {
