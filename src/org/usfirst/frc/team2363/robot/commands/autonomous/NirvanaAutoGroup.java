@@ -1,16 +1,14 @@
 package org.usfirst.frc.team2363.robot.commands.autonomous;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
-import org.usfirst.frc.team2363.robot.commands.autonomous.AutoGroup;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.TurnToAngle;
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
-import org.usfirst.frc.team2363.util.pathplanning.AutoRoutines;
-import org.usfirst.frc.team2363.util.pathplanning.AutoRoutines.AutoTypeEnum;
 import org.usfirst.frc.team2363.util.pathplanning.BoTHTrajectory;
 import org.usfirst.frc.team2363.util.pathplanning.commands.PathRunner;
+
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *

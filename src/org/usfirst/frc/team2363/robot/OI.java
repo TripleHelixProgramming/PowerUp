@@ -2,11 +2,9 @@ package org.usfirst.frc.team2363.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
-import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 
 /**
  * This class is the glue that binds the controls on the physical operator
