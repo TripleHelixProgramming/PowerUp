@@ -2,8 +2,15 @@ package org.usfirst.frc.team2363.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 import static org.usfirst.frc.team2363.robot.RobotMap.*;
+
+import org.usfirst.frc.team2363.robot.commands.gripper.CloseClaw;
+import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
+import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
+import org.usfirst.frc.team2363.robot.commands.gripper.OpenClaw;
+import org.usfirst.frc.team2363.robot.commands.gripper.RaiseWrist;
 
 
 /**
@@ -19,6 +26,12 @@ public class OI {
 		//Controllers
 		driverController = new Joystick(DRIVER_PORT);
 		operatorController = new Joystick(OPERATOR_PORT);
+		
+		new JoystickButton(operatorController, X).whileHeld(new IntakeCube());
+		new JoystickButton(operatorController, B).whileHeld(new EjectCube());
+		new JoystickButton(operatorController, A).whenPressed(new RaiseWrist());
+		new JoystickButton(driverController, Y).whenPressed(new OpenClaw());
+		new JoystickButton(driverController,Y).whenReleased(new CloseClaw());
 		
 		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((Joystick)f).getRawAxis(LEFT_STICK_Y));
 		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((Joystick)f).getRawAxis(RIGHT_STICK_X));

@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -15,11 +16,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Gripper extends Subsystem {
 	
-	private TalonSRX leftWheel = new TalonSRX(RobotMap.LEFTWHEEL);
-	private TalonSRX rightWheel = new TalonSRX(RobotMap.RIGHTWHEEL);
-	private Solenoid wrist = new Solenoid(RobotMap.WRIST);
-	private Solenoid claws = new Solenoid(RobotMap.CLAWS);
-	private DigitalInput hasCube = new DigitalInput(0);
+	private TalonSRX leftWheel = new TalonSRX(RobotMap.GRIPPER_LEFT_WHEEL);
+	private TalonSRX rightWheel = new TalonSRX(RobotMap.GRIPPER_RIGHT_WHEEL);
+	private DoubleSolenoid wrist = new DoubleSolenoid(RobotMap.GRIPPER_RAISE, RobotMap.GRIPPER_LOWER);
+	private DoubleSolenoid claws = new DoubleSolenoid(RobotMap.GRIPPER_OPEN, RobotMap.GRIPPER_CLOSE);
+//	private DigitalInput hasCube = new DigitalInput(0);
 	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -36,7 +37,7 @@ public class Gripper extends Subsystem {
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-//        setDefaultCommand(new StopWheels());
+        setDefaultCommand(new StopWheels());
     }
     
     public void intake() {
@@ -55,22 +56,26 @@ public class Gripper extends Subsystem {
     }
     
     public void openClaw() {
-    	claws.set(true);
+    	claws.set(DoubleSolenoid.Value.kForward);
     }
     
     public void closeClaw() {
-    	claws.set(false);
+    	claws.set(DoubleSolenoid.Value.kReverse);
     }
     
     public void lower() {
-    	wrist.set(true);
+    	wrist.set(DoubleSolenoid.Value.kForward);
     }
     
     public void raise() {
-    	wrist.set(false);
+    	wrist.set(DoubleSolenoid.Value.kReverse);
     }
     
     public boolean isDown() {
-    	return wrist.get();
+    	return (wrist.get() == DoubleSolenoid.Value.kForward);
+    }
+    
+    public boolean isUp() {
+    	return (wrist.get() == DoubleSolenoid.Value.kReverse);
     }
 }
