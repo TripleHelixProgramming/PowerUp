@@ -42,6 +42,8 @@ public class FollowTrajectory extends Command {
 
 	private MotionProfileStatus rightStatus = new MotionProfileStatus();
 	private MotionProfileStatus leftStatus = new MotionProfileStatus();
+	
+	private final boolean reversed;
 
 	/**
 	 * this is only either Disable, Enable, or Hold. Since we'd never want one
@@ -65,11 +67,19 @@ public class FollowTrajectory extends Command {
 	public FollowTrajectory(String trajectoryName) {
 		requires(Robot.drivetrain);
 		this.trajectoryName = trajectoryName;
+		reversed = false;
 	}
 	
 	public FollowTrajectory(SrxTrajectory trajectoryToFollow) {
 		requires(Robot.drivetrain);
 		this.trajectoryToFollow = trajectoryToFollow;
+		reversed = false;
+	}
+	
+	public FollowTrajectory(SrxTrajectory trajectoryToFollow, boolean reversed) {
+		requires(Robot.drivetrain);
+		this.trajectoryToFollow = trajectoryToFollow;
+		this.reversed = reversed;
 	}
 
 	// Called just before this Command runs the first time
@@ -77,7 +87,8 @@ public class FollowTrajectory extends Command {
 
 		setUpTalon(Robot.drivetrain.getLeft());
 		setUpTalon(Robot.drivetrain.getRight());
-
+		
+		
 		setValue = SetValueMotionProfile.Disable;
 		
 		Robot.drivetrain.getLeft().set(ControlMode.MotionProfile, setValue.value);
@@ -101,8 +112,13 @@ public class FollowTrajectory extends Command {
 		
 		int pidfSlot = 0;
 		
-		fillTalonBuffer(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot);
-		fillTalonBuffer(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot);
+		if (reversed) {
+			fillTalonBuffer(Robot.drivetrain.getRight(), this.trajectoryToFollow.leftProfile, pidfSlot);
+			fillTalonBuffer(Robot.drivetrain.getLeft(), this.trajectoryToFollow.rightProfile, pidfSlot);
+		} else {
+			fillTalonBuffer(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot);
+			fillTalonBuffer(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot);
+		}
 
 	}
 

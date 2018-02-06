@@ -17,15 +17,13 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
 	// Constants
-	private static final int ENCODER_TICKS = 120;
+	private static final int ENCODER_TICKS = 480;
 	public static final int MAX_RPM = 3900;
 	
 	// Talons
@@ -68,7 +66,8 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(false);
 		frontLeft.config_kF(0, 1.3, 10);
-		frontLeft.config_kP(0, 1.5, 10);
+		frontLeft.config_kP(0, 0.75, 10);
+
 		frontLeft.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
 		frontLeft.setInverted(true);
 		middleLeft.setInverted(true);
@@ -88,7 +87,7 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(false); 
 		frontRight.config_kF(0, 1.3, 10);
-		frontRight.config_kP(0, 1.5, 10);
+		frontRight.config_kP(0, 0.75, 10);
 		frontRight.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
@@ -105,6 +104,9 @@ public class Drivetrain extends Subsystem {
 		
 		rearRight.set(ControlMode.Follower, frontRight.getDeviceID());
 		rearRight.setNeutralMode(NeutralMode.Brake);
+		
+		frontLeft.configMotionProfileTrajectoryPeriod(0, 10);
+		frontRight.configMotionProfileTrajectoryPeriod(0, 10);
 		
 		// Instantiate the NavMXP Gyro
 //		try {
@@ -214,4 +216,6 @@ public class Drivetrain extends Subsystem {
 	private int getRPM(int sensorVelocity) {
 		return sensorVelocity * (600 / ENCODER_TICKS);
 	}
+	
+	
 }

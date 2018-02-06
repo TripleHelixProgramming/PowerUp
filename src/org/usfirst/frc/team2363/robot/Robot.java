@@ -8,8 +8,8 @@ import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
+import org.usfirst.frc.team319.utils.SrxTrajectoryImporter;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -44,6 +44,7 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	
 	public static HelixLogger LOG;
+	private static final SrxTrajectoryImporter importer = new SrxTrajectoryImporter("/home/lvuser/Autos");
 	
 	public Robot() {
       
@@ -65,7 +66,11 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		// Create the controller interface
 		oi = new OI();
-		autonomousCommand = new FollowTrajectory("scaling_calibration");
+		try {
+			autonomousCommand = new FollowTrajectory(importer.importSrxTrajectory("turning_calibration"), false);
+		} catch(Exception e) { 
+			e.printStackTrace();
+		}
 		
 //		CameraServer.getInstance().startAutomaticCapture();
 	}

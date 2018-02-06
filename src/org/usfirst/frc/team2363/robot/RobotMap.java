@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team2363.robot;
 
+import com.ctre.phoenix.ErrorCode;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -75,7 +77,8 @@ public class RobotMap {
 	//LIMIT SWITCHES
 	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 2;
 	public static final int ELEVATOR_UPPER_LIMIT_CHANNEL = 3;
-}	
+
+}
 
 
 
