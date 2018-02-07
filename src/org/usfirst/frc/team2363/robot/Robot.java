@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
 		// Create the controller interface
 		oi = new OI();
 		try {
-			autonomousCommand = new FollowTrajectory(importer.importSrxTrajectory("turning_calibration"), false);
+			autonomousCommand = new FollowTrajectory(importer.importSrxTrajectory("OppositeSideScale"), false);
 		} catch(Exception e) { 
 			e.printStackTrace();
 		}

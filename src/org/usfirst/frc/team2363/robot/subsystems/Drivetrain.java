@@ -66,7 +66,7 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(false);
 		frontLeft.config_kF(0, 1.3, 10);
-		frontLeft.config_kP(0, 0.75, 10);
+		frontLeft.config_kP(0, 1.5, 10);
 
 		frontLeft.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
 		frontLeft.setInverted(true);
@@ -87,7 +87,7 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(false); 
 		frontRight.config_kF(0, 1.3, 10);
-		frontRight.config_kP(0, 0.75, 10);
+		frontRight.config_kP(0, 1.5, 10);
 		frontRight.configMotionProfileTrajectoryPeriod(10, 10); //Our profile uses 10 ms timing
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
