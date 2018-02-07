@@ -74,6 +74,9 @@ public class FollowTrajectory extends Command {
 		}
 		
 		public void run() {
+			if (lastPointSent >= prof.numPoints) {
+				return;
+			}
 			System.out.println("filling talon buffer");
 			TrajectoryPoint point = new TrajectoryPoint();
 
@@ -102,7 +105,6 @@ public class FollowTrajectory extends Command {
 
 	// Runs the runnable
 	private Notifier SrxNotifier = new Notifier(new PeriodicRunnable());
-	
 	private Notifier loadLeftBuffer;
 	private Notifier loadRightBuffer;
 
@@ -209,6 +211,8 @@ public class FollowTrajectory extends Command {
 	// Called once after isFinished returns true
 	protected void end() {
 		SrxNotifier.stop();
+		loadLeftBuffer.stop();
+		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
 		resetTalon(Robot.drivetrain.getLeft(), ControlMode.PercentOutput, 0);
 	}
@@ -217,26 +221,23 @@ public class FollowTrajectory extends Command {
 	// subsystems is scheduled to run
 	protected void interrupted() {
 		SrxNotifier.stop();
+		loadLeftBuffer.stop();
+		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
 		resetTalon(Robot.drivetrain.getLeft(), ControlMode.PercentOutput, 0);
 	}	
 
 	// set up the talon for motion profile control
-	public void setUpTalon(TalonSRX talon) {
+	private void setUpTalon(TalonSRX talon) {
 		talon.clearMotionProfileTrajectories();
 		talon.changeMotionControlFramePeriod(5);
 	}
 
 	// set the 	 to the desired controlMode
 	// used at the end of the motion profile
-	public void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
+	private void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
 		talon.clearMotionProfileTrajectories();
 		talon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
 		talon.set(controlMode, setValue);
-	}
-
-	// Send all the profile points to the talon object
-	public void fillTalonBuffer(TalonSRX talon, SrxMotionProfile prof, int pidfSlot) {
-		
 	}
 }
