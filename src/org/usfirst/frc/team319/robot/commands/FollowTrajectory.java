@@ -66,7 +66,6 @@ public class FollowTrajectory extends Command {
 		
 		public void run() {
 			talon.processMotionProfileBuffer();
-			System.out.println("filling talon buffer");
 			TrajectoryPoint point = new TrajectoryPoint();
 
 			if (!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
@@ -77,14 +76,16 @@ public class FollowTrajectory extends Command {
 				point.profileSlotSelect0 = pidfSlot; 
 				point.profileSlotSelect1 = pidfSlot;
 				point.zeroPos = false;
-				if (lastPointSent == 0)
+				if (lastPointSent == 0) {
 					point.zeroPos = true; /* set this to true on the first point */
+					System.out.println("Loaded first trajectory point");
+				}
 
 				point.isLastPoint = false;
-				if ((lastPointSent + 1) == prof.numPoints)
-					point.isLastPoint = true; /*
-												 * set this to true on the last point
-												 */
+				if ((lastPointSent + 1) == prof.numPoints) {
+					point.isLastPoint = true; /** set this to true on the last point */
+					System.out.println("Loaded last trajectory point");
+				}
 
 				talon.pushMotionProfileTrajectory(point);
 				lastPointSent++;
