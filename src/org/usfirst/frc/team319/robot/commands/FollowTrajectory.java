@@ -69,10 +69,7 @@ public class FollowTrajectory extends Command {
 			System.out.println("filling talon buffer");
 			TrajectoryPoint point = new TrajectoryPoint();
 
-			while (!talon.isMotionProfileTopLevelBufferFull()) {
-				if (lastPointSent >= prof.numPoints) {
-					return;
-				}
+			if (!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
 				/* for each point, fill our structure and pass it to API */
 				point.position = prof.points[lastPointSent][0];
 				point.velocity = prof.points[lastPointSent][1];
