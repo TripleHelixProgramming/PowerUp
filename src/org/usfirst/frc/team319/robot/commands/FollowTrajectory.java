@@ -51,15 +51,6 @@ public class FollowTrajectory extends Command {
 	 * for both sides.
 	 */
 	private SetValueMotionProfile setValue = SetValueMotionProfile.Disable;
-
-	// periodically tells the SRXs to do the thing
-	private class PeriodicRunnable implements java.lang.Runnable {
-		public void run() {
-			
-			Robot.drivetrain.getLeft().processMotionProfileBuffer();
-			Robot.drivetrain.getRight().processMotionProfileBuffer();
-		}
-	}
 	
 	private class BufferLoader implements java.lang.Runnable {
 		private int lastPointSent = 0;
@@ -74,13 +65,14 @@ public class FollowTrajectory extends Command {
 		}
 		
 		public void run() {
-			if (lastPointSent >= prof.numPoints) {
-				return;
-			}
+			talon.processMotionProfileBuffer();
 			System.out.println("filling talon buffer");
 			TrajectoryPoint point = new TrajectoryPoint();
 
 			while (!talon.isMotionProfileTopLevelBufferFull()) {
+				if (lastPointSent >= prof.numPoints) {
+					return;
+				}
 				/* for each point, fill our structure and pass it to API */
 				point.position = prof.points[lastPointSent][0];
 				point.velocity = prof.points[lastPointSent][1];
@@ -104,7 +96,6 @@ public class FollowTrajectory extends Command {
 	}
 
 	// Runs the runnable
-	private Notifier SrxNotifier = new Notifier(new PeriodicRunnable());
 	private Notifier loadLeftBuffer;
 	private Notifier loadRightBuffer;
 
@@ -163,7 +154,6 @@ public class FollowTrajectory extends Command {
 			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
 		}
 		
-		SrxNotifier.startPeriodic(.005);
 		loadLeftBuffer.startPeriodic(.005);
 		loadRightBuffer.startPeriodic(.005);
 
@@ -210,7 +200,6 @@ public class FollowTrajectory extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		SrxNotifier.stop();
 		loadLeftBuffer.stop();
 		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
@@ -220,7 +209,6 @@ public class FollowTrajectory extends Command {
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		SrxNotifier.stop();
 		loadLeftBuffer.stop();
 		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
