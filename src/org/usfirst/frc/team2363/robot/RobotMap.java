@@ -55,18 +55,20 @@ public class RobotMap {
 	public static final int TRAMPS = 4;
 
 	//Gripper Solenoids
-	public static final int CLAWS = 0;
-	public static final int WRIST = 2;
+	public static final int GRIPPER_OPEN = 6;
+	public static final int GRIPPER_CLOSE = 1;
+	public static final int GRIPPER_RAISE = 0;
+	public static final int GRIPPER_LOWER = 7;
 	
 	//Digital IO -Gripper
-	public static final int HASCUBE = 0;
+	public static final int HAS_CUBE = 0;
   
   //Elevator Digital IO
 	public static final int DEFAULT_POSITION = 1;
   
 	// Gripper TalonSRX
-	public static final int LEFTWHEEL = 20;
-	public static final int RIGHTWHEEL = 21;
+	public static final int GRIPPER_LEFT_WHEEL = 20;
+	public static final int GRIPPER_RIGHT_WHEEL = 21;
 
 	//Elevator Motors
 	public static final int LEFT_ELEVATOR_MOTOR = 30;

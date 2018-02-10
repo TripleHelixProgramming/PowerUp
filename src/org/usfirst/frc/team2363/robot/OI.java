@@ -1,9 +1,23 @@
 package org.usfirst.frc.team2363.robot;
 
+import static org.usfirst.frc.team2363.robot.RobotMap.DRIVER_PORT;
+import static org.usfirst.frc.team2363.robot.RobotMap.HIGH_SPEED_SCALING;
+import static org.usfirst.frc.team2363.robot.RobotMap.LEFT_STICK_Y;
+import static org.usfirst.frc.team2363.robot.RobotMap.LOW_SPEED_SCALING;
+import static org.usfirst.frc.team2363.robot.RobotMap.OPERATOR_PORT;
+import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
+
+import org.usfirst.frc.team2363.robot.commands.gripper.CloseClaw;
+import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
+import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
+import org.usfirst.frc.team2363.robot.commands.gripper.LowerWrist;
+import org.usfirst.frc.team2363.robot.commands.gripper.OpenClaw;
+import org.usfirst.frc.team2363.robot.commands.gripper.RaiseWrist;
+import org.usfirst.frc.team2363.robot.commands.gripper.ScoreCube;
+
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
-
-import static org.usfirst.frc.team2363.robot.RobotMap.*;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 
 /**
@@ -19,6 +33,13 @@ public class OI {
 		//Controllers
 		driverController = new Joystick(DRIVER_PORT);
 		operatorController = new Joystick(OPERATOR_PORT);
+		
+		new JoystickButton(operatorController, RobotMap.X).whileHeld(new IntakeCube());
+		new JoystickButton(operatorController, RobotMap.B).whileHeld(new EjectCube());
+		new JoystickButton(operatorController, RobotMap.A).whileHeld(new LowerWrist());
+		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new RaiseWrist());
+		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
+		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		
 		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((Joystick)f).getRawAxis(LEFT_STICK_Y));
 		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((Joystick)f).getRawAxis(RIGHT_STICK_X));
@@ -60,7 +81,7 @@ public class OI {
 	public void setControllerRumble(boolean state) {
 		if (state == true) {
 			driverController.setRumble(RumbleType.kLeftRumble, 1);
-			driverController.setRumble(RumbleType.kRightRumble, 1);
+			driverController.setRumble(RumbleType.kRightRumble, 1);  
 			operatorController.setRumble(RumbleType.kLeftRumble, 1);
 			operatorController.setRumble(RumbleType.kRightRumble, 1);
 		} else {
