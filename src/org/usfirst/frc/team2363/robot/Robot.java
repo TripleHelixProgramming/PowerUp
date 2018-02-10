@@ -3,11 +3,11 @@ package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
+import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
-import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 import org.usfirst.frc.team319.utils.SrxTrajectoryImporter;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -67,7 +67,7 @@ public class Robot extends IterativeRobot {
 		// Create the controller interface
 		oi = new OI();
 		try {
-			autonomousCommand = new FollowTrajectory(importer.importSrxTrajectory("OppositeSideScale"), false);
+			autonomousCommand = new PathTesting();
 		} catch(Exception e) { 
 			e.printStackTrace();
 		}

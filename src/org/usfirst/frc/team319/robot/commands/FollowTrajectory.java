@@ -44,6 +44,7 @@ public class FollowTrajectory extends Command {
 	private MotionProfileStatus leftStatus = new MotionProfileStatus();
 	
 	private final boolean reversed;
+	private boolean hasPathStarted;
 
 	/**
 	 * this is only either Disable, Enable, or Hold. Since we'd never want one
@@ -66,9 +67,13 @@ public class FollowTrajectory extends Command {
 		
 		public void run() {
 			talon.processMotionProfileBuffer();
-			TrajectoryPoint point = new TrajectoryPoint();
 
-			if (!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
+			if (lastPointSent >= prof.numPoints) {
+				return;
+			}
+
+			while(!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
+				TrajectoryPoint point = new TrajectoryPoint();
 				/* for each point, fill our structure and pass it to API */
 				point.position = prof.points[lastPointSent][0];
 				point.velocity = prof.points[lastPointSent][1];
@@ -89,6 +94,7 @@ public class FollowTrajectory extends Command {
 
 				talon.pushMotionProfileTrajectory(point);
 				lastPointSent++;
+				hasPathStarted = true;
 			}
 		}
 	}
@@ -190,9 +196,15 @@ public class FollowTrajectory extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
+		if (!hasPathStarted) {
+			return false;
+		}
 		boolean leftComplete = leftStatus.activePointValid && leftStatus.isLast;
 		boolean rightComplete = rightStatus.activePointValid && rightStatus.isLast;
 		boolean trajectoryComplete = leftComplete && rightComplete;
+		if (trajectoryComplete) {
+			System.out.println("Finished trajectory");
+		}
 		return trajectoryComplete || isFinished;
 	}
 
@@ -217,12 +229,14 @@ public class FollowTrajectory extends Command {
 	private void setUpTalon(TalonSRX talon) {
 		talon.clearMotionProfileTrajectories();
 		talon.changeMotionControlFramePeriod(5);
+		talon.clearMotionProfileHasUnderrun(10);
 	}
 
 	// set the 	 to the desired controlMode
 	// used at the end of the motion profile
 	private void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
 		talon.clearMotionProfileTrajectories();
+		talon.clearMotionProfileHasUnderrun(10);
 		talon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
 		talon.set(controlMode, setValue);
 	}
