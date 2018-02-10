@@ -39,7 +39,7 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.A).whileHeld(new LowerWrist());
 		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new RaiseWrist());
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
-		new JoystickButton(operatorController, RobotMap.RB).whenReleased(new CloseClaw());
+		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		
 		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((Joystick)f).getRawAxis(LEFT_STICK_Y));
 		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((Joystick)f).getRawAxis(RIGHT_STICK_X));

@@ -70,8 +70,12 @@ public class Elevator extends Subsystem {
 		} else	{
 			if (getPosition() <= MIN_HEIGHT) {
 				setPower(0);
-			} else if (getPosition() < .40 * MAX_HEIGHT) {
-				setPower(Math.max(-.15,  power));
+			} else if (getPosition() < .30 * MAX_HEIGHT) {
+				if (getVelocity() <= -400) {
+					setPower(Math.max(0, power));
+				} else {
+					setPower(Math.max(-.25,  power));
+				}
 			} else {
 				setPower(power * 0.55);
 			}
@@ -80,6 +84,7 @@ public class Elevator extends Subsystem {
 @Override
 	public void periodic() {
 		SmartDashboard.putNumber("Encoder Position", getPosition());
+		SmartDashboard.putNumber("Elevator Velocity", getVelocity());
 		if (leftMotor.getSensorCollection().isRevLimitSwitchClosed()) {
 			SmartDashboard.putBoolean("Limit Switch", true);
 			leftMotor.getSensorCollection().setQuadraturePosition(0, 0);
@@ -93,6 +98,10 @@ public class Elevator extends Subsystem {
 	public double getPosition() {
 		return leftMotor.getSensorCollection().getQuadraturePosition();
 //		return leftMotor.getSelectedSensorPosition(0);
+	}
+	
+	public double getVelocity() {
+		return leftMotor.getSensorCollection().getQuadratureVelocity();
 	}
 	
 	private void setPower(double power) {
