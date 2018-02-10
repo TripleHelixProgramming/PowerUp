@@ -64,11 +64,11 @@ public class Gripper extends Subsystem {
     }
     
     public void lower() {
-    	wrist.set(DoubleSolenoid.Value.kForward);
+    	wrist.set(DoubleSolenoid.Value.kReverse);
     }
     
     public void raise() {
-    	wrist.set(DoubleSolenoid.Value.kReverse);
+    	wrist.set(DoubleSolenoid.Value.kForward);
     }
     
     public boolean isDown() {

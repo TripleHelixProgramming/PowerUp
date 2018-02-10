@@ -55,10 +55,10 @@ public class RobotMap {
 	public static final int TRAMPS = 4;
 
 	//Gripper Solenoids
-	public static final int GRIPPER_OPEN = 0;
+	public static final int GRIPPER_OPEN = 6;
 	public static final int GRIPPER_CLOSE = 1;
-	public static final int GRIPPER_RAISE = 2;
-	public static final int GRIPPER_LOWER = 3;
+	public static final int GRIPPER_RAISE = 0;
+	public static final int GRIPPER_LOWER = 7;
 	
 	//Digital IO -Gripper
 	public static final int HAS_CUBE = 0;

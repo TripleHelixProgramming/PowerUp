@@ -6,11 +6,14 @@ import org.usfirst.frc.team2363.robot.commands.elevator.OperateElevator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
@@ -34,13 +37,17 @@ public class Elevator extends Subsystem {
 		}
 	}
 	
-	private static final int MAX_HEIGHT = 4780;
+	private static final int MAX_HEIGHT = 4500;
 	private static final int MIN_HEIGHT = 0;
 	
 	public Elevator() {
 		rightMotor.set(ControlMode.Follower, leftMotor.getDeviceID());
 		rightMotor.setNeutralMode(NeutralMode.Brake);
+		rightMotor.configOpenloopRamp(0.2, 10);
 		leftMotor.setNeutralMode(NeutralMode.Brake);
+		leftMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+		leftMotor.overrideLimitSwitchesEnable(true);
+		leftMotor.configOpenloopRamp(0.2, 10);
 	}
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
@@ -52,31 +59,48 @@ public class Elevator extends Subsystem {
     // here. Call these from Commands.
 
 	public void elevate (double power) {
-		if (power > 0) {
+		if (power > 0.0) {
 			if (getPosition() >= MAX_HEIGHT) {
 				setPower(0);
-			} else if (getPosition() > .9 * MAX_HEIGHT) {
-				setPower(Math.min(.25, power));
+			} else if (getPosition() > .70 * MAX_HEIGHT) {
+				setPower(Math.min(.6, power));
 			} else {
-				setPower(power);
+				setPower(power * 0.8);
 			}
 		} else	{
 			if (getPosition() <= MIN_HEIGHT) {
 				setPower(0);
-			} else if (getPosition() < .1 * MAX_HEIGHT) {
-				setPower(Math.max(-.25,  power));
+			} else if (getPosition() < .40 * MAX_HEIGHT) {
+				setPower(Math.max(-.15,  power));
 			} else {
-				setPower(power);
+				setPower(power * 0.55);
 			}
+		}
+	}
+@Override
+	public void periodic() {
+		SmartDashboard.putNumber("Encoder Position", getPosition());
+		if (leftMotor.getSensorCollection().isRevLimitSwitchClosed()) {
+			SmartDashboard.putBoolean("Limit Switch", true);
+			leftMotor.getSensorCollection().setQuadraturePosition(0, 0);
+//			leftMotor.setSelectedSensorPosition(0, 0, 10);
+		} else {
+//			leftMotor.setSelectedSensorPosition(0, 0, 10);
+			SmartDashboard.putBoolean("Limit Switch", false);
 		}
 	}
 	
 	public double getPosition() {
-		return leftMotor.getSelectedSensorPosition(0);
+		return leftMotor.getSensorCollection().getQuadraturePosition();
+//		return leftMotor.getSelectedSensorPosition(0);
 	}
 	
 	private void setPower(double power) {
-		leftMotor.set(ControlMode.PercentOutput, power, 10);
+		if (power < 0.1 && power > -0.1 && getPosition() != 0) {
+			leftMotor.set(ControlMode.PercentOutput, 0.1, 10);
+		} else {
+			leftMotor.set(ControlMode.PercentOutput, Math.abs(power) * power, 10);
+		}
 	}
 	
 	public void goTo (Height height) {
