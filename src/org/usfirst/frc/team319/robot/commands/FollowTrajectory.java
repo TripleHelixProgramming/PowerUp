@@ -42,6 +42,9 @@ public class FollowTrajectory extends Command {
 
 	private MotionProfileStatus rightStatus = new MotionProfileStatus();
 	private MotionProfileStatus leftStatus = new MotionProfileStatus();
+	
+	private final boolean reversed;
+	private boolean hasPathStarted;
 
 	/**
 	 * this is only either Disable, Enable, or Hold. Since we'd never want one
@@ -49,27 +52,74 @@ public class FollowTrajectory extends Command {
 	 * for both sides.
 	 */
 	private SetValueMotionProfile setValue = SetValueMotionProfile.Disable;
-
-	// periodically tells the SRXs to do the thing
-	private class PeriodicRunnable implements java.lang.Runnable {
+	
+	private class BufferLoader implements java.lang.Runnable {
+		private int lastPointSent = 0;
+		private TalonSRX talon;
+		private SrxMotionProfile prof;
+		private int pidfSlot;
+		
+		public BufferLoader(TalonSRX talon, SrxMotionProfile prof, int pidfSlot) {
+			this.talon = talon;
+			this.prof = prof;
+			this.pidfSlot = pidfSlot;
+		}
+		
 		public void run() {
-			Robot.drivetrain.getLeft().processMotionProfileBuffer();
-			Robot.drivetrain.getRight().processMotionProfileBuffer();
+			talon.processMotionProfileBuffer();
+
+			if (lastPointSent >= prof.numPoints) {
+				return;
+			}
+
+			while(!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
+				TrajectoryPoint point = new TrajectoryPoint();
+				/* for each point, fill our structure and pass it to API */
+				point.position = prof.points[lastPointSent][0];
+				point.velocity = prof.points[lastPointSent][1];
+				point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
+				point.profileSlotSelect0 = pidfSlot; 
+				point.profileSlotSelect1 = pidfSlot;
+				point.zeroPos = false;
+				if (lastPointSent == 0) {
+					point.zeroPos = true; /* set this to true on the first point */
+					System.out.println("Loaded first trajectory point");
+				}
+
+				point.isLastPoint = false;
+				if ((lastPointSent + 1) == prof.numPoints) {
+					point.isLastPoint = true; /** set this to true on the last point */
+					System.out.println("Loaded last trajectory point");
+				}
+
+				talon.pushMotionProfileTrajectory(point);
+				lastPointSent++;
+				hasPathStarted = true;
+			}
 		}
 	}
 
 	// Runs the runnable
-	private Notifier SrxNotifier = new Notifier(new PeriodicRunnable());
+	private Notifier loadLeftBuffer;
+	private Notifier loadRightBuffer;
 
 	// constructor
 	public FollowTrajectory(String trajectoryName) {
 		requires(Robot.drivetrain);
 		this.trajectoryName = trajectoryName;
+		reversed = false;
 	}
 	
 	public FollowTrajectory(SrxTrajectory trajectoryToFollow) {
 		requires(Robot.drivetrain);
 		this.trajectoryToFollow = trajectoryToFollow;
+		reversed = false;
+	}
+	
+	public FollowTrajectory(SrxTrajectory trajectoryToFollow, boolean reversed) {
+		requires(Robot.drivetrain);
+		this.trajectoryToFollow = trajectoryToFollow;
+		this.reversed = reversed;
 	}
 
 	// Called just before this Command runs the first time
@@ -77,14 +127,13 @@ public class FollowTrajectory extends Command {
 
 		setUpTalon(Robot.drivetrain.getLeft());
 		setUpTalon(Robot.drivetrain.getRight());
-
+		
+		
 		setValue = SetValueMotionProfile.Disable;
 		
 		Robot.drivetrain.getLeft().set(ControlMode.MotionProfile, setValue.value);
 		Robot.drivetrain.getRight().set(ControlMode.MotionProfile, setValue.value);
 
-		SrxNotifier.startPeriodic(.005);
-		
 		if(trajectoryToFollow == null) {
 			
 			try 
@@ -101,8 +150,16 @@ public class FollowTrajectory extends Command {
 		
 		int pidfSlot = 0;
 		
-		fillTalonBuffer(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot);
-		fillTalonBuffer(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot);
+		if (reversed) {
+			loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.leftProfile, pidfSlot));
+			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.rightProfile, pidfSlot));
+		} else {
+			loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
+			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
+		}
+		
+		loadLeftBuffer.startPeriodic(.005);
+		loadRightBuffer.startPeriodic(.005);
 
 	}
 
@@ -139,15 +196,22 @@ public class FollowTrajectory extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
+		if (!hasPathStarted) {
+			return false;
+		}
 		boolean leftComplete = leftStatus.activePointValid && leftStatus.isLast;
 		boolean rightComplete = rightStatus.activePointValid && rightStatus.isLast;
 		boolean trajectoryComplete = leftComplete && rightComplete;
+		if (trajectoryComplete) {
+			System.out.println("Finished trajectory");
+		}
 		return trajectoryComplete || isFinished;
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
-		SrxNotifier.stop();
+		loadLeftBuffer.stop();
+		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
 		resetTalon(Robot.drivetrain.getLeft(), ControlMode.PercentOutput, 0);
 	}
@@ -155,48 +219,25 @@ public class FollowTrajectory extends Command {
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		SrxNotifier.stop();
+		loadLeftBuffer.stop();
+		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
 		resetTalon(Robot.drivetrain.getLeft(), ControlMode.PercentOutput, 0);
 	}	
 
 	// set up the talon for motion profile control
-	public void setUpTalon(TalonSRX talon) {
+	private void setUpTalon(TalonSRX talon) {
 		talon.clearMotionProfileTrajectories();
 		talon.changeMotionControlFramePeriod(5);
+		talon.clearMotionProfileHasUnderrun(10);
 	}
 
 	// set the 	 to the desired controlMode
 	// used at the end of the motion profile
-	public void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
+	private void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
 		talon.clearMotionProfileTrajectories();
+		talon.clearMotionProfileHasUnderrun(10);
 		talon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
 		talon.set(controlMode, setValue);
-	}
-
-	// Send all the profile points to the talon object
-	public void fillTalonBuffer(TalonSRX talon, SrxMotionProfile prof, int pidfSlot) {
-		System.out.println("filling talon buffer");
-		TrajectoryPoint point = new TrajectoryPoint();
-
-		for (int i = 0; i < prof.numPoints; ++i) {
-			/* for each point, fill our structure and pass it to API */
-			point.position = prof.points[i][0];
-			point.velocity = prof.points[i][1];
-			point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-			point.profileSlotSelect0 = pidfSlot; 
-			point.profileSlotSelect1 = pidfSlot;
-			point.zeroPos = false;
-			if (i == 0)
-				point.zeroPos = true; /* set this to true on the first point */
-
-			point.isLastPoint = false;
-			if ((i + 1) == prof.numPoints)
-				point.isLastPoint = true; /*
-											 * set this to true on the last point
-											 */
-
-			talon.pushMotionProfileTrajectory(point);
-		}
 	}
 }
