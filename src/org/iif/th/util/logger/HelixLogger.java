@@ -23,7 +23,7 @@ public class HelixLogger {
 	
 	private String loggingLocation = "/home/lvuser/logs/";
 	
-	public HelixLogger(){
+	public HelixLogger() {
 		File usb1 = new File("/media/sda1/");
 		if (usb1.exists()) {
 			loggingLocation = "/media/sda1/logs/";
@@ -50,7 +50,9 @@ public class HelixLogger {
 			} else {
 				file = Paths.get(loggingLocation + "test.csv");
 			}
-			Files.createFile(file);
+			if (!Files.exists(file)) {
+				Files.createFile(file);
+			}
 			saveTitles();
 		} catch (IOException e) {
 			e.printStackTrace();
