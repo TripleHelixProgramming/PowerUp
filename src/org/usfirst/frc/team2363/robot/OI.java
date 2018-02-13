@@ -7,11 +7,11 @@ import static org.usfirst.frc.team2363.robot.RobotMap.LOW_SPEED_SCALING;
 import static org.usfirst.frc.team2363.robot.RobotMap.OPERATOR_PORT;
 import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
 
-import org.usfirst.frc.team2363.robot.commands.gripper.CloseClaw;
+import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
+import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.LowerWrist;
-import org.usfirst.frc.team2363.robot.commands.gripper.OpenClaw;
 import org.usfirst.frc.team2363.robot.commands.gripper.RaiseWrist;
 import org.usfirst.frc.team2363.robot.commands.gripper.ScoreCube;
 
