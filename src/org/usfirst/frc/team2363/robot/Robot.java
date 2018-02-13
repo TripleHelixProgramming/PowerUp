@@ -4,6 +4,7 @@ package org.usfirst.frc.team2363.robot;
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
 import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
+import org.usfirst.frc.team2363.robot.subsystems.Claws;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
 	public static Gripper gripper = new Gripper();
 	public static Tramps tramps;
 	public static Elevator elevator = new Elevator();
+	public static Claws claws = new Claws();
 	
 	public static AutoRoutines autoRoutines;
 	

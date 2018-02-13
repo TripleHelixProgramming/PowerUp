@@ -23,7 +23,6 @@ public class RaiseWrist extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.gripper.raise();
-    	Robot.gripper.closeClaw();
     	Robot.gripper.stop();
     }
 

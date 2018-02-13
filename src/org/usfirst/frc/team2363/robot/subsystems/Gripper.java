@@ -2,13 +2,9 @@ package org.usfirst.frc.team2363.robot.subsystems;
 
 import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.gripper.StopWheels;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -19,7 +15,6 @@ public class Gripper extends Subsystem {
 	private TalonSRX leftWheel = new TalonSRX(RobotMap.GRIPPER_LEFT_WHEEL);
 	private TalonSRX rightWheel = new TalonSRX(RobotMap.GRIPPER_RIGHT_WHEEL);
 	private DoubleSolenoid wrist = new DoubleSolenoid(RobotMap.GRIPPER_RAISE, RobotMap.GRIPPER_LOWER);
-	private DoubleSolenoid claws = new DoubleSolenoid(RobotMap.GRIPPER_OPEN, RobotMap.GRIPPER_CLOSE);
 //	private DigitalInput hasCube = new DigitalInput(0);
 	
     // Put methods for controlling this subsystem
@@ -41,26 +36,18 @@ public class Gripper extends Subsystem {
     }
     
     public void intake() {
-    	leftWheel.set(ControlMode.PercentOutput, -0.75);
-    	rightWheel.set(ControlMode.PercentOutput, 0.75);
+    	leftWheel.set(ControlMode.PercentOutput, 1);
+    	rightWheel.set(ControlMode.PercentOutput, -1);
     }
     
     public void eject() {
-    	leftWheel.set(ControlMode.PercentOutput, 0.25);
-    	rightWheel.set(ControlMode.PercentOutput, -0.25);
+    	leftWheel.set(ControlMode.PercentOutput, -0.5);
+    	rightWheel.set(ControlMode.PercentOutput, 0.5);
     }
     
     public void stop() {
-    	leftWheel.set(ControlMode.PercentOutput, 0);
-    	rightWheel.set(ControlMode.PercentOutput, 0);
-    }
-    
-    public void openClaw() {
-    	claws.set(DoubleSolenoid.Value.kForward);
-    }
-    
-    public void closeClaw() {
-    	claws.set(DoubleSolenoid.Value.kReverse);
+    	leftWheel.set(ControlMode.PercentOutput, 0.2);
+    	rightWheel.set(ControlMode.PercentOutput, -0.2);
     }
     
     public void lower() {
