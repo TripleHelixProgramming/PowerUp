@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team2363.robot;
 
+import org.iif.th.util.logger.HelixEvents;
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
 import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
@@ -121,6 +122,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		HelixEvents.startLogging();
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
