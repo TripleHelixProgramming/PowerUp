@@ -1,86 +1,66 @@
 package org.usfirst.frc.team2363.robot.commands.autonomous;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
+import org.usfirst.frc.team319.models.GameState;
+import org.usfirst.frc.team319.models.GameState.Side;
 import org.usfirst.frc.team319.models.SrxTrajectory;
-import org.usfirst.frc.team319.utils.SrxTrajectoryImporter;
+import org.usfirst.frc.team319.paths.CenterSwitch;
+import org.usfirst.frc.team319.paths.OppositeSideScale;
+import org.usfirst.frc.team319.paths.SameSideScale;
+import org.usfirst.frc.team319.paths.SameSideSwitch;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.Command;
 
 public class AutoRoutines {
 	
 	// AutoType Order must match paths order below.
 	public enum AutoType {
-		CENTER_SWITCH("CameraSwitch"),
-		SAME_SIDE_SWITCH("SameSideSwitch"),
-		SAME_SIDE_SCALE("SameSideScale"),
-		OPPOSITE_SIDE_SCALE("OpposideSideScale"),
-		BASELINE("Baseline"),
-		PATH_TO_CUBE("PathToCube"),
-		SHORT_PATH("ShortPath");
+		CENTER_SWITCH(Height.SWITCH, 0, null),
+		SAME_SIDE_SWITCH(Height.SWITCH, 0, null),
+		SAME_SIDE_SCALE(Height.SWITCH, 0, null),
+		OPPOSITE_SIDE_SCALE(Height.SWITCH, 0, null),
+		BASELINE(Height.GROUND, 0, null);
 		
-		private String fileName;
+		private Height height;
+		private double delay;
+		private Command phase2;
 		
-		AutoType(String fileName) {
-			this.fileName = fileName;
+		private AutoType(Height height,  double delay, Command phase2) {
+			this.height = height;
+			this.delay = delay;
+			this.phase2 = phase2;
 		}
 		
-		public String getFileName() {
-			return fileName;
+		public Height getHeight() {
+			return height;
 		}
-	}
-	
-	private SrxTrajectoryImporter importer = new SrxTrajectoryImporter("/home/lvuser");
-	
-	private AutoType autoType = AutoType.BASELINE;
-	private String gameData;
-    char ourSwitch, opponentSwitch, scale, robotPosition;
-	private Height height;
-	private Boolean reverse = false;
-	
-	// Hash map allowing look ups of path object based on autonomous path file name. 
-	Map<AutoType, SrxTrajectory> autoMap = new HashMap<AutoType, SrxTrajectory>();
-	
-	public AutoRoutines() {
-		loadPaths();
-	}
-	
-	/* 
-	 * Read the autonomous digital switch selections &  Load all the autonomous paths to save time during autonomous.  
-	 * This routine should be called in RobotInit.
-	 */
-	public void loadPaths() {
-		try {
-			for (AutoType path: AutoType.values()) {
-				autoMap.put(path, importer.importSrxTrajectory(path.getFileName()));
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
+		
+		public double getDelay() {
+			return delay;
+		}
+		
+		public Command getPhase2() {
+			return phase2;
 		}
 	}
 	
-	/* 
-	 * Get the locations of the switches and scale with respect to our alliance wall. 
-	 */
-	public void obtainPlateStates() {
-
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		
-		ourSwitch = gameData.charAt(0);
-		scale = gameData.charAt(1);
-		opponentSwitch = gameData.charAt(2);
-		
-		
-		// Read the switch setting and plan auto routes based on plate locations above.
-		determineAutoRoute();
-		
-		updateSmartDashboard();
-		
+	enum AutoMode {
+		CENTER_SWITCH,
+		OUR_SIDE_ONLY,
+		SWITCH_SCALE_SCALE,
+		SCALE_ONLY;
 	}
+	
+    private static DigitalInput left = new DigitalInput(0);
+    private static DigitalInput right = new DigitalInput(1);
+    private static DigitalInput centerSwitch = new DigitalInput(2);
+    private static DigitalInput ourSideOnly = new DigitalInput(3);
+    private static DigitalInput switchScaleScale = new DigitalInput(4);
+    private static DigitalInput scaleOnly = new DigitalInput(5);  // default
+	
 	
 	/* 
 	 * Base on Robot Position on the alliance wall & plates states, determines 
@@ -88,96 +68,90 @@ public class AutoRoutines {
 	 * profiles need to be reverse base on field symmetry.
 	 * 
 	 */
-	public void determineAutoRoute () {
-		
-		DigitalInput Left = new DigitalInput(0);
-		DigitalInput Right = new DigitalInput(1);
-		DigitalInput CenterSwitch = new DigitalInput(2);
-		DigitalInput OurSideOnly = new DigitalInput(3);
-		DigitalInput SwitchScaleScale = new DigitalInput(4);
-		DigitalInput ScaleOnly = new DigitalInput(5);  // default
-			
-		/*
-		 *  Switch left & right motor profiles, if robot is on right side of the alliance
-		 *  wall, when facing the field  OR  if robot is at center of alliance wall & our 
-		 *  switch plate is on the right.    
-		 */
-		if (Left.get()) {
-			robotPosition = 'L';
-			reverse = false;
-		} else if (Right.get()) {
-			robotPosition = 'R';
-			reverse = true;
-		} else {   // Center Switch
-			// Motor profile reverse is based on switch location in CenterSwitch case
-			reverse = (ourSwitch == 'R')? true : false; 
-		}
-		
-		height = Height.SWITCH;	
-		
-		if (CenterSwitch.get()) {
-			autoType = AutoType.CENTER_SWITCH;
-		} else if (OurSideOnly.get()) {  // Our Side only auto
-			if (ourSwitch == robotPosition) {
-				// Switch is on our side. Go for the switch first over the scale.
-				autoType = AutoType.SAME_SIDE_SWITCH;
-			} else if (scale == robotPosition) {
-				// Switch is not on our side, but scale is.
-				autoType = AutoType.SAME_SIDE_SCALE;
-				height = Height.SCALE;
-			} else {  
-				// Neither the Switch nor the Scale are on our side.
-				autoType = AutoType.BASELINE;
-				height = Height.GROUND;
-			}
-		} else if (SwitchScaleScale.get()) { 
-			if (ourSwitch == robotPosition) {
-				// Switch is on our side. Go for the switch first over the scale.
-				autoType = AutoType.SAME_SIDE_SWITCH;
-			} else if (scale == robotPosition){
-				// Switch is not on our side, but scale is. Go for scale.
-				autoType = AutoType.SAME_SIDE_SCALE;
-				height = Height.SCALE;
-			} else { 
-				// Neither the Switch nor the Scale are on our side. Go for opposite side scale. 
-				autoType = AutoType.OPPOSITE_SIDE_SCALE;
-				height = Height.SCALE;
-			}
-		} else {  // ScaleOnly run
-			height = Height.SCALE;
-			if (scale == robotPosition){
-				autoType = AutoType.SAME_SIDE_SCALE;
+	public static AutoGroup getAutoRoute () {
+		GameState state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
+		Side robotSide = getRobotSide(state);
+		AutoType selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
+		HelixEvents.addEvent("Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + (robotSide == Side.RIGHT));
+		return new AutoGroup(
+				getPath(selectedAutoType, robotSide == Side.RIGHT), 
+				selectedAutoType.getHeight(),
+				selectedAutoType.getDelay(),
+				selectedAutoType.getPhase2());
+	}
+	
+	private static Side getRobotSide(GameState state) {
+		if (centerSwitch.get()) {
+			return state.mySwitchSide; 
+		} else {
+			if (left.get()) {
+				return Side.LEFT;
 			} else {
-				autoType = AutoType.OPPOSITE_SIDE_SCALE;
-			}
+				return Side.RIGHT;
+			} 
 		}
 	}
 	
-	public SrxTrajectory getPath () {
-		return autoMap.get(autoType);
+	private static AutoMode getSelectedAutoMode() {
+		if (centerSwitch.get()) {
+			return AutoMode.CENTER_SWITCH;
+		} else if (ourSideOnly.get()) {  // Our Side only auto
+			return AutoMode.OUR_SIDE_ONLY;
+		} else if (switchScaleScale.get()) { 
+			return AutoMode.SWITCH_SCALE_SCALE;
+		} else {  // ScaleOnly run
+			return AutoMode.SCALE_ONLY;
+		}
 	}
 	
-	public SrxTrajectory getPath (AutoType autoType) {
-		return autoMap.get(autoType);
+	static AutoType getAutoType(AutoMode selectedAutoMode, GameState state, Side robotSide) {
+		switch (selectedAutoMode) {
+			case CENTER_SWITCH:
+				return AutoType.CENTER_SWITCH;
+			case OUR_SIDE_ONLY:
+				if (state.mySwitchSide == robotSide) {
+					// Switch is on our side. Go for the switch first over the scale.
+					return AutoType.SAME_SIDE_SWITCH;
+				} else if (state.scaleSide == robotSide) {
+					// Switch is not on our side, but scale is.
+					return AutoType.SAME_SIDE_SCALE;
+				} else {  
+					// Neither the Switch nor the Scale are on our side.
+					return AutoType.BASELINE;
+				}
+			case SWITCH_SCALE_SCALE:
+				if (state.mySwitchSide == robotSide) {
+					// Switch is on our side. Go for the switch first over the scale.
+					return AutoType.SAME_SIDE_SWITCH;
+				} else if (state.scaleSide == robotSide){
+					// Switch is not on our side, but scale is. Go for scale.
+					return AutoType.SAME_SIDE_SCALE;
+				} else { 
+					// Neither the Switch nor the Scale are on our side. Go for opposite side scale. 
+					return AutoType.OPPOSITE_SIDE_SCALE;
+				}
+			default:
+				if (state.scaleSide == robotSide) {
+					return AutoType.SAME_SIDE_SCALE;
+				} else {
+					return AutoType.OPPOSITE_SIDE_SCALE;
+				}
+			}
 	}
 	
-	public Height getHeight() {
-		return height;
-	}
-	
-	public boolean getReverse() {
-		return reverse;
-	}
-	
-	private void updateSmartDashboard () {
-		
-		SmartDashboard.putString("Game Specific Message", gameData);
-		SmartDashboard.putString("Our Switch Location", (ourSwitch == 'L')? "Left" : "Right");
-		SmartDashboard.putString("Scale Location", (scale == 'L')? "Left" : "Right");
-		SmartDashboard.putString("Opponent Switch Location", (opponentSwitch == 'L')? "Left" : "Right");
-		
-		SmartDashboard.putString("Robot Position", (robotPosition == 'L')? "Left" : (robotPosition == 'R')? "Right" : "Center");
-		SmartDashboard.putString("Auto Routine Chosen", autoType.getFileName());
-		SmartDashboard.putString("Gripper Height", height.toString());
+	private static SrxTrajectory getPath(AutoType autoType, boolean flipped) {
+		switch (autoType) {
+			case CENTER_SWITCH:
+				return new CenterSwitch();
+			case OPPOSITE_SIDE_SCALE:
+				return new OppositeSideScale(flipped);
+			case SAME_SIDE_SCALE:
+				return new SameSideScale(flipped);
+			case SAME_SIDE_SWITCH:
+				return new SameSideSwitch(flipped);
+			default:
+				break;
+		}
+		return null;
 	}
 }
