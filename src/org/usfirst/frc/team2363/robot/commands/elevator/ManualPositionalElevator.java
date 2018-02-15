@@ -1,44 +1,45 @@
 package org.usfirst.frc.team2363.robot.commands.elevator;
 
-import edu.wpi.first.wpilibj.command.Command;
-import static org.usfirst.frc.team2363.robot.Robot.*;
-
-import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
-import org.usfirst.frc.team2363.robot.subsystems.Elevator.*;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator;
+
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class RaiseElevator extends Command {
-
-	private Height height;
+public class ManualPositionalElevator extends Command {
 	
-    public RaiseElevator(Height height) {
+	double position;
+
+    public ManualPositionalElevator() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    	requires(elevator);
-    	this.height = height;
+        requires(Robot.elevator);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	HelixEvents.addEvent("Starting to go to " + height.toString());
+    	position = Robot.elevator.getPosition();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.goTo(height);
+    	position += Robot.oi.getElevatorPower() * 200;
+    	if (position > Elevator.MAX_HEIGHT) {
+    		position = Elevator.MAX_HEIGHT;
+    	} else if (position < 0) {
+    		position = 0;
+    	}
+    	Robot.elevator.goTo(position);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Robot.elevator.getPosition() - height.getHeight()) < 50;
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	HelixEvents.addEvent("Finished going to " + height.toString());
     }
 
     // Called when another command which requires one or more of the same
