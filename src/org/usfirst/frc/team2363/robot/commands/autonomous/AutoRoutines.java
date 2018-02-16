@@ -20,8 +20,8 @@ public class AutoRoutines {
 	public enum AutoType {
 		CENTER_SWITCH(Height.SWITCH, 0, null),
 		SAME_SIDE_SWITCH(Height.SWITCH, 0, null),
-		SAME_SIDE_SCALE(Height.SWITCH, 0, null),
-		OPPOSITE_SIDE_SCALE(Height.SWITCH, 0, null),
+		SAME_SIDE_SCALE(Height.SWITCH, 2, new SameSideScalePhase2()),
+		OPPOSITE_SIDE_SCALE(Height.SWITCH, 6, null),
 		BASELINE(Height.GROUND, 0, null);
 		
 		private Height height;
@@ -68,7 +68,7 @@ public class AutoRoutines {
 	 * profiles need to be reverse base on field symmetry.
 	 * 
 	 */
-	public static AutoGroup getAutoRoute () {
+	public static AutoGroup getAutoRoutine () {
 		GameState state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
 		Side robotSide = getRobotSide(state);
 		AutoType selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
@@ -136,7 +136,7 @@ public class AutoRoutines {
 				} else {
 					return AutoType.OPPOSITE_SIDE_SCALE;
 				}
-			}
+		}
 	}
 	
 	private static SrxTrajectory getPath(AutoType autoType, boolean flipped) {

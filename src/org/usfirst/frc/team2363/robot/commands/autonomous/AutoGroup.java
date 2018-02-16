@@ -21,7 +21,8 @@ public class AutoGroup extends CommandGroup {
     public AutoGroup(SrxTrajectory path, Height elevatorHeight, double elevatorDelay, Command phase2) {
         addParallel(new ElevatorCommand(elevatorHeight, elevatorDelay));
         addSequential(new FollowTrajectory(path));
-        addSequential(new EjectCube());
+        addParallel(new EjectCube());
+        addSequential(new WaitCommand(0.25));
         if (phase2 != null) {
         	addSequential(phase2);
         }

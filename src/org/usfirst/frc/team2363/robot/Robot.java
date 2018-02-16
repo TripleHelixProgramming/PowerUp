@@ -3,13 +3,17 @@ package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.iif.th.util.logger.HelixLogger;
+import org.usfirst.frc.team2363.robot.commands.autonomous.AutoGroup;
 import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
 import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
+import org.usfirst.frc.team2363.robot.commands.autonomous.SameSideScalePhase2;
 import org.usfirst.frc.team2363.robot.subsystems.Claws;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
+import org.usfirst.frc.team319.paths.SameSideScale;
 import org.usfirst.frc.team319.utils.SrxTrajectoryImporter;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -103,7 +107,7 @@ public class Robot extends IterativeRobot {
 //		AutoGroup autoGroup = new AutoGroup(autoRoutines.getPath(), autoRoutines.getHeight(), autoRoutines.getReverse());
 //		autonomousCommand = autoGroup;
 //		autonomousCommand = new PathRunner("scaling_calibration");
-		
+		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2, new SameSideScalePhase2());
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 		

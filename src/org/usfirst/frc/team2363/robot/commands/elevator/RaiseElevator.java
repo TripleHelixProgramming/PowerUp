@@ -19,6 +19,7 @@ public class RaiseElevator extends Command {
         // eg. requires(chassis);
     	requires(elevator);
     	this.height = height;
+    	setTimeout(2);
     }
 
     // Called just before this Command runs the first time
@@ -33,7 +34,7 @@ public class RaiseElevator extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(Robot.elevator.getPosition() - height.getHeight()) < 50;
+        return isTimedOut() || Math.abs(Robot.elevator.getPosition() - height.getHeight()) < 50;
     }
 
     // Called once after isFinished returns true
