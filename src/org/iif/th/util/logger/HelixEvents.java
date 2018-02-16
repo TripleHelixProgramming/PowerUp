@@ -31,11 +31,12 @@ public class HelixEvents {
 		log.startPeriodic(1);
 	}
 	
-	public static void addEvent(String event) {
+	public static void addEvent(String subsystem, String event) {
 		events.add(
 				new StringBuilder()
 				.append(Instant.now().toString()).append("\t")
 				.append(DriverStation.getInstance().getMatchTime()).append("\t")
+				.append(subsystem).append("t")
 				.append(event).append("\n")
 				.toString());
 	}
