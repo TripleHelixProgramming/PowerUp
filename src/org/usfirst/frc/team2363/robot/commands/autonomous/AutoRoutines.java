@@ -72,7 +72,7 @@ public class AutoRoutines {
 		GameState state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
 		Side robotSide = getRobotSide(state);
 		AutoType selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
-		HelixEvents.addEvent("Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + (robotSide == Side.RIGHT));
+		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + (robotSide == Side.RIGHT));
 		return new AutoGroup(
 				getPath(selectedAutoType, robotSide == Side.RIGHT), 
 				selectedAutoType.getHeight(),
