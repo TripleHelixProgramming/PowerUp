@@ -43,7 +43,6 @@ public class FollowTrajectory extends Command {
 	private MotionProfileStatus rightStatus = new MotionProfileStatus();
 	private MotionProfileStatus leftStatus = new MotionProfileStatus();
 	
-	private final boolean reversed;
 	private boolean hasPathStarted;
 
 	/**
@@ -107,21 +106,13 @@ public class FollowTrajectory extends Command {
 	public FollowTrajectory(String trajectoryName) {
 		requires(Robot.drivetrain);
 		this.trajectoryName = trajectoryName;
-		reversed = false;
 	}
 	
 	public FollowTrajectory(SrxTrajectory trajectoryToFollow) {
 		requires(Robot.drivetrain);
 		this.trajectoryToFollow = trajectoryToFollow;
-		reversed = false;
 	}
 	
-	public FollowTrajectory(SrxTrajectory trajectoryToFollow, boolean reversed) {
-		requires(Robot.drivetrain);
-		this.trajectoryToFollow = trajectoryToFollow;
-		this.reversed = reversed;
-	}
-
 	// Called just before this Command runs the first time
 	protected void initialize() {
 
@@ -150,13 +141,8 @@ public class FollowTrajectory extends Command {
 		
 		int pidfSlot = 0;
 		
-		if (reversed) {
-			loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.leftProfile, pidfSlot));
-			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.rightProfile, pidfSlot));
-		} else {
-			loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
-			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
-		}
+		loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
+		loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
 		
 		loadLeftBuffer.startPeriodic(.005);
 		loadRightBuffer.startPeriodic(.005);

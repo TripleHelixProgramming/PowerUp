@@ -50,9 +50,10 @@ public class HelixLogger {
 			} else {
 				file = Paths.get(loggingLocation + "test.csv");
 			}
-			if (!Files.exists(file)) {
-				Files.createFile(file);
+			if (Files.exists(file)) {
+				Files.delete(file);
 			}
+			Files.createFile(file);
 			saveTitles();
 		} catch (IOException e) {
 			e.printStackTrace();

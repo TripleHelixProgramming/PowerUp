@@ -1,39 +1,41 @@
-package org.usfirst.frc.team2363.robot.commands.gripper;
+package org.usfirst.frc.team2363.robot.commands.elevator;
 
 import org.usfirst.frc.team2363.robot.Robot;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 
-import edu.wpi.first.wpilibj.command.WaitCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class WaitForIntakeToLower extends WaitCommand {
+public class ManualPositionalElevator extends Command {
 	
-	boolean isGripperDown = false;
+	double position;
 
-    public WaitForIntakeToLower() {
+    public ManualPositionalElevator() {
         // Use requires() here to declare subsystem dependencies
-    	super(1);
-        requires(Robot.gripper);
+        requires(Robot.elevator);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if (Robot.gripper.isDown()) {
-    		isGripperDown = true;
-    	} else {
-    		Robot.gripper.lower();
-    	}
+    	position = Robot.elevator.getPosition();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	position += Robot.oi.getElevatorPower() * 200;
+    	if (position > Elevator.MAX_HEIGHT) {
+    		position = Elevator.MAX_HEIGHT;
+    	} else if (position < 0) {
+    		position = 0;
+    	}
+    	Robot.elevator.goTo(position);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return super.isFinished() || isGripperDown;
+        return false;
     }
 
     // Called once after isFinished returns true

@@ -3,6 +3,7 @@ package org.usfirst.frc.team2363.robot.commands.elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import static org.usfirst.frc.team2363.robot.Robot.*;
 
+import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.*;
 
@@ -18,10 +19,12 @@ public class RaiseElevator extends Command {
         // eg. requires(chassis);
     	requires(elevator);
     	this.height = height;
+    	setTimeout(2);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	HelixEvents.addEvent("ELEVATOR", "Starting to go to " + height.toString());
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -31,11 +34,12 @@ public class RaiseElevator extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return isTimedOut() || Math.abs(Robot.elevator.getPosition() - height.getHeight()) < 50;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	HelixEvents.addEvent("ELEVATOR", "Finished going to " + height.toString());
     }
 
     // Called when another command which requires one or more of the same

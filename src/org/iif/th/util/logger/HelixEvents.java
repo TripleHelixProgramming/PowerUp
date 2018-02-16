@@ -31,11 +31,12 @@ public class HelixEvents {
 		log.startPeriodic(1);
 	}
 	
-	public static void addEvent(String event) {
+	public static void addEvent(String subsystem, String event) {
 		events.add(
 				new StringBuilder()
 				.append(Instant.now().toString()).append("\t")
-				.append(DriverStation.getInstance().getMatchTime()).append("t")
+				.append(DriverStation.getInstance().getMatchTime()).append("\t")
+				.append(subsystem).append("t")
 				.append(event).append("\n")
 				.toString());
 	}
@@ -55,13 +56,14 @@ public class HelixEvents {
 				file = Paths.get(loggingLocation + 
 						DriverStation.getInstance().getEventName() + "_"+ 
 						DriverStation.getInstance().getMatchType() + 
-						DriverStation.getInstance().getMatchNumber() + "Events.csv");
+						DriverStation.getInstance().getMatchNumber() + "Events.txt");
 			} else {
-				file = Paths.get(loggingLocation + "testEvents.csv");
+				file = Paths.get(loggingLocation + "testEvents.txt");
 			}
-			if (!Files.exists(file)) {
-				Files.createFile(file);
+			if (Files.exists(file)) {
+				Files.delete(file);
 			}
+			Files.createFile(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -79,7 +81,9 @@ public class HelixEvents {
 		public void run() {
 			while (!events.isEmpty()) {
 				try {
-					Files.write(file, events.remove().getBytes(), StandardOpenOption.APPEND);
+					String event = events.remove();
+					System.out.println(event);
+					Files.write(file, event.getBytes(), StandardOpenOption.APPEND);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

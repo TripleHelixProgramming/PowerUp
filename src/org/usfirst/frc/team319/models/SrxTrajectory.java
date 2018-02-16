@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 public class SrxTrajectory {
 	public SrxMotionProfile leftProfile;
 	public SrxMotionProfile rightProfile;
+	
+	public SrxTrajectory() { }
 
 	public SrxTrajectory(SrxMotionProfile left, SrxMotionProfile right) {
 		this.leftProfile = left;
