@@ -20,8 +20,8 @@ public class Elevator extends Subsystem {
 	public enum Height {
 		
 		GROUND(0),
-		SWITCH(1125),
-		SCALE(4500),
+		SWITCH(1394),
+		SCALE(4700),
 		RUNG(2);
 		
 		private final double height;
@@ -35,7 +35,7 @@ public class Elevator extends Subsystem {
 		}
 	}
 	
-	public static final int MAX_HEIGHT = 4500;
+	public static final int MAX_HEIGHT = 4700;
 	public static final int MIN_HEIGHT = 0;
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);

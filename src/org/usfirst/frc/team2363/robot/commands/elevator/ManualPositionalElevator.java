@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2363.robot.commands.elevator;
 
+import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 
@@ -20,6 +21,7 @@ public class ManualPositionalElevator extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	position = Robot.elevator.getPosition();
+    	HelixEvents.addEvent("ELEVATOR", "Starting to move elevator");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -40,6 +42,7 @@ public class ManualPositionalElevator extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	HelixEvents.addEvent("ELEVATOR", "finished moving elevator");
     }
 
     // Called when another command which requires one or more of the same

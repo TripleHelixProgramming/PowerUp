@@ -1,7 +1,7 @@
 package org.usfirst.frc.team2363.robot.commands.autonomous;
 
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
-import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
+import org.usfirst.frc.team2363.robot.commands.gripper.ShootCube;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team319.models.SrxTrajectory;
 import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
@@ -21,7 +21,7 @@ public class AutoGroup extends CommandGroup {
     public AutoGroup(SrxTrajectory path, Height elevatorHeight, double elevatorDelay, Command phase2) {
         addParallel(new ElevatorCommand(elevatorHeight, elevatorDelay));
         addSequential(new FollowTrajectory(path));
-        addParallel(new EjectCube());
+        addParallel(new ShootCube());
         addSequential(new WaitCommand(0.25));
         if (phase2 != null) {
         	addSequential(phase2);

@@ -65,8 +65,8 @@ public class Drivetrain extends Subsystem {
 		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
-		frontLeft.config_kF(0, 1.3, 10);
-		frontLeft.config_kP(0, 6, 10);
+		frontLeft.config_kF(0, 2, 10);
+		frontLeft.config_kP(0, 7, 10);
 
 		frontLeft.setInverted(true);
 		middleLeft.setInverted(true);
@@ -85,8 +85,8 @@ public class Drivetrain extends Subsystem {
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
-		frontRight.config_kF(0, 1.3, 10);
-		frontRight.config_kP(0, 6, 10);
+		frontRight.config_kF(0, 2, 10);
+		frontRight.config_kP(0, 7, 10);
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 

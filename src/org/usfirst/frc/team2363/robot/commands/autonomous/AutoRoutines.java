@@ -20,7 +20,7 @@ public class AutoRoutines {
 	public enum AutoType {
 		CENTER_SWITCH(Height.SWITCH, 0, null),
 		SAME_SIDE_SWITCH(Height.SWITCH, 0, null),
-		SAME_SIDE_SCALE(Height.SWITCH, 2, new SameSideScalePhase2()),
+		SAME_SIDE_SCALE(Height.SWITCH, 2.5, new SameSideScalePhase2()),
 		OPPOSITE_SIDE_SCALE(Height.SWITCH, 6, null),
 		BASELINE(Height.GROUND, 0, null);
 		
