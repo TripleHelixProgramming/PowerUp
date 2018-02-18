@@ -121,6 +121,9 @@ public class Drivetrain extends Subsystem {
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
 		
+		throttle *= (0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3;
+		turn *= (0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3;
+		
 		double leftMotorSpeed;
 	    double rightMotorSpeed;
 	    
@@ -215,5 +218,8 @@ public class Drivetrain extends Subsystem {
 		return sensorVelocity * (600 / ENCODER_TICKS);
 	}
 	
-	
+	public void adjustForHeight(double heightPercentage) {
+		frontRight.configOpenloopRamp(0.4 + (0.6 * heightPercentage), 0);
+		frontLeft.configOpenloopRamp(0.4 + (0.6 * heightPercentage), 0);
+	}
 }

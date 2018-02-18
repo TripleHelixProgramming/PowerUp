@@ -20,7 +20,7 @@ public class Elevator extends Subsystem {
 	public enum Height {
 		
 		GROUND(0),
-		SWITCH(1394),
+		SWITCH(1500),
 		SCALE(4700),
 		RUNG(2);
 		
@@ -86,5 +86,13 @@ public class Elevator extends Subsystem {
 	protected void initDefaultCommand() {
 		// sets the default drive mode to Colson drive
   		setDefaultCommand(new ManualPositionalElevator());
+	}
+	
+	public double getHeightPercentage() {
+		return getPosition() / MAX_HEIGHT;
+	}
+
+	public void stop() {
+		leftMotor.set(ControlMode.PercentOutput, 0);
 	}
 }

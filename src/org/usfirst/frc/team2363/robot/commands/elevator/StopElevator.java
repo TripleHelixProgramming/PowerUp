@@ -1,30 +1,31 @@
-package org.usfirst.frc.team2363.robot.commands.drivetrain;
+package org.usfirst.frc.team2363.robot.commands.elevator;
 
-import edu.wpi.first.wpilibj.command.Command;
-import static org.usfirst.frc.team2363.robot.Robot.*;
+import static org.usfirst.frc.team2363.robot.Robot.elevator;
 
 import org.iif.th.util.logger.HelixEvents;
+import org.usfirst.frc.team2363.robot.Robot;
+
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class JoystickDrive extends Command {
+public class StopElevator extends Command {
 
-    public JoystickDrive() {
+	public StopElevator() {
         // Use requires() here to declare subsystem dependencies
-        requires(drivetrain);
+        // eg. requires(chassis);
+    	requires(elevator);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	HelixEvents.addEvent("DRIVETRAIN", "Starting to start joystick drive");
+    	HelixEvents.addEvent("ELEVATOR", "Stopping elevator");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.arcadeDrive(oi.getThrottle(), oi.getTurn(), false);
-    	
-    	drivetrain.adjustForHeight(elevator.getHeightPercentage());
+    	Robot.elevator.stop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -34,7 +35,6 @@ public class JoystickDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	HelixEvents.addEvent("DRIVETRAIN", "Finished starting joystick drive");
     }
 
     // Called when another command which requires one or more of the same

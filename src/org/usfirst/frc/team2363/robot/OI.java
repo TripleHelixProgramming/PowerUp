@@ -9,6 +9,7 @@ import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
 
 import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
 import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
+import org.usfirst.frc.team2363.robot.commands.elevator.ManualPositionalElevator;
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
@@ -43,6 +44,7 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new RaiseWrist());
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
+		new JoystickButton(operatorController, RobotMap.LEFT_STICK_BUTTON).whenPressed(new ManualPositionalElevator());
 		
 		new Button() {
 
