@@ -75,7 +75,7 @@ public class Robot extends IterativeRobot {
 			e.printStackTrace();
 		}
 		
-//		CameraServer.getInstance().startAutomaticCapture();
+		elevator.reset();
 	}
 
 	/**
