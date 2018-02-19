@@ -1,6 +1,8 @@
 package org.usfirst.frc.team2363.robot.commands.claws;
 
 import edu.wpi.first.wpilibj.command.Command;
+
+import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
 
 /**
@@ -16,6 +18,7 @@ public class CloseClaw extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	HelixEvents.addEvent("CLAW", "Starting to close claw");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,6 +32,7 @@ public class CloseClaw extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	HelixEvents.addEvent("CLAW", "Finished closing claw");
     }
 
     // Called when another command which requires one or more of the same

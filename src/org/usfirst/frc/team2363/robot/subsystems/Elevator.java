@@ -1,13 +1,14 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
 import org.usfirst.frc.team2363.robot.RobotMap;
-import org.usfirst.frc.team2363.robot.commands.elevator.ManualPositionalElevator;
+import org.usfirst.frc.team2363.robot.commands.elevator.StopElevator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -20,8 +21,8 @@ public class Elevator extends Subsystem {
 	public enum Height {
 		
 		GROUND(0),
-		SWITCH(1125),
-		SCALE(4500),
+		SWITCH(1500),
+		SCALE(4700),
 		RUNG(2);
 		
 		private final double height;
@@ -35,14 +36,14 @@ public class Elevator extends Subsystem {
 		}
 	}
 	
-	public static final int MAX_HEIGHT = 4500;
+	public static final int MAX_HEIGHT = 4700;
 	public static final int MIN_HEIGHT = 0;
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
-	private TalonSRX rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
+	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	
 	public Elevator() {
-		rightMotor.set(ControlMode.Follower, leftMotor.getDeviceID());
+		rightMotor.follow(leftMotor);
 		rightMotor.setNeutralMode(NeutralMode.Brake);
 		rightMotor.configOpenloopRamp(0.2, 0);
 		leftMotor.setNeutralMode(NeutralMode.Brake);
@@ -85,6 +86,22 @@ public class Elevator extends Subsystem {
 	
 	protected void initDefaultCommand() {
 		// sets the default drive mode to Colson drive
-  		setDefaultCommand(new ManualPositionalElevator());
+  		setDefaultCommand(new StopElevator());
+	}
+	
+	public double getHeightPercentage() {
+		if (getPosition() < Height.SWITCH.getHeight()) {
+			return 0;
+		}
+		
+		return (getPosition() - Height.SWITCH.getHeight()) / (MAX_HEIGHT - Height.SWITCH.getHeight());
+	}
+
+	public void stop() {
+		leftMotor.set(ControlMode.PercentOutput, 0);
+	}
+
+	public void reset() {
+		leftMotor.getSensorCollection().setQuadraturePosition(0, 0);
 	}
 }

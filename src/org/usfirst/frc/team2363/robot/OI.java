@@ -9,11 +9,11 @@ import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
 
 import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
 import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
+import org.usfirst.frc.team2363.robot.commands.elevator.ManualPositionalElevator;
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
-import org.usfirst.frc.team2363.robot.commands.gripper.LowerWrist;
-import org.usfirst.frc.team2363.robot.commands.gripper.RaiseWrist;
+import org.usfirst.frc.team2363.robot.commands.gripper.ShootCube;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -38,11 +38,11 @@ public class OI {
 		operatorController = new XboxController(OPERATOR_PORT);
 		
 		new JoystickButton(operatorController, RobotMap.X).whileHeld(new IntakeCube());
-		new JoystickButton(operatorController, RobotMap.B).whileHeld(new EjectCube());
-		new JoystickButton(operatorController, RobotMap.A).whileHeld(new LowerWrist());
-		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new RaiseWrist());
+		new JoystickButton(operatorController, RobotMap.A).whileHeld(new EjectCube());
+		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
+		new JoystickButton(operatorController, RobotMap.LEFT_STICK_BUTTON).whenPressed(new ManualPositionalElevator());
 		
 		new Button() {
 

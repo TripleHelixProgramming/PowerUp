@@ -5,10 +5,12 @@ import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team319.models.GameState;
 import org.usfirst.frc.team319.models.GameState.Side;
 import org.usfirst.frc.team319.models.SrxTrajectory;
+import org.usfirst.frc.team319.paths.Baseline;
 import org.usfirst.frc.team319.paths.CenterSwitch;
 import org.usfirst.frc.team319.paths.OppositeSideScale;
 import org.usfirst.frc.team319.paths.SameSideScale;
 import org.usfirst.frc.team319.paths.SameSideSwitch;
+import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,9 +21,10 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoType {
 		CENTER_SWITCH(Height.SWITCH, 0, null),
-		SAME_SIDE_SWITCH(Height.SWITCH, 0, null),
-		SAME_SIDE_SCALE(Height.SWITCH, 2, new SameSideScalePhase2()),
-		OPPOSITE_SIDE_SCALE(Height.SWITCH, 6, null),
+		SAME_SIDE_SWITCH(Height.SWITCH, 3, new SameSideSwitchPhase2()),
+		SAME_SIDE_SCALE(Height.SCALE, 2.5, new SameSideScalePhase2()),
+		SCALE_TO_SWITCH(Height.SCALE, 2.5, new ScaleToSwitchPhase2()),
+		OPPOSITE_SIDE_SCALE(Height.SCALE, 6, null),
 		BASELINE(Height.GROUND, 0, null);
 		
 		private Height height;
@@ -68,13 +71,18 @@ public class AutoRoutines {
 	 * profiles need to be reverse base on field symmetry.
 	 * 
 	 */
-	public static AutoGroup getAutoRoutine () {
+	public static Command getAutoRoutine () {
 		GameState state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
 		Side robotSide = getRobotSide(state);
 		AutoType selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
-		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + (robotSide == Side.RIGHT));
+		boolean flipped = robotSide == Side.RIGHT;
+		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + flipped);
+		if (selectedAutoType == AutoType.BASELINE) {
+			return new FollowTrajectory(getPath(selectedAutoType, flipped));
+		}
+		
 		return new AutoGroup(
-				getPath(selectedAutoType, robotSide == Side.RIGHT), 
+				getPath(selectedAutoType, flipped), 
 				selectedAutoType.getHeight(),
 				selectedAutoType.getDelay(),
 				selectedAutoType.getPhase2());
@@ -109,7 +117,9 @@ public class AutoRoutines {
 			case CENTER_SWITCH:
 				return AutoType.CENTER_SWITCH;
 			case OUR_SIDE_ONLY:
-				if (state.mySwitchSide == robotSide) {
+				if (state.mySwitchSide == robotSide && state.scaleSide == robotSide) {
+					return AutoType.SCALE_TO_SWITCH;
+				} else if (state.mySwitchSide == robotSide) {
 					// Switch is on our side. Go for the switch first over the scale.
 					return AutoType.SAME_SIDE_SWITCH;
 				} else if (state.scaleSide == robotSide) {
@@ -120,7 +130,9 @@ public class AutoRoutines {
 					return AutoType.BASELINE;
 				}
 			case SWITCH_SCALE_SCALE:
-				if (state.mySwitchSide == robotSide) {
+				if (state.mySwitchSide == robotSide && state.scaleSide == robotSide) {
+					return AutoType.SCALE_TO_SWITCH;
+				} else if (state.mySwitchSide == robotSide) {
 					// Switch is on our side. Go for the switch first over the scale.
 					return AutoType.SAME_SIDE_SWITCH;
 				} else if (state.scaleSide == robotSide){
@@ -150,8 +162,7 @@ public class AutoRoutines {
 			case SAME_SIDE_SWITCH:
 				return new SameSideSwitch(flipped);
 			default:
-				break;
+				return new Baseline(flipped);
 		}
-		return null;
 	}
 }

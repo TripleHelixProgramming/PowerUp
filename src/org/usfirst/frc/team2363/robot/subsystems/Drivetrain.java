@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -28,12 +29,12 @@ public class Drivetrain extends Subsystem {
 	
 	// Talons
 	private TalonSRX frontLeft = new TalonSRX(FRONT_LEFT_TALON_ID);
-	private TalonSRX middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
-	private TalonSRX rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
+	private BaseMotorController middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
+	private BaseMotorController rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
 
 	private TalonSRX frontRight = new TalonSRX(FRONT_RIGHT_TALON_ID);
-	private TalonSRX middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
-	private TalonSRX rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
+	private BaseMotorController middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
+	private BaseMotorController rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
 
 	// navX Gryo
 	private static AHRS ahrs;
@@ -41,20 +42,20 @@ public class Drivetrain extends Subsystem {
 	public Drivetrain() {
 
 		Robot.LOG.addSource("LEFT1 Current", frontLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("LEFT2 Current", middleLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("LEFT3 Current", rearLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("LEFT2 Current", middleLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
+		Robot.LOG.addSource("LEFT3 Current", rearLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		
 		Robot.LOG.addSource("LEFT1 Voltage", frontLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("LEFT2 Voltage", middleLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("LEFT3 Voltage", rearLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("LEFT2 Voltage", middleLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("LEFT3 Voltage", rearLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
 
 		Robot.LOG.addSource("RIGHT1 Current", frontRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("RIGHT2 Current", middleRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("RIGHT3 Current", rearRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("RIGHT2 Current", middleRight, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
+		Robot.LOG.addSource("RIGHT3 Current", rearRight, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		
 		Robot.LOG.addSource("RIGHT1 Voltage", frontRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
 
 		Robot.LOG.addSource("RightRPM", frontRight, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
 		Robot.LOG.addSource("LeftRPM", frontLeft, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
@@ -65,8 +66,8 @@ public class Drivetrain extends Subsystem {
 		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
-		frontLeft.config_kF(0, 1.3, 10);
-		frontLeft.config_kP(0, 6, 10);
+		frontLeft.config_kF(0, 2, 10);
+		frontLeft.config_kP(0, 7, 10);
 
 		frontLeft.setInverted(true);
 		middleLeft.setInverted(true);
@@ -85,33 +86,31 @@ public class Drivetrain extends Subsystem {
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
-		frontRight.config_kF(0, 1.3, 10);
-		frontRight.config_kP(0, 6, 10);
+		frontRight.config_kF(0, 2, 10);
+		frontRight.config_kP(0, 7, 10);
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 
 
-		middleLeft.set(ControlMode.Follower, frontLeft.getDeviceID());
+		middleLeft.follow(frontLeft);
 		middleLeft.setNeutralMode(NeutralMode.Brake);
 
-		middleRight.set(ControlMode.Follower, frontRight.getDeviceID());
+		middleRight.follow(frontRight);
 		middleRight.setNeutralMode(NeutralMode.Brake);
 		
-		rearLeft.set(ControlMode.Follower, frontLeft.getDeviceID());
+		rearLeft.follow(frontLeft);
 		rearLeft.setNeutralMode(NeutralMode.Brake);
 		
-		rearRight.set(ControlMode.Follower, frontRight.getDeviceID());
+		rearRight.follow(frontRight);
 		rearRight.setNeutralMode(NeutralMode.Brake);
 		
 		frontLeft.configMotionProfileTrajectoryPeriod(0, 10);
 		frontRight.configMotionProfileTrajectoryPeriod(0, 10);
 		
-		// Instantiate the NavMXP Gyro
-//		try {
-//			ahrs = new AHRS(SPI.Port.kMXP); 
-//		} catch (RuntimeException ex ) {
-//			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-//		}
+		frontLeft.configPeakCurrentLimit(40, 0);
+		frontLeft.configPeakCurrentDuration(1000, 0);
+		frontRight.configPeakCurrentLimit(40, 0);
+		frontRight.configPeakCurrentDuration(1000, 0);
 	}
 	
 	public void periodic() {
@@ -120,6 +119,9 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
+		
+		throttle *= (0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3;
+		turn *= (0.4 * (1 - Robot.elevator.getHeightPercentage())) + 0.6;
 		
 		double leftMotorSpeed;
 	    double rightMotorSpeed;
@@ -215,5 +217,8 @@ public class Drivetrain extends Subsystem {
 		return sensorVelocity * (600 / ENCODER_TICKS);
 	}
 	
-	
+	public void adjustForHeight(double heightPercentage) {
+		frontRight.configOpenloopRamp(0.4 + (0.6 * heightPercentage), 0);
+		frontLeft.configOpenloopRamp(0.4 + (0.6 * heightPercentage), 0);
+	}
 }

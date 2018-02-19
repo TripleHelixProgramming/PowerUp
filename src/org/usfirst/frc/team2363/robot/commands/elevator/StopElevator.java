@@ -1,39 +1,40 @@
-package org.usfirst.frc.team2363.robot.commands.claws;
+package org.usfirst.frc.team2363.robot.commands.elevator;
 
-import edu.wpi.first.wpilibj.command.Command;
+import static org.usfirst.frc.team2363.robot.Robot.elevator;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  *
  */
-public class OpenClaw extends Command {
+public class StopElevator extends Command {
 
-    public OpenClaw() {
+	public StopElevator() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.claws);
+    	requires(elevator);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	HelixEvents.addEvent("CLAW", "Starting to open claw");
+    	HelixEvents.addEvent("ELEVATOR", "Stopping elevator");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.claws.openClaw();
+    	Robot.elevator.stop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	HelixEvents.addEvent("CLAW", "Finished closing claw");
     }
 
     // Called when another command which requires one or more of the same

@@ -36,7 +36,7 @@ public class HelixEvents {
 				new StringBuilder()
 				.append(Instant.now().toString()).append("\t")
 				.append(DriverStation.getInstance().getMatchTime()).append("\t")
-				.append(subsystem).append("t")
+				.append(subsystem).append("\t")
 				.append(event).append("\n")
 				.toString());
 	}
