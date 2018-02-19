@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +42,7 @@ public class Elevator extends Subsystem {
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
 	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
+//	private BaseMotorController rightMotor = new VictorSPX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	
 	public Elevator() {
 		rightMotor.follow(leftMotor);

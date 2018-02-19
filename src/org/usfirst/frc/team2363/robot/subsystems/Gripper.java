@@ -6,6 +6,7 @@ import org.usfirst.frc.team2363.robot.commands.gripper.StopWheels;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -17,6 +18,9 @@ public class Gripper extends Subsystem {
 	
 	private BaseMotorController leftWheel = new TalonSRX(RobotMap.GRIPPER_LEFT_WHEEL);
 	private BaseMotorController rightWheel = new TalonSRX(RobotMap.GRIPPER_RIGHT_WHEEL);
+//	private BaseMotorController leftWheel = new VictorSPX(RobotMap.GRIPPER_LEFT_WHEEL);
+//	private BaseMotorController rightWheel = new VictorSPX(RobotMap.GRIPPER_RIGHT_WHEEL);
+	
 	private DoubleSolenoid wrist = new DoubleSolenoid(RobotMap.GRIPPER_RAISE, RobotMap.GRIPPER_LOWER);
 //	private DigitalInput hasCube = new DigitalInput(0);
 	
