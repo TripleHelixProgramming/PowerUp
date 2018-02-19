@@ -18,18 +18,18 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class SameSideScalePhase2 extends CommandGroup {
 
 
-    public SameSideScalePhase2() {
+    public SameSideScalePhase2(boolean flipped) {
     	addParallel(new RaiseElevator(Height.GROUND));
-        addSequential(new FollowTrajectory(new SameSideScalePart2()));
+        addSequential(new FollowTrajectory(new SameSideScalePart2(flipped)));
         addParallel(new IntakeCube());
 //        addParallel(new OpenClaw());
-        addSequential(new FollowTrajectory(new SameSideScalePart3()));
+        addSequential(new FollowTrajectory(new SameSideScalePart3(flipped)));
 //        addParallel(new CloseClaw());
 //        addSequential(new WaitCommand(0.25));
         addParallel(new StopWheels());
-        addSequential(new FollowTrajectory(new SameSideScalePart4()));
+        addSequential(new FollowTrajectory(new SameSideScalePart4(flipped)));
         addParallel(new RaiseElevator(Height.SCALE));
-        addSequential(new FollowTrajectory(new SameSideScalePart5()));
+        addSequential(new FollowTrajectory(new SameSideScalePart5(flipped)));
         addParallel(new ShootCube());
         
     }

@@ -16,16 +16,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class OppositeSideScalePhase2 extends CommandGroup {
 
 
-    public OppositeSideScalePhase2() {
+    public OppositeSideScalePhase2(boolean flipped) {
     	addParallel(new RaiseElevator(Height.GROUND));
-        addSequential(new FollowTrajectory(new OppositeSideScalePart2()));
+        addSequential(new FollowTrajectory(new OppositeSideScalePart2(flipped)));
         addParallel(new IntakeCube());
 //        addParallel(new OpenClaw());
-        addSequential(new FollowTrajectory(new OppositeSideScalePart3()));
+        addSequential(new FollowTrajectory(new OppositeSideScalePart3(flipped)));
 //        addParallel(new CloseClaw());
 //        addSequential(new WaitCommand(0.25));
         addParallel(new StopWheels());
-        addSequential(new FollowTrajectory(new OppositeSideScalePart4()));
+        addSequential(new FollowTrajectory(new OppositeSideScalePart4(flipped)));
 //        addParallel(new RaiseElevator(Height.SCALE));
 //        addSequential(new FollowTrajectory(new SameSideScalePart5()));
 //        addParallel(new ShootCube());

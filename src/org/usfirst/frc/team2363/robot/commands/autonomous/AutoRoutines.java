@@ -20,21 +20,19 @@ public class AutoRoutines {
 	
 	// AutoType Order must match paths order below.
 	public enum AutoType {
-		CENTER_SWITCH(Height.SWITCH, 0, null),
-		SAME_SIDE_SWITCH(Height.SWITCH, 3, new SameSideSwitchPhase2()),
-		SAME_SIDE_SCALE(Height.SCALE, 2.5, new SameSideScalePhase2()),
-		SCALE_TO_SWITCH(Height.SCALE, 2.5, new ScaleToSwitchPhase2()),
-		OPPOSITE_SIDE_SCALE(Height.SCALE, 6, null),
-		BASELINE(Height.GROUND, 0, null);
+		CENTER_SWITCH(Height.SWITCH, 0),
+		SAME_SIDE_SWITCH(Height.SWITCH, 3),
+		SAME_SIDE_SCALE(Height.SCALE, 2.5),
+		SCALE_TO_SWITCH(Height.SCALE, 2.5),
+		OPPOSITE_SIDE_SCALE(Height.SCALE, 6),
+		BASELINE(Height.GROUND, 0);
 		
 		private Height height;
 		private double delay;
-		private Command phase2;
 		
-		private AutoType(Height height,  double delay, Command phase2) {
+		private AutoType(Height height,  double delay) {
 			this.height = height;
 			this.delay = delay;
-			this.phase2 = phase2;
 		}
 		
 		public Height getHeight() {
@@ -43,10 +41,6 @@ public class AutoRoutines {
 		
 		public double getDelay() {
 			return delay;
-		}
-		
-		public Command getPhase2() {
-			return phase2;
 		}
 	}
 	
@@ -85,7 +79,7 @@ public class AutoRoutines {
 				getPath(selectedAutoType, flipped), 
 				selectedAutoType.getHeight(),
 				selectedAutoType.getDelay(),
-				selectedAutoType.getPhase2());
+				getPhase2(selectedAutoType, flipped));
 	}
 	
 	private static Side getRobotSide(GameState state) {
@@ -158,11 +152,27 @@ public class AutoRoutines {
 			case OPPOSITE_SIDE_SCALE:
 				return new OppositeSideScale(flipped);
 			case SAME_SIDE_SCALE:
+			case SCALE_TO_SWITCH:
 				return new SameSideScale(flipped);
 			case SAME_SIDE_SWITCH:
 				return new SameSideSwitch(flipped);
 			default:
 				return new Baseline(flipped);
+		}
+	}
+	
+	private static Command getPhase2(AutoType autoType, boolean flipped) {
+		switch (autoType) {
+			case OPPOSITE_SIDE_SCALE:
+				return new OppositeSideScalePhase2(flipped);
+			case SAME_SIDE_SCALE:
+				return new SameSideScalePhase2(flipped);
+			case SAME_SIDE_SWITCH:
+				return new SameSideSwitchPhase2(flipped);
+			case SCALE_TO_SWITCH:
+				return new ScaleToSwitchPhase2(flipped);
+			default:
+				return null;
 		}
 	}
 }

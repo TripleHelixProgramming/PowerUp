@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class ScaleToSwitchPhase2 extends CommandGroup {
 
 
-    public ScaleToSwitchPhase2() {
+    public ScaleToSwitchPhase2(boolean flipped) {
     	addParallel(new RaiseElevator(Height.GROUND));
-        addSequential(new FollowTrajectory(new SameSideScalePart2()));
+        addSequential(new FollowTrajectory(new SameSideScalePart2(flipped)));
         addParallel(new IntakeCube());
-        addSequential(new FollowTrajectory(new SameSideScalePart3()));
+        addSequential(new FollowTrajectory(new SameSideScalePart3(flipped)));
         addSequential(new RaiseElevator(Height.SWITCH));
         addParallel(new ShootCube());
         

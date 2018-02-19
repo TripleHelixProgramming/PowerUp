@@ -16,12 +16,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class SameSideSwitchPhase2 extends CommandGroup {
 
-    public SameSideSwitchPhase2() {
-    	 addSequential(new FollowTrajectory(new SameSideSwitchPart2()));
+    public SameSideSwitchPhase2(boolean flipped) {
+    	 addSequential(new FollowTrajectory(new SameSideSwitchPart2(flipped)));
     	 addParallel(new RaiseElevator(Height.GROUND));
-    	 addSequential(new FollowTrajectory(new SameSideSwitchPart3()));
+    	 addSequential(new FollowTrajectory(new SameSideSwitchPart3(flipped)));
     	 addParallel(new IntakeCube());
-    	 addSequential(new FollowTrajectory(new SameSideSwitchPart4()));
+    	 addSequential(new FollowTrajectory(new SameSideSwitchPart4(flipped)));
     	 addSequential(new RaiseElevator(Height.SWITCH));
     	 addSequential(new ShootCube());
     }
