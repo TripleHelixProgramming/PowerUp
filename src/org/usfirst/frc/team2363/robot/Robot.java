@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator = new Elevator();
 	public static Claws claws = new Claws();
 	
-	public static AutoRoutines autoRoutines;
+	public static AutoRoutines autoRoutines = new AutoRoutines();
 	
 	// declare SmartDashboard tools
 	Command autonomousCommand;
@@ -56,7 +56,6 @@ public class Robot extends IterativeRobot {
 	  
 		drivetrain = new Drivetrain();
 		tramps = new Tramps();
-//		autoRoutines = new AutoRoutines();
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("Compressor State", compressor, f -> "" + ((Compressor)f).enabled());
@@ -95,22 +94,23 @@ public class Robot extends IterativeRobot {
 		// makes sure only one command per subsystems runs at a time
 		Scheduler.getInstance().run();
 		elevator.goTo(elevator.getPosition());
+		
+		AutoRoutines.putSmartDash();
 	}
 
 	@Override
 	public void autonomousInit() {
 			
-		//   Set plate states
-//		autoRoutines.obtainPlateStates();
-		
-//		AutoGroup autoGroup = new AutoGroup(autoRoutines.getPath(), autoRoutines.getHeight(), autoRoutines.getReverse());
-//		autonomousCommand = autoGroup;
 //		autonomousCommand = new FollowTrajectory(new SameSideScalePart2());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new SameSideScalePhase2());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new ScaleToSwitchPhase2());
 //		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2());
-		autonomousCommand = new FollowTrajectory(new Baseline());
+//		autonomousCommand = new FollowTrajectory(new Baseline());
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
+		
+		
+//		autonomousCommand = AutoRoutines.getAutoRoutine();
+		autonomousCommand = null;
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 		
@@ -147,7 +147,6 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		
 		LOG.saveLogs();
-		gripper.putSmartdash();
 	}
 
 	/**
