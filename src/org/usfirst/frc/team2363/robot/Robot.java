@@ -13,6 +13,7 @@ import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team319.paths.Baseline;
 import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -76,6 +77,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		elevator.reset();
+		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**
@@ -145,6 +147,7 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		
 		LOG.saveLogs();
+		gripper.putSmartdash();
 	}
 
 	/**

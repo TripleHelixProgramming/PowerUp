@@ -30,16 +30,16 @@ public class Drivetrain extends Subsystem {
 	
 	// Talons
 	private TalonSRX frontLeft = new TalonSRX(FRONT_LEFT_TALON_ID);
-	private BaseMotorController middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
-	private BaseMotorController rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
-//	private BaseMotorController middleLeft = new VictorSPX(MIDDLE_LEFT_TALON_ID);
-//	private BaseMotorController rearLeft = new VictorSPX(REAR_LEFT_TALON_ID);
+//	private BaseMotorController middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
+//	private BaseMotorController rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
+	private BaseMotorController middleLeft = new VictorSPX(MIDDLE_LEFT_TALON_ID);
+	private BaseMotorController rearLeft = new VictorSPX(REAR_LEFT_TALON_ID);
 	
 	private TalonSRX frontRight = new TalonSRX(FRONT_RIGHT_TALON_ID);
-	private BaseMotorController middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
-	private BaseMotorController rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
-//	private BaseMotorController middleRight = new VictorSPX(MIDDLE_RIGHT_TALON_ID);
-//	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TALON_ID);
+//	private BaseMotorController middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
+//	private BaseMotorController rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
+	private BaseMotorController middleRight = new VictorSPX(MIDDLE_RIGHT_TALON_ID);
+	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TALON_ID);
 
 	// navX Gryo
 	private static AHRS ahrs;

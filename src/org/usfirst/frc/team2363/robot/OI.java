@@ -38,7 +38,7 @@ public class OI {
 		operatorController = new XboxController(OPERATOR_PORT);
 		
 		new JoystickButton(operatorController, RobotMap.X).whileHeld(new IntakeCube());
-		new JoystickButton(operatorController, RobotMap.A).whileHeld(new EjectCube());
+		new JoystickButton(operatorController, RobotMap.B).whileHeld(new EjectCube());
 		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());

@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -47,9 +48,14 @@ public class Gripper extends Subsystem {
     	rightWheel.set(ControlMode.PercentOutput, -1);
     }
     
+//@Override
+//	public void periodic() {
+//		putSmartDashboard();
+//}
+    
     public void eject() {
-    	leftWheel.set(ControlMode.PercentOutput, -0.5);
-    	rightWheel.set(ControlMode.PercentOutput, 0.5);
+    	leftWheel.set(ControlMode.PercentOutput, -0.25);
+    	rightWheel.set(ControlMode.PercentOutput, 0.25);
     }
     
     public void shoot() {
@@ -76,5 +82,26 @@ public class Gripper extends Subsystem {
     
     public boolean isUp() {
     	return (wrist.get() == DoubleSolenoid.Value.kReverse);
+    }
+    
+    public void putSmartdash() {
+    	SmartDashboard.putNumber("GripperLeftCurrent", leftWheel.getOutputCurrent());
+    	SmartDashboard.putNumber("GripperRightCurrent", rightWheel.getOutputCurrent());
+    }
+        
+    public double getOutputCurrent() {
+    	return Math.max(leftWheel.getOutputCurrent(), rightWheel.getOutputCurrent());
+    }
+    
+    /**
+     * Use to detect if the gear grabber roller is over current
+     * @return true if over 20 amps
+     */
+    public boolean isOverCurrent() {
+    	if (getOutputCurrent() > 20) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
 }

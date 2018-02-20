@@ -41,8 +41,8 @@ public class Elevator extends Subsystem {
 	public static final int MIN_HEIGHT = 0;
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
-	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
-//	private BaseMotorController rightMotor = new VictorSPX(RobotMap.RIGHT_ELEVATOR_MOTOR);
+//	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
+	private BaseMotorController rightMotor = new VictorSPX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	
 	public Elevator() {
 		rightMotor.follow(leftMotor);
@@ -55,7 +55,7 @@ public class Elevator extends Subsystem {
 		leftMotor.config_kD(0, 4000, 10);
 		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		leftMotor.configMotionCruiseVelocity(700, 0);
-		leftMotor.configMotionAcceleration(10000, 0);
+		leftMotor.configMotionAcceleration(5000, 0);
 	}
 
 	@Override
