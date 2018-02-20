@@ -48,6 +48,11 @@ public class Gripper extends Subsystem {
     	rightWheel.set(ControlMode.PercentOutput, -1);
     }
     
+//@Override
+//	public void periodic() {
+//		putSmartDashboard();
+//}
+    
     public void eject() {
     	leftWheel.set(ControlMode.PercentOutput, -0.25);
     	rightWheel.set(ControlMode.PercentOutput, 0.25);

@@ -55,7 +55,7 @@ public class Elevator extends Subsystem {
 		leftMotor.config_kD(0, 4000, 10);
 		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		leftMotor.configMotionCruiseVelocity(700, 0);
-		leftMotor.configMotionAcceleration(10000, 0);
+		leftMotor.configMotionAcceleration(5000, 0);
 	}
 
 	@Override
