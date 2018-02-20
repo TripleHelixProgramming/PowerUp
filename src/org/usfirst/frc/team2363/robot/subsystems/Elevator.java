@@ -41,8 +41,8 @@ public class Elevator extends Subsystem {
 	public static final int MIN_HEIGHT = 0;
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
-	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
-//	private BaseMotorController rightMotor = new VictorSPX(RobotMap.RIGHT_ELEVATOR_MOTOR);
+//	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
+	private BaseMotorController rightMotor = new VictorSPX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	
 	public Elevator() {
 		rightMotor.follow(leftMotor);
