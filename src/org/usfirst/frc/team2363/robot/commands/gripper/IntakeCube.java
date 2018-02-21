@@ -36,14 +36,14 @@ public class IntakeCube extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return stalledCount > 30;
+        return stalledCount > 5;
 //        return true;
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	HelixEvents.addEvent("GRIPPER", "Finished intaking cube");
-    	oi.setControllerRumble(true);
+//    	oi.setControllerRumble(true);
     }
 
     // Called when another command which requires one or more of the same
