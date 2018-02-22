@@ -63,6 +63,7 @@ public class Robot extends IterativeRobot {
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("Compressor State", compressor, f -> "" + ((Compressor)f).enabled());
+		
 	}
     
 	/**
@@ -99,7 +100,7 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		elevator.goTo(elevator.getPosition());
 		
-		AutoRoutines.putSmartDash();
+		AutoRoutines.updateGameState();
 	}
 
 	@Override
@@ -114,7 +115,6 @@ public class Robot extends IterativeRobot {
 		
 		
 		autonomousCommand = AutoRoutines.getAutoRoutine();
-//		autonomousCommand = null;
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 		

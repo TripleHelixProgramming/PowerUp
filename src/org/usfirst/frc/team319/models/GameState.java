@@ -6,7 +6,19 @@ public class GameState {
 	public Side scaleSide;
 	public Side theirSwitchSide;
 	
+	public enum Side{LEFT, RIGHT}
+	
+	public GameState() {
+
+	}
+	
 	public GameState(String gameSpecificMessage) {
+		
+		updateGameState(gameSpecificMessage);
+			
+	}
+	
+	public void updateGameState(String gameSpecificMessage) {
 		
 		if(gameSpecificMessage.charAt(0) == 'L') {
 			this.mySwitchSide = Side.LEFT;
@@ -27,7 +39,4 @@ public class GameState {
 		}
 			
 	}
-	
-	public enum Side{LEFT, RIGHT}
-
 }

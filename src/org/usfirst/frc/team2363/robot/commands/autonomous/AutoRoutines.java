@@ -65,14 +65,17 @@ public class AutoRoutines {
     private static boolean flipped;
 	
     public AutoRoutines() {
-    	setGameState();
+    	state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
     }
     
-	public static void setGameState() {
-		state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
+	public static void updateGameState() {
+		state.updateGameState(DriverStation.getInstance().getGameSpecificMessage());
+		
 		robotSide = getRobotSide(state);
 		selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
 		flipped = robotSide == Side.RIGHT;
+		
+		putSmartDash();
 	}
 	
 	/* 
@@ -83,8 +86,7 @@ public class AutoRoutines {
 	 */
 	public static Command getAutoRoutine () {
 
-		setGameState();
-		putSmartDash();
+		updateGameState();
 		
 		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + flipped);
 		
@@ -195,24 +197,8 @@ public class AutoRoutines {
 	
 	public static void putSmartDash() {
 		
-		Side side;
-		AutoMode mode;
-		AutoType autoType;
-		GameState state;
-		
-		state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
 		SmartDashboard.putString("Robot Location", !left.get()? "LEFT": (!right.get()? "RIGHT" : "CENTER"));
-		
-		if (!centerSwitch.get()) {
-			mode=AutoMode.CENTER_SWITCH;
-		} else if (!ourSideOnly.get()) {  // Our Side only auto
-			mode=AutoMode.OUR_SIDE_ONLY;
-		} else if (!switchScaleScale.get()) { 
-			mode=AutoMode.SWITCH_SCALE_SCALE;
-		} else {  // ScaleOnly run
-			mode= AutoMode.SCALE_ONLY;
-		}
-		SmartDashboard.putString("Auto Mode", mode.name());
+		SmartDashboard.putString("Auto Mode", getSelectedAutoMode().name());
 		
 		SmartDashboard.putBoolean("Center Switch", !centerSwitch.get());
 		SmartDashboard.putBoolean("Our Side Only", !ourSideOnly.get());
@@ -222,20 +208,9 @@ public class AutoRoutines {
 		SmartDashboard.putString("Our Switch", state.mySwitchSide.name());
 		SmartDashboard.putString("Our Scale", state.scaleSide.name());
 		SmartDashboard.putString("Their Switch", state.theirSwitchSide.name());
-		
-		if (!centerSwitch.get()) {
-			side = state.mySwitchSide; 
-		} else {
-			if (!left.get()) {
-				side =Side.LEFT;
-			} else {
-				side =Side.RIGHT;
-			} 
-		}
-		SmartDashboard.putBoolean("Flipped", side == Side.RIGHT);
-
-		autoType = getAutoType(mode, state, side);
-		SmartDashboard.putString("Auto Type", autoType.name());
+	
+		SmartDashboard.putBoolean("Flipped", robotSide == Side.RIGHT);
+		SmartDashboard.putString("Auto Type", selectedAutoType.name());
 		
 	}
 }
