@@ -24,7 +24,7 @@ public class Elevator extends Subsystem {
 		GROUND(0),
 		SWITCH(1500),
 		SCALE(4700),
-		RUNG(2);
+		RUNG(4700);
 		
 		private final double height;
 		
@@ -39,6 +39,7 @@ public class Elevator extends Subsystem {
 	
 	public static final int MAX_HEIGHT = 4700;
 	public static final int MIN_HEIGHT = 0;
+	public static final double SLOW_HEIGHT = Height.SWITCH.height + 5;
 	
 	private TalonSRX leftMotor = new TalonSRX(RobotMap.LEFT_ELEVATOR_MOTOR);
 //	private BaseMotorController rightMotor = new TalonSRX(RobotMap.RIGHT_ELEVATOR_MOTOR);
@@ -91,12 +92,17 @@ public class Elevator extends Subsystem {
   		setDefaultCommand(new StopElevator());
 	}
 	
-	public double getHeightPercentage() {
-		if (getPosition() < Height.SWITCH.getHeight()) {
-			return 0;
-		}
+	public double getHeightPercentage(boolean slow_mode) {
 		
-		return (getPosition() - Height.SWITCH.getHeight()) / (MAX_HEIGHT - Height.SWITCH.getHeight());
+		if (slow_mode) {
+			return (getPosition()/ MAX_HEIGHT);
+		} else {
+			if (getPosition() < SLOW_HEIGHT) {
+				return 0;
+			}
+			
+			return (getPosition() - SLOW_HEIGHT) / (MAX_HEIGHT - SLOW_HEIGHT);
+		}
 	}
 
 	public void stop() {

@@ -125,8 +125,8 @@ public class Drivetrain extends Subsystem {
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
 		
-		throttle *= (0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3;
-		turn *= (0.4 * (1 - Robot.elevator.getHeightPercentage())) + 0.6;
+		throttle *= (0.7 * (1 - Robot.elevator.getHeightPercentage(false))) + 0.3;
+		turn *= (0.4 * (1 - Robot.elevator.getHeightPercentage(false))) + 0.6;
 		
 		double leftMotorSpeed;
 	    double rightMotorSpeed;
