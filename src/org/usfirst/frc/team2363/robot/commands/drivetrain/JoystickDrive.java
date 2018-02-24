@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import static org.usfirst.frc.team2363.robot.Robot.*;
 
 import org.iif.th.util.logger.HelixEvents;
+import org.usfirst.frc.team2363.robot.Robot;
 
 /**
  *
@@ -22,7 +23,13 @@ public class JoystickDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.arcadeDrive(oi.getThrottle(), oi.getTurn(), false);
+    	
+    	double throttle, turn;
+    	
+    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage(false))) + 0.3);
+    	turn = oi.getTurn() * ((0.4 * (1 - Robot.elevator.getHeightPercentage(false))) + 0.6);
+    	
+    	drivetrain.arcadeDrive(throttle, turn, false);
     	drivetrain.adjustForHeight(elevator.getHeightPercentage(false));
     }
 
