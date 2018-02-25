@@ -15,6 +15,7 @@ import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoRoutines {
 	
@@ -58,6 +59,24 @@ public class AutoRoutines {
     private static DigitalInput switchScaleScale = new DigitalInput(4);
     private static DigitalInput scaleOnly = new DigitalInput(5);  // default
 	
+    private static GameState state;
+    private static Side robotSide;
+    private static AutoType selectedAutoType;
+    private static boolean flipped;
+	
+    public AutoRoutines() {
+    	state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
+    }
+    
+	public static void updateGameState() {
+		state.updateGameState(DriverStation.getInstance().getGameSpecificMessage());
+		
+		robotSide = getRobotSide(state);
+		selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
+		flipped = robotSide == Side.RIGHT;
+		
+		putSmartDash();
+	}
 	
 	/* 
 	 * Base on Robot Position on the alliance wall & plates states, determines 
@@ -66,11 +85,11 @@ public class AutoRoutines {
 	 * 
 	 */
 	public static Command getAutoRoutine () {
-		GameState state = new GameState(DriverStation.getInstance().getGameSpecificMessage());
-		Side robotSide = getRobotSide(state);
-		AutoType selectedAutoType = getAutoType(getSelectedAutoMode(), state, robotSide);
-		boolean flipped = robotSide == Side.RIGHT;
+
+		updateGameState();
+		
 		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + flipped);
+		
 		if (selectedAutoType == AutoType.BASELINE) {
 			return new FollowTrajectory(getPath(selectedAutoType, flipped));
 		}
@@ -83,10 +102,10 @@ public class AutoRoutines {
 	}
 	
 	private static Side getRobotSide(GameState state) {
-		if (centerSwitch.get()) {
+		if (!centerSwitch.get()) {
 			return state.mySwitchSide; 
 		} else {
-			if (left.get()) {
+			if (!left.get()) {
 				return Side.LEFT;
 			} else {
 				return Side.RIGHT;
@@ -95,11 +114,11 @@ public class AutoRoutines {
 	}
 	
 	private static AutoMode getSelectedAutoMode() {
-		if (centerSwitch.get()) {
+		if (!centerSwitch.get()) {
 			return AutoMode.CENTER_SWITCH;
-		} else if (ourSideOnly.get()) {  // Our Side only auto
+		} else if (!ourSideOnly.get()) {  // Our Side only auto
 			return AutoMode.OUR_SIDE_ONLY;
-		} else if (switchScaleScale.get()) { 
+		} else if (!switchScaleScale.get()) { 
 			return AutoMode.SWITCH_SCALE_SCALE;
 		} else {  // ScaleOnly run
 			return AutoMode.SCALE_ONLY;
@@ -174,5 +193,24 @@ public class AutoRoutines {
 			default:
 				return null;
 		}
+	}
+	
+	public static void putSmartDash() {
+		
+		SmartDashboard.putString("Robot Location", !left.get()? "LEFT": (!right.get()? "RIGHT" : "CENTER"));
+		SmartDashboard.putString("Auto Mode", getSelectedAutoMode().name());
+		
+		SmartDashboard.putBoolean("Center Switch", !centerSwitch.get());
+		SmartDashboard.putBoolean("Our Side Only", !ourSideOnly.get());
+		SmartDashboard.putBoolean("Switch Scale Scale", !switchScaleScale.get());
+		SmartDashboard.putBoolean("Scale Only", !scaleOnly.get());
+		
+		SmartDashboard.putString("Our Switch", state.mySwitchSide.name());
+		SmartDashboard.putString("Our Scale", state.scaleSide.name());
+		SmartDashboard.putString("Their Switch", state.theirSwitchSide.name());
+	
+		SmartDashboard.putBoolean("Flipped", robotSide == Side.RIGHT);
+		SmartDashboard.putString("Auto Type", selectedAutoType.name());
+		
 	}
 }

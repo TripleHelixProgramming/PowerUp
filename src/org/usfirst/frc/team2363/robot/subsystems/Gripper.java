@@ -48,10 +48,10 @@ public class Gripper extends Subsystem {
     	rightWheel.set(ControlMode.PercentOutput, -1);
     }
     
-//@Override
-//	public void periodic() {
-//		putSmartDashboard();
-//}
+@Override
+	public void periodic() {
+		putSmartDash();
+	}
     
     public void eject() {
     	leftWheel.set(ControlMode.PercentOutput, -0.25);
@@ -84,7 +84,7 @@ public class Gripper extends Subsystem {
     	return (wrist.get() == DoubleSolenoid.Value.kReverse);
     }
     
-    public void putSmartdash() {
+    public void putSmartDash() {
     	SmartDashboard.putNumber("GripperLeftCurrent", leftWheel.getOutputCurrent());
     	SmartDashboard.putNumber("GripperRightCurrent", rightWheel.getOutputCurrent());
     }
