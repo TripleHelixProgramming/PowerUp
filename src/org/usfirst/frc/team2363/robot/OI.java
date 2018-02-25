@@ -42,7 +42,7 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
-		new JoystickButton(operatorController, RobotMap.LEFT_STICK_BUTTON).whenPressed(new ManualPositionalElevator());
+		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
 		
 		new Button() {
 
