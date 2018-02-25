@@ -5,12 +5,15 @@ import static org.usfirst.frc.team2363.robot.Robot.*;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
+import org.usfirst.frc.team2363.robot.commands.gripper.RumbleController;
 
 /**
  *
  */
 public class JoystickDrive extends Command {
 
+	Command SlowDrive = new SlowJoystickDrive();
+	
     public JoystickDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(drivetrain);
@@ -24,13 +27,19 @@ public class JoystickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	double throttle, turn;
-    	
-    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3);
-    	turn = oi.getTurn() * ((0.4 * (1 - Robot.elevator.getHeightPercentage())) + 0.6);
-    	
-    	drivetrain.arcadeDrive(throttle, turn, false);
-    	drivetrain.adjustForHeight(elevator.getHeightPercentage());
+		if (Robot.elevator.getPosition() > Robot.elevator.getSlowHeight()) {
+	    	if (!SlowDrive.isRunning()) {
+				SlowDrive.start();
+			}
+		} else {
+	    	double throttle, turn;
+	    	
+	    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3);
+	    	turn = oi.getTurn() * ((0.4 * (1 - Robot.elevator.getHeightPercentage())) + 0.6);
+	    	
+	    	drivetrain.arcadeDrive(throttle, turn, false);
+	    	drivetrain.adjustForHeight(elevator.getHeightPercentage());
+		}
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -92,8 +92,12 @@ public class Elevator extends Subsystem {
   		setDefaultCommand(new StopElevator());
 	}
 	
+	public double getSlowHeight() {
+		return SLOW_HEIGHT;
+	}
+	
 	public double getHeightPercentage() {
-		if (getPosition() < SLOW_HEIGHT) {
+		if (getPosition() <= SLOW_HEIGHT) {
 				return 0;
 		}
 			

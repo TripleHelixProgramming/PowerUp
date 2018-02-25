@@ -30,6 +30,7 @@ public class SlowJoystickDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
     	double throttle, turn, percentage;
    	
     	percentage = Robot.elevator.getHeightPercentage();
