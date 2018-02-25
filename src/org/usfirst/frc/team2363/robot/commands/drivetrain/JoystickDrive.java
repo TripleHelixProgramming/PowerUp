@@ -26,11 +26,11 @@ public class JoystickDrive extends Command {
     	
     	double throttle, turn;
     	
-    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage(false))) + 0.3);
-    	turn = oi.getTurn() * ((0.4 * (1 - Robot.elevator.getHeightPercentage(false))) + 0.6);
+    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3);
+    	turn = oi.getTurn() * ((0.4 * (1 - Robot.elevator.getHeightPercentage())) + 0.6);
     	
     	drivetrain.arcadeDrive(throttle, turn, false);
-    	drivetrain.adjustForHeight(elevator.getHeightPercentage(false));
+    	drivetrain.adjustForHeight(elevator.getHeightPercentage());
     }
 
     // Make this return true when this Command no longer needs to run execute()
