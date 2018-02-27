@@ -68,6 +68,14 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.SCALE));
 		
+		new Button() {
+
+			@Override
+			public boolean get() {
+				return operatorController.getPOV() == 90;
+			}
+		}.whenPressed(new RaiseElevator(Height.ROTATE));
+		
 		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((Joystick)f).getRawAxis(LEFT_STICK_Y));
 		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((Joystick)f).getRawAxis(RIGHT_STICK_X));
 		Robot.LOG.addSource("Scaled Throttle", this, f -> "" + ((OI)f).getThrottle() * Math.abs(((OI)f).getThrottle()));

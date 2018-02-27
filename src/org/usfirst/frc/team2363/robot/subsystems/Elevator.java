@@ -22,7 +22,8 @@ public class Elevator extends Subsystem {
 	public enum Height {
 		
 		GROUND(0),
-		SWITCH(390),//original switch height at 1500, currently set for cube rotation 390
+		ROTATE(390),
+		SWITCH(1500),//original switch height at 1500, currently set for cube rotation 390
 		SCALE(4700),
 		RUNG(2);
 		
