@@ -37,7 +37,7 @@ public class SlowJoystickDrive extends Command {
     	if (percentage > highest_percentage) highest_percentage = percentage;
     	
     	throttle = oi.getThrottle() * ((0.7 * (1 - highest_percentage)) + 0.3);
-    	turn = oi.getTurn() * ((0.4 * (1 - highest_percentage)) + 0.6);
+    	turn = oi.getTurn() * ((0.3 * (1 - highest_percentage)) + 0.7);  //original: 0.4, 0.6;
     	
     	drivetrain.arcadeDrive(throttle, turn, false);
     	drivetrain.adjustForHeight(highest_percentage);

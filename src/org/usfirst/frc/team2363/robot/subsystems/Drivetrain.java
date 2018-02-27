@@ -220,7 +220,7 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public void adjustForHeight(double heightPercentage) {
-		frontRight.configOpenloopRamp(0.4 + (0.6 * heightPercentage), 0);
-		frontLeft.configOpenloopRamp(0.4 + (0.6 * heightPercentage), 0);
+		frontRight.configOpenloopRamp(0.7 + (0.3 * heightPercentage), 0);//0.4, 0.6
+		frontLeft.configOpenloopRamp(0.7 + (0.3 * heightPercentage), 0);
 	}
 }

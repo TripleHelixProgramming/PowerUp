@@ -44,10 +44,10 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
-		new JoystickButton(operatorController, RobotMap.LEFT_STICK_BUTTON).whenPressed(new ManualPositionalElevator());
+		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
 		
-		new JoystickButton(driverController, RobotMap.RIGHT_TRIGGER).whenPressed(new SlowJoystickDrive());
-		new JoystickButton(driverController, RobotMap.RIGHT_TRIGGER).whenReleased(new JoystickDrive());
+		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
+		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
 		
 		new Button() {
 
@@ -72,6 +72,14 @@ public class OI {
 				return operatorController.getPOV() == 0;
 			}
 		}.whenPressed(new RaiseElevator(Height.SCALE));
+		
+		new Button() {
+
+			@Override
+			public boolean get() {
+				return operatorController.getPOV() == 90;
+			}
+		}.whenPressed(new RaiseElevator(Height.ROTATE));
 		
 		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((Joystick)f).getRawAxis(LEFT_STICK_Y));
 		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((Joystick)f).getRawAxis(RIGHT_STICK_X));
