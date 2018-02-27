@@ -46,24 +46,24 @@ public class Drivetrain extends Subsystem {
 	
 	public Drivetrain() {
 
-		Robot.LOG.addSource("LEFT1 Current", frontLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("LEFT2 Current", middleLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
-		Robot.LOG.addSource("LEFT3 Current", rearLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
+		Robot.LOG.addSource("DRIVETRAIN LEFT1 Current", frontLeft, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("DRIVETRAIN LEFT2 Current", middleLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
+		Robot.LOG.addSource("DRIVETRAIN LEFT3 Current", rearLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		
-		Robot.LOG.addSource("LEFT1 Voltage", frontLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("LEFT2 Voltage", middleLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("LEFT3 Voltage", rearLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("DRIVETRAIN LEFT1 Voltage", frontLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("DRIVETRAIN LEFT2 Voltage", middleLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("DRIVETRAIN LEFT3 Voltage", rearLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
 
-		Robot.LOG.addSource("RIGHT1 Current", frontRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("RIGHT2 Current", middleRight, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
-		Robot.LOG.addSource("RIGHT3 Current", rearRight, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
+		Robot.LOG.addSource("DRIVETRAIN RIGHT1 Current", frontRight, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("DRIVETRAIN RIGHT2 Current", middleRight, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
+		Robot.LOG.addSource("DRIVETRAIN RIGHT3 Current", rearRight, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		
-		Robot.LOG.addSource("RIGHT1 Voltage", frontRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("RIGHT2 Voltage", middleRight, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("RIGHT3 Voltage", rearRight, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("DRIVETRAIN RIGHT1 Voltage", frontRight, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("DRIVETRAIN RIGHT2 Voltage", middleRight, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("DRIVETRAIN RIGHT3 Voltage", rearRight, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
 
-		Robot.LOG.addSource("RightRPM", frontRight, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
-		Robot.LOG.addSource("LeftRPM", frontLeft, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
+		Robot.LOG.addSource("DRIVETRAIN RightRPM", frontRight, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
+		Robot.LOG.addSource("DRIVETRAIN LeftRPM", frontLeft, f -> "" + getRPM(((TalonSRX)(f)).getSelectedSensorVelocity(0)));
 
 		//  Configure Front Left Master
 		frontLeft.selectProfileSlot(0, 0);

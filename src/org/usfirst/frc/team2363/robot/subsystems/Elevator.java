@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
+import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.elevator.StopElevator;
 
@@ -8,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -47,6 +49,16 @@ public class Elevator extends Subsystem {
 	private BaseMotorController rightMotor = new VictorSPX(RobotMap.RIGHT_ELEVATOR_MOTOR);
 	
 	public Elevator() {
+		
+		Robot.LOG.addSource("ELEVATOR Left Current", leftMotor, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("ELEVATOR Right Current", rightMotor, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("ELEVATOR Left Voltage", leftMotor, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("ELEVATOR Right Voltage", rightMotor, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("ELEVATOR Encoder Position", leftMotor, f -> "" + ((Elevator)(f)).getPosition());
+		Robot.LOG.addSource("ELEVATOR Velocity", leftMotor, f -> "" + ((Elevator)(f)).getVelocity());
+		Robot.LOG.addSource("ELEVATOR Limit Switch State", leftMotor, f -> "" + ((SensorCollection)(f)).isRevLimitSwitchClosed());
+		Robot.LOG.addSource("ELEVATOR Height", leftMotor, f -> "" + ((Elevator)(f)).getHeightPercentage());
+		
 		rightMotor.follow(leftMotor);
 		rightMotor.setNeutralMode(NeutralMode.Brake);
 		rightMotor.configOpenloopRamp(0.2, 0);

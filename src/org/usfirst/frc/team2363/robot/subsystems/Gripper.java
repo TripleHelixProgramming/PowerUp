@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
+import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.gripper.StopWheels;
 
@@ -29,6 +30,13 @@ public class Gripper extends Subsystem {
     // here. Call these from Commands.
 	
 	public void gripper() {
+		
+		Robot.LOG.addSource("GRIPPER Left Current", leftWheel, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("GRIPPER Right Current", rightWheel, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("GRIPPER Left Voltage", leftWheel, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("GRIPPER Right Voltage", rightWheel, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("GRIPPER Wrist Solenoid State", wrist, f -> "" + ((DoubleSolenoid)(f)).get());
+		
 //		leftWheel.configContinuousCurrentLimit(5, 10);
 //		leftWheel.configPeakCurrentLimit(20, 10);
 //		leftWheel.configPeakCurrentDuration(1000, 10);

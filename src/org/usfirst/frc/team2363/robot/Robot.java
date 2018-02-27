@@ -62,8 +62,8 @@ public class Robot extends IterativeRobot {
 		tramps = new Tramps();
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
-		LOG.addSource("Compressor State", compressor, f -> "" + ((Compressor)f).enabled());
-		
+		LOG.addSource("COMPRESSOR State", compressor, f -> "" + ((Compressor)f).enabled());
+		LOG.addSource("COMPRESSOR Current", compressor, f -> "" + ((Compressor)(f)).getCompressorCurrent());
 	}
     
 	/**
