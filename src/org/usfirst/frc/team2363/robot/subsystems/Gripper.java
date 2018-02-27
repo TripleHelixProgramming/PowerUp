@@ -44,8 +44,8 @@ public class Gripper extends Subsystem {
     }
     
     public void intake() {
-    	leftWheel.set(ControlMode.PercentOutput, 1);
-    	rightWheel.set(ControlMode.PercentOutput, -1);
+    	leftWheel.set(ControlMode.PercentOutput, 0.75);
+    	rightWheel.set(ControlMode.PercentOutput, -0.75);
     }
     
 @Override
@@ -54,8 +54,8 @@ public class Gripper extends Subsystem {
 	}
     
     public void eject() {
-    	leftWheel.set(ControlMode.PercentOutput, -0.25);
-    	rightWheel.set(ControlMode.PercentOutput, 0.25);
+    	leftWheel.set(ControlMode.PercentOutput, -0.35);
+    	rightWheel.set(ControlMode.PercentOutput, 0.35);
     }
     
     public void shoot() {

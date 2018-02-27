@@ -22,7 +22,8 @@ public class Elevator extends Subsystem {
 	public enum Height {
 		
 		GROUND(0),
-		SWITCH(1500),
+		ROTATE(390),
+		SWITCH(1500),//original switch height at 1500, currently set for cube rotation 390
 		SCALE(4700),
 		RUNG(2);
 		
@@ -53,6 +54,7 @@ public class Elevator extends Subsystem {
 		leftMotor.overrideLimitSwitchesEnable(true);
 		leftMotor.config_kP(0, 5, 10);
 		leftMotor.config_kD(0, 4000, 10);
+//		leftMotor.config_kI(0, 0.01, 10);
 		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		leftMotor.configMotionCruiseVelocity(700, 0);
 		leftMotor.configMotionAcceleration(5000, 0);
