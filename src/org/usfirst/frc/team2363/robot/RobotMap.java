@@ -54,13 +54,11 @@ public class RobotMap {
 	public static final int ANALOG_INPUT = 0;
 
 	//Tramp Solenoids
-	public static final int TRAMPS = 4;
+	public static final int TRAMPS = 0;
 
 	//Gripper Solenoids
 	public static final int CLAW_OPEN = 6;
 	public static final int CLAW_CLOSE = 1;
-	public static final int GRIPPER_RAISE = 0;
-	public static final int GRIPPER_LOWER = 7;
 	
 	//Digital IO -Gripper
 	public static final int HAS_CUBE = 0;

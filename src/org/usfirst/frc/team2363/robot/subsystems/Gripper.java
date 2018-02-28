@@ -23,7 +23,7 @@ public class Gripper extends Subsystem {
 //	private BaseMotorController leftWheel = new VictorSPX(RobotMap.GRIPPER_LEFT_WHEEL);
 //	private BaseMotorController rightWheel = new VictorSPX(RobotMap.GRIPPER_RIGHT_WHEEL);
 	
-	private DoubleSolenoid wrist = new DoubleSolenoid(RobotMap.GRIPPER_RAISE, RobotMap.GRIPPER_LOWER);
+//	private DoubleSolenoid wrist = new DoubleSolenoid(RobotMap.GRIPPER_RAISE, RobotMap.GRIPPER_LOWER);
 //	private DigitalInput hasCube = new DigitalInput(0);
 	
     // Put methods for controlling this subsystem
@@ -35,7 +35,7 @@ public class Gripper extends Subsystem {
 		Robot.LOG.addSource("GRIPPER Right Current", rightWheel, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
 		Robot.LOG.addSource("GRIPPER Left Voltage", leftWheel, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("GRIPPER Right Voltage", rightWheel, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("GRIPPER Wrist Solenoid State", wrist, f -> "" + ((DoubleSolenoid)(f)).get());
+//		Robot.LOG.addSource("GRIPPER Wrist Solenoid State", wrist, f -> "" + ((DoubleSolenoid)(f)).get());
 		
 //		leftWheel.configContinuousCurrentLimit(5, 10);
 //		leftWheel.configPeakCurrentLimit(20, 10);
@@ -76,7 +76,7 @@ public class Gripper extends Subsystem {
     	rightWheel.set(ControlMode.PercentOutput, -0.2);
     }
     
-    public void lower() {
+/*    public void lower() {
     	wrist.set(DoubleSolenoid.Value.kReverse);
     }
     
@@ -90,7 +90,7 @@ public class Gripper extends Subsystem {
     
     public boolean isUp() {
     	return (wrist.get() == DoubleSolenoid.Value.kReverse);
-    }
+    }*/
     
     public void putSmartDash() {
     	SmartDashboard.putNumber("GripperLeftCurrent", leftWheel.getOutputCurrent());

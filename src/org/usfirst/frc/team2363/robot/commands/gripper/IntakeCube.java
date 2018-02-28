@@ -21,7 +21,7 @@ public class IntakeCube extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	gripper.lower();
+//    	gripper.lower();
     	HelixEvents.addEvent("GRIPPER", "Starting to intake cube");
     }
 
