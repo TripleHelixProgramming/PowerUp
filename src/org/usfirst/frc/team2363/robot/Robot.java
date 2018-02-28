@@ -41,10 +41,10 @@ public class Robot extends IterativeRobot {
 	public static Drivetrain drivetrain;
 	private final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private final Compressor compressor = new Compressor();
-	public static Gripper gripper = new Gripper();
+	public static Gripper gripper;
 	public static Tramps tramps;
-	public static Elevator elevator = new Elevator();
-	public static Claws claws = new Claws();
+	public static Elevator elevator;
+	public static Claws claws;
 	
 	public static AutoRoutines autoRoutines = new AutoRoutines();
 	
@@ -60,6 +60,9 @@ public class Robot extends IterativeRobot {
 	  
 		drivetrain = new Drivetrain();
 		tramps = new Tramps();
+		elevator = new Elevator();
+		claws = new Claws();
+		gripper = new Gripper();
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("COMPRESSOR State", compressor, f -> "" + ((Compressor)f).enabled());

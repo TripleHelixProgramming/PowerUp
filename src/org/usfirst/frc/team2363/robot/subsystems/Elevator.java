@@ -51,9 +51,9 @@ public class Elevator extends Subsystem {
 	public Elevator() {
 		
 		Robot.LOG.addSource("ELEVATOR Left Current", leftMotor, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
-		Robot.LOG.addSource("ELEVATOR Right Current", rightMotor, f -> "" + ((TalonSRX)(f)).getOutputCurrent());
+		Robot.LOG.addSource("ELEVATOR Right Current", rightMotor, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		Robot.LOG.addSource("ELEVATOR Left Voltage", leftMotor, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("ELEVATOR Right Voltage", rightMotor, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
+		Robot.LOG.addSource("ELEVATOR Right Voltage", rightMotor, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("ELEVATOR Encoder Position", leftMotor, f -> "" + ((Elevator)(f)).getPosition());
 		Robot.LOG.addSource("ELEVATOR Velocity", leftMotor, f -> "" + ((Elevator)(f)).getVelocity());
 		Robot.LOG.addSource("ELEVATOR Limit Switch State", leftMotor, f -> "" + ((SensorCollection)(f)).isRevLimitSwitchClosed());

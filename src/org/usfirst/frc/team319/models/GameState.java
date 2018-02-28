@@ -20,7 +20,7 @@ public class GameState {
 	
 	public void updateGameState(String gameSpecificMessage) {
 		
-		if (gameSpecificMessage == null) gameSpecificMessage = "LLL";
+		if (gameSpecificMessage == null || gameSpecificMessage.isEmpty()) gameSpecificMessage = "LLL";
 		
 		if(gameSpecificMessage.charAt(0) == 'L') {
 			this.mySwitchSide = Side.LEFT;

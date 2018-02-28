@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class SlowJoystickDrive extends Command {
 	
-	public static double highest_percentage;
-
     public SlowJoystickDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(drivetrain);
@@ -25,22 +23,13 @@ public class SlowJoystickDrive extends Command {
     protected void initialize() {
     	HelixEvents.addEvent("DRIVETRAIN", "Starting to start SLOW joystick drive");
     	
-    	highest_percentage = Robot.elevator.getHeightPercentage();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	double throttle, turn, percentage;
-   	
-    	percentage = Robot.elevator.getHeightPercentage();
-    	if (percentage > highest_percentage) highest_percentage = percentage;
-    	
-    	throttle = oi.getThrottle() * ((0.7 * (1 - highest_percentage)) + 0.3);
-    	turn = oi.getTurn() * ((0.3 * (1 - highest_percentage)) + 0.7);  //original: 0.4, 0.6;
-    	
-    	drivetrain.arcadeDrive(throttle, turn, false);
-    	drivetrain.adjustForHeight(highest_percentage);
+    	drivetrain.arcadeDrive(oi.getThrottle() * 0.3, oi.getTurn() * 0.7, false);
+    	drivetrain.adjustForHeight(elevator.getHeightPercentage());
     }
 
     // Make this return true when this Command no longer needs to run execute()
