@@ -54,10 +54,10 @@ public class Elevator extends Subsystem {
 		Robot.LOG.addSource("ELEVATOR Right Current", rightMotor, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		Robot.LOG.addSource("ELEVATOR Left Voltage", leftMotor, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("ELEVATOR Right Voltage", rightMotor, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
-		Robot.LOG.addSource("ELEVATOR Encoder Position", leftMotor, f -> "" + ((Elevator)(f)).getPosition());
-		Robot.LOG.addSource("ELEVATOR Velocity", leftMotor, f -> "" + ((Elevator)(f)).getVelocity());
-		Robot.LOG.addSource("ELEVATOR Limit Switch State", leftMotor, f -> "" + ((SensorCollection)(f)).isRevLimitSwitchClosed());
-		Robot.LOG.addSource("ELEVATOR Height", leftMotor, f -> "" + ((Elevator)(f)).getHeightPercentage());
+		Robot.LOG.addSource("ELEVATOR Encoder Position", this, f -> "" + ((Elevator)(f)).getPosition());
+		Robot.LOG.addSource("ELEVATOR Velocity", this, f -> "" + ((Elevator)(f)).getVelocity());
+		Robot.LOG.addSource("ELEVATOR Limit Switch State", leftMotor, f -> "" + ((TalonSRX)(f)).getSensorCollection().isRevLimitSwitchClosed());
+		Robot.LOG.addSource("ELEVATOR Height", this, f -> "" + ((Elevator)(f)).getHeightPercentage());
 		
 		rightMotor.follow(leftMotor);
 		rightMotor.setNeutralMode(NeutralMode.Brake);

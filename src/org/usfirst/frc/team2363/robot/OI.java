@@ -1,11 +1,6 @@
 package org.usfirst.frc.team2363.robot;
 
-import static org.usfirst.frc.team2363.robot.RobotMap.DRIVER_PORT;
-import static org.usfirst.frc.team2363.robot.RobotMap.HIGH_SPEED_SCALING;
-import static org.usfirst.frc.team2363.robot.RobotMap.LEFT_STICK_Y;
-import static org.usfirst.frc.team2363.robot.RobotMap.LOW_SPEED_SCALING;
-import static org.usfirst.frc.team2363.robot.RobotMap.OPERATOR_PORT;
-import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
+import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
 import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
 import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
@@ -31,12 +26,12 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
 	
-	private Joystick driverController;
+	private XboxController driverController;
 	private XboxController operatorController;
 
 	public OI() {
 		//Controllers
-		driverController = new Joystick(DRIVER_PORT);
+		driverController = new XboxController(DRIVER_PORT);
 		operatorController = new XboxController(OPERATOR_PORT);
 		
 		new JoystickButton(operatorController, RobotMap.X).whileHeld(new IntakeCube());
@@ -46,8 +41,19 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
 		
-		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
-		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
+//		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
+//		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
+		
+		Button drive = new Button() {
+
+			@Override
+			public boolean get() {
+				return driverController.getRawAxis(RIGHT_TRIGGER) >= 0.5;
+			}
+		};
+		drive.whenPressed(new SlowJoystickDrive());
+		
+		drive.whenReleased(new JoystickDrive());
 		
 		new Button() {
 
@@ -81,8 +87,8 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.ROTATE));
 		
-		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((Joystick)f).getRawAxis(LEFT_STICK_Y));
-		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((Joystick)f).getRawAxis(RIGHT_STICK_X));
+		Robot.LOG.addSource("Raw Throttle", driverController, f -> "" + ((XboxController)f).getRawAxis(LEFT_STICK_Y));
+		Robot.LOG.addSource("Raw Turn", driverController, f -> "" + ((XboxController)f).getRawAxis(RIGHT_STICK_X));
 		Robot.LOG.addSource("Scaled Throttle", this, f -> "" + ((OI)f).getThrottle() * Math.abs(((OI)f).getThrottle()));
 		Robot.LOG.addSource("Scaled Turn", this, f -> "" + ((OI)f).getTurn() * Math.abs(((OI)f).getTurn()));
 		
