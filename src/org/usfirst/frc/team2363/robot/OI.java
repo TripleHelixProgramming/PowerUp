@@ -11,6 +11,9 @@ import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.ShootCube;
+import org.usfirst.frc.team2363.robot.commands.tramps.DeployLeftTramps;
+import org.usfirst.frc.team2363.robot.commands.tramps.DeployRightTramps;
+import org.usfirst.frc.team2363.robot.commands.tramps.DeployTramps;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -34,16 +37,25 @@ public class OI {
 		driverController = new XboxController(DRIVER_PORT);
 		operatorController = new XboxController(OPERATOR_PORT);
 		
-		new JoystickButton(operatorController, RobotMap.X).whileHeld(new IntakeCube());
-		new JoystickButton(operatorController, RobotMap.B).whileHeld(new EjectCube());
-		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());
-		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
-		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
-		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
+		//gripper controls
+		new JoystickButton(operatorController, X).whileHeld(new IntakeCube());
+		new JoystickButton(operatorController, B).whileHeld(new EjectCube());
+		new JoystickButton(operatorController, Y).whileHeld(new ShootCube());
+		new JoystickButton(operatorController, RB).whenPressed(new OpenClaw());
+		new JoystickButton(operatorController, LB).whenPressed(new CloseClaw());
+		
+		//enable manual elevator control
+		new JoystickButton(operatorController, A).whenPressed(new ManualPositionalElevator());
+		
+		//tramp controls
+		new JoystickButton(operatorController, RIGHT_STICK_BUTTON).whenPressed(new DeployTramps());
+		new JoystickButton(operatorController, LOGO_RIGHT).whenPressed(new DeployLeftTramps());
+		new JoystickButton(operatorController, LOGO_LEFT).whenPressed(new DeployRightTramps());
 		
 //		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
 //		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
 		
+		//control for slow drive
 		Button drive = new Button() {
 
 			@Override
@@ -55,6 +67,7 @@ public class OI {
 		
 		drive.whenReleased(new JoystickDrive());
 		
+		//elevator to ground
 		new Button() {
 
 			@Override
@@ -63,6 +76,7 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.GROUND));
 		
+		//elevator to switch
 		new Button() {
 
 			@Override
@@ -71,6 +85,7 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.SWITCH));
 		
+		//elevator to scale
 		new Button() {
 
 			@Override
@@ -79,6 +94,7 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.SCALE));
 		
+		//elevator to rotate cube position
 		new Button() {
 
 			@Override

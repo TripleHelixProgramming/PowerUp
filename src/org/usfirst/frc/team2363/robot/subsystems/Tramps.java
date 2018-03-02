@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
-import org.usfirst.frc.team2363.robot.RobotMap;
+import static org.usfirst.frc.team2363.robot.RobotMap.*;
 import org.usfirst.frc.team2363.robot.commands.tramps.RetractTramps;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Tramps extends Subsystem {
 	
-	private Solenoid deploy = new Solenoid (RobotMap.TRAMPS);
-	private DoubleSolenoid left1 = new DoubleSolenoid(2, 5);
-	private DoubleSolenoid left2 = new DoubleSolenoid(3, 4);
-	private DoubleSolenoid right1 = new DoubleSolenoid(1, 0, 7);
-	private DoubleSolenoid right2 = new DoubleSolenoid(1, 1, 6);
+	private Solenoid deploy = new Solenoid (TRAMPS_DEPLOY);
+	private DoubleSolenoid left1 = new DoubleSolenoid(LEFT1_TRAMP_RAISE, LEFT1_TRAMP_LOWER);
+	private DoubleSolenoid left2 = new DoubleSolenoid(LEFT2_TRAMP_RAISE, LEFT2_TRAMP_LOWER);
+	private DoubleSolenoid right1 = new DoubleSolenoid(1, RIGHT1_TRAMP_RAISE, RIGHT1_TRAMP_LOWER);
+	private DoubleSolenoid right2 = new DoubleSolenoid(1, RIGHT2_TRAMP_RAISE, RIGHT2_TRAMP_LOWER);
 
     public void initDefaultCommand() {
         setDefaultCommand(new RetractTramps());
@@ -27,22 +27,22 @@ public class Tramps extends Subsystem {
     	deploy.set(true);
     }
     
-    public void deployLeft() {
+    public void raiseLeft() {
     	left1.set(DoubleSolenoid.Value.kForward);
     	left2.set(DoubleSolenoid.Value.kForward);
     }
     
-    public void deployRight() {
+    public void raiseRight() {
     	right1.set(DoubleSolenoid.Value.kForward);
     	right2.set(DoubleSolenoid.Value.kForward);
     }
     
     public void retract() {
     	deploy.set(false);
-    	left1.set(DoubleSolenoid.Value.kForward);
-    	left2.set(DoubleSolenoid.Value.kForward);
-    	right1.set(DoubleSolenoid.Value.kForward);
-    	right2.set(DoubleSolenoid.Value.kForward);
+    	left1.set(DoubleSolenoid.Value.kReverse);
+    	left2.set(DoubleSolenoid.Value.kReverse);
+    	right1.set(DoubleSolenoid.Value.kReverse);
+    	right2.set(DoubleSolenoid.Value.kReverse);
     }
 }
 

@@ -15,11 +15,11 @@ public class DeployLeftTramps extends Command {
     }
 
     protected void initialize() {
-    	HelixEvents.addEvent("TRAMPS", "Starting to deploy left tramps");
+    	HelixEvents.addEvent("TRAMPS", "Starting to raise left tramps");
     }
 
     protected void execute() {
-    	Robot.tramps.deployLeft();
+    	Robot.tramps.raiseLeft();
     }
 
     protected boolean isFinished() {
@@ -27,7 +27,7 @@ public class DeployLeftTramps extends Command {
     }
 
     protected void end() {
-    	HelixEvents.addEvent("TRAMPS", "Finished deploying left tramps");
+    	HelixEvents.addEvent("TRAMPS", "Finished raising left tramps");
     }
 
     protected void interrupted() {
