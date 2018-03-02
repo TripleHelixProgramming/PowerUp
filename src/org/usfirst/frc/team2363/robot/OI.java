@@ -36,7 +36,7 @@ public class OI {
 		
 		new JoystickButton(operatorController, RobotMap.X).whileHeld(new IntakeCube());
 		new JoystickButton(operatorController, RobotMap.B).whileHeld(new EjectCube());
-		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());
+		new JoystickButton(operatorController, RobotMap.Y).whileHeld(new ShootCube());//originally shootCube
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
