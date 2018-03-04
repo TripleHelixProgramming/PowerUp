@@ -67,8 +67,8 @@ public class Gripper extends Subsystem {
     }
     
     public void autoEject() {
-    	leftWheel.set(ControlMode.PercentOutput, -0.50);
-    	rightWheel.set(ControlMode.PercentOutput, 0.50);
+    	leftWheel.set(ControlMode.PercentOutput, -0.75);
+    	rightWheel.set(ControlMode.PercentOutput, 0.75);
     }
     
     public void shoot() {
@@ -111,7 +111,7 @@ public class Gripper extends Subsystem {
      * @return true if over 20 amps
      */
     public boolean isOverCurrent() {
-    	if (getOutputCurrent() > 20) {
+    	if (getOutputCurrent() > 15) {
     		return true;
     	} else {
     		return false;

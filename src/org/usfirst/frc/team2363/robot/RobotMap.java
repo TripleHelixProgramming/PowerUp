@@ -12,7 +12,7 @@ import com.ctre.phoenix.ErrorCode;
 public class RobotMap {
 	
 	public static final double HIGH_SPEED_SCALING = 0.3;//original 0.50
-	public static final double LOW_SPEED_SCALING = 0.45;//original 0.75
+	public static final double LOW_SPEED_SCALING = 0.70;//original 0.75
 		
 	//Controllers
 	public static final int DRIVER_PORT = 0;

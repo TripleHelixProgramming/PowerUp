@@ -90,8 +90,12 @@ public class AutoRoutines {
 		
 		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + flipped);
 		
-		if (selectedAutoType == AutoType.BASELINE) {
+		if (selectedAutoType == AutoType.BASELINE || selectedAutoType == AutoType.OPPOSITE_SIDE_SCALE) {
 			return new FollowTrajectory(getPath(selectedAutoType, flipped));
+		}
+		
+		if (selectedAutoType == AutoType.SAME_SIDE_SWITCH) {
+				return new SameSideSwitchGroup(flipped);
 		}
 		
 		return new AutoGroup(

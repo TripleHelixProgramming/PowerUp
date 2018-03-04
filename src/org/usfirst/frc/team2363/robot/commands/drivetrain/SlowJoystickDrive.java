@@ -28,7 +28,7 @@ public class SlowJoystickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	drivetrain.arcadeDrive(oi.getThrottle() * 0.3, oi.getTurn() * 0.7, false);
+    	drivetrain.arcadeDrive(oi.getThrottle() * 0.50, oi.getTurn() * 0.90, false);
     	drivetrain.adjustForHeight(elevator.getHeightPercentage());
     }
 
