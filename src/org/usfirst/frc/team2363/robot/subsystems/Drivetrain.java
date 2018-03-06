@@ -122,10 +122,8 @@ public class Drivetrain extends Subsystem {
 		frontRight.configPeakCurrentLimit(40, 0);
 		frontRight.configPeakCurrentDuration(1000, 0);
 		
-		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-
 		/* Remote 0 will be the other side's Talon */
-		frontRight.configRemoteFeedbackFilter(frontRight.getDeviceID(),
+		frontRight.configRemoteFeedbackFilter(frontLeft.getDeviceID(),
 				RemoteSensorSource.TalonSRX_SelectedSensor, 0, 0);
 		/* Remote 1 will be a pigeon */
 		frontRight.configRemoteFeedbackFilter(pigeon.getDeviceID(),
