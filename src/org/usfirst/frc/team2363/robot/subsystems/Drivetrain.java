@@ -142,7 +142,7 @@ public class Drivetrain extends Subsystem {
 		frontRight.configSelectedFeedbackCoefficient(3600 / 8192, 1, 0); //Coefficient for Pigeon to convert to 360
 		
 		frontLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
-		frontRight.configAuxPIDPolarity(true, 0);
+		frontRight.configAuxPIDPolarity(false, 0);
 	}
 	
 	public void periodic() {
