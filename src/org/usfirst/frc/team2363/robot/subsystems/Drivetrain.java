@@ -7,17 +7,22 @@ import static org.usfirst.frc.team2363.robot.RobotMap.MIDDLE_RIGHT_TALON_ID;
 import static org.usfirst.frc.team2363.robot.RobotMap.REAR_LEFT_TALON_ID;
 import static org.usfirst.frc.team2363.robot.RobotMap.REAR_RIGHT_TALON_ID;
 
+import org.junit.jupiter.engine.Constants;
 import org.usfirst.frc.team2363.robot.Robot;
+import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,7 +47,7 @@ public class Drivetrain extends Subsystem {
 	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TALON_ID);
 
 	// navX Gryo
-	private static AHRS ahrs;
+	private PigeonIMU pigeon = new PigeonIMU(RobotMap.PIGEON_ID);
 	
 	public Drivetrain() {
 
@@ -116,6 +121,30 @@ public class Drivetrain extends Subsystem {
 		frontLeft.configPeakCurrentDuration(1000, 0);
 		frontRight.configPeakCurrentLimit(40, 0);
 		frontRight.configPeakCurrentDuration(1000, 0);
+		
+		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+
+		/* Remote 0 will be the other side's Talon */
+		frontRight.configRemoteFeedbackFilter(frontRight.getDeviceID(),
+				RemoteSensorSource.TalonSRX_SelectedSensor, 0, 0);
+		/* Remote 1 will be a pigeon */
+		frontRight.configRemoteFeedbackFilter(pigeon.getDeviceID(),
+				RemoteSensorSource.Pigeon_Yaw, 1, 0);
+		
+		frontRight.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor0, 0);
+		frontRight.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.QuadEncoder, 0);
+		frontRight.configSensorTerm(SensorTerm.Diff1, FeedbackDevice.RemoteSensor0, 0);
+		frontRight.configSensorTerm(SensorTerm.Diff0, FeedbackDevice.QuadEncoder, 0);
+		/* select sum for distance(0), different for turn(1) */
+		
+		frontRight.configSelectedFeedbackSensor(FeedbackDevice.SensorSum, 0, 0);
+		frontRight.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 1, 0);
+
+		frontLeft.configSelectedFeedbackCoefficient(1, 0, 0); //Coefficient for Distance
+		frontRight.configSelectedFeedbackCoefficient(3600 / 8192, 1, 0); //Coefficient for Pigeon to convert to 360
+		
+		frontLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
+		frontRight.configAuxPIDPolarity(true, 0);
 	}
 	
 	public void periodic() {
@@ -181,11 +210,11 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public double getAngle() {
-		return ahrs.getAngle();
+		return pigeon.getFusedHeading();
 	}
 
 	public void resetAngle() {
-		ahrs.zeroYaw();
+		pigeon.setYaw(0, 0);
 	}
 
 	public TalonSRX getLeft() {

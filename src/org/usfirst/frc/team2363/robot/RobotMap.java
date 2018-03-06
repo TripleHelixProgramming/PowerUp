@@ -2,6 +2,7 @@
 package org.usfirst.frc.team2363.robot;
 
 import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -79,6 +80,7 @@ public class RobotMap {
 	//LIMIT SWITCHES
 	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 2;
 	public static final int ELEVATOR_UPPER_LIMIT_CHANNEL = 3;
+	public static final int PIGEON_ID = 0;
 
 }
 

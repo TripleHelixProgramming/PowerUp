@@ -114,8 +114,13 @@ public class FollowTrajectory extends Command {
 
 		int pidfSlot = 0;
 		
-		loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
-		loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
+		if (trajectoryToFollow.flipped) {
+			loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.leftProfile, pidfSlot));
+			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.rightProfile, pidfSlot));
+		} else {
+			loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
+			loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
+		}
 		
 		loadLeftBuffer.startPeriodic(.005);
 		loadRightBuffer.startPeriodic(.005);

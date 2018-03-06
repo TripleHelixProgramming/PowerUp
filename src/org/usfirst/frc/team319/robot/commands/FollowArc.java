@@ -34,7 +34,7 @@ public class FollowArc extends Command {
 
 	private SrxTrajectory trajectoryToFollow = null;
 
-	private MotionProfileStatus leftStatus = new MotionProfileStatus();
+	private MotionProfileStatus status = new MotionProfileStatus();
 	
 	private boolean hasPathStarted;
 
@@ -49,12 +49,10 @@ public class FollowArc extends Command {
 		private int lastPointSent = 0;
 		private TalonSRX talon;
 		private SrxMotionProfile prof;
-		private int pidfSlot;
 		
-		public BufferLoader(TalonSRX talon, SrxMotionProfile prof, int pidfSlot) {
+		public BufferLoader(TalonSRX talon, SrxMotionProfile prof) {
 			this.talon = talon;
 			this.prof = prof;
-			this.pidfSlot = pidfSlot;
 		}
 		
 		public void run() {
@@ -71,8 +69,8 @@ public class FollowArc extends Command {
 				point.velocity = prof.points[lastPointSent][1];
 				point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
 				point.headingDeg = prof.points[lastPointSent][3];
-				point.profileSlotSelect0 = pidfSlot; 
-				point.profileSlotSelect1 = pidfSlot;
+				point.profileSlotSelect0 = 0; 
+				point.profileSlotSelect1 = 1;
 				point.zeroPos = false;
 				if (lastPointSent == 0) {
 					point.zeroPos = true; /* set this to true on the first point */
@@ -109,42 +107,40 @@ public class FollowArc extends Command {
 		
 		setValue = SetValueMotionProfile.Disable;
 		
-		Robot.drivetrain.getLeft().set(ControlMode.MotionProfileArc, setValue.value);
-		Robot.drivetrain.getRight().follow(Robot.drivetrain.getLeft(), FollowerType.AuxOutput1);
+		Robot.drivetrain.getRight().set(ControlMode.MotionProfileArc, setValue.value);
+		Robot.drivetrain.getLeft().follow(Robot.drivetrain.getRight(), FollowerType.AuxOutput1);
 
-		int pidfSlot = 0;
-		
-		loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
+		loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.centerProfile));
 		
 		loadLeftBuffer.startPeriodic(.005);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.drivetrain.getLeft().getMotionProfileStatus(leftStatus);
+		Robot.drivetrain.getRight().getMotionProfileStatus(status);
 		//System.out.println("Bottom buffer count: " + rightStatus.btmBufferCnt);
 		//System.out.println("Top buffer count: " + rightStatus.topBufferCnt);
 		
 
-		if (leftStatus.isUnderrun)
+		if (status.isUnderrun)
 		{
 			// if either MP has underrun, stop both
 			System.out.println("Motion profile has underrun!");
 			setValue = SetValueMotionProfile.Disable;
 		}
-		else if (leftStatus.btmBufferCnt > kMinPointsInTalon)
+		else if (status.btmBufferCnt > kMinPointsInTalon)
 		{
 			// if we have enough points in the talon, go.
 			setValue = SetValueMotionProfile.Enable;
 		}	
-		else if (leftStatus.activePointValid
-				&& leftStatus.isLast)
+		else if (status.activePointValid
+				&& status.isLast)
 		{
 			// if both profiles are at their last points, hold the last point
 			setValue = SetValueMotionProfile.Hold;
 		}
 		
-		Robot.drivetrain.getLeft().set(ControlMode.MotionProfileArc, setValue.value);
+		Robot.drivetrain.getRight().set(ControlMode.MotionProfileArc, setValue.value);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -152,7 +148,7 @@ public class FollowArc extends Command {
 		if (!hasPathStarted) {
 			return false;
 		}
-		boolean leftComplete = leftStatus.activePointValid && leftStatus.isLast;
+		boolean leftComplete = status.activePointValid && status.isLast;
 		boolean trajectoryComplete = leftComplete;
 		if (trajectoryComplete) {
 			System.out.println("Finished trajectory");
