@@ -19,13 +19,14 @@ import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 
 
-public class FollowTrajectory extends Command {
+public class FollowArc extends Command {
 
 	private int kMinPointsInTalon = 5;
 	
@@ -33,7 +34,6 @@ public class FollowTrajectory extends Command {
 
 	private SrxTrajectory trajectoryToFollow = null;
 
-	private MotionProfileStatus rightStatus = new MotionProfileStatus();
 	private MotionProfileStatus leftStatus = new MotionProfileStatus();
 	
 	private boolean hasPathStarted;
@@ -70,6 +70,7 @@ public class FollowTrajectory extends Command {
 				point.position = prof.points[lastPointSent][0];
 				point.velocity = prof.points[lastPointSent][1];
 				point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
+				point.headingDeg = prof.points[lastPointSent][3];
 				point.profileSlotSelect0 = pidfSlot; 
 				point.profileSlotSelect1 = pidfSlot;
 				point.zeroPos = false;
@@ -93,9 +94,8 @@ public class FollowTrajectory extends Command {
 
 	// Runs the runnable
 	private Notifier loadLeftBuffer;
-	private Notifier loadRightBuffer;
 	
-	public FollowTrajectory(SrxTrajectory trajectoryToFollow) {
+	public FollowArc(SrxTrajectory trajectoryToFollow) {
 		requires(Robot.drivetrain);
 		this.trajectoryToFollow = trajectoryToFollow;
 	}
@@ -109,48 +109,42 @@ public class FollowTrajectory extends Command {
 		
 		setValue = SetValueMotionProfile.Disable;
 		
-		Robot.drivetrain.getLeft().set(ControlMode.MotionProfile, setValue.value);
-		Robot.drivetrain.getRight().set(ControlMode.MotionProfile, setValue.value);
+		Robot.drivetrain.getLeft().set(ControlMode.MotionProfileArc, setValue.value);
+		Robot.drivetrain.getRight().follow(Robot.drivetrain.getLeft(), FollowerType.AuxOutput1);
 
 		int pidfSlot = 0;
 		
 		loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.rightProfile, pidfSlot));
-		loadRightBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getLeft(), this.trajectoryToFollow.leftProfile, pidfSlot));
 		
 		loadLeftBuffer.startPeriodic(.005);
-		loadRightBuffer.startPeriodic(.005);
-
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-
-		Robot.drivetrain.getRight().getMotionProfileStatus(rightStatus);
 		Robot.drivetrain.getLeft().getMotionProfileStatus(leftStatus);
 		//System.out.println("Bottom buffer count: " + rightStatus.btmBufferCnt);
 		//System.out.println("Top buffer count: " + rightStatus.topBufferCnt);
 		
 
-		if (rightStatus.isUnderrun || leftStatus.isUnderrun)
+		if (leftStatus.isUnderrun)
 		{
 			// if either MP has underrun, stop both
 			System.out.println("Motion profile has underrun!");
 			setValue = SetValueMotionProfile.Disable;
 		}
-		else if (rightStatus.btmBufferCnt > kMinPointsInTalon && leftStatus.btmBufferCnt > kMinPointsInTalon)
+		else if (leftStatus.btmBufferCnt > kMinPointsInTalon)
 		{
 			// if we have enough points in the talon, go.
 			setValue = SetValueMotionProfile.Enable;
 		}	
-		else if (rightStatus.activePointValid && rightStatus.isLast && leftStatus.activePointValid
+		else if (leftStatus.activePointValid
 				&& leftStatus.isLast)
 		{
 			// if both profiles are at their last points, hold the last point
 			setValue = SetValueMotionProfile.Hold;
 		}
 		
-		Robot.drivetrain.getLeft().set(ControlMode.MotionProfile, setValue.value);
-		Robot.drivetrain.getRight().set(ControlMode.MotionProfile, setValue.value);
+		Robot.drivetrain.getLeft().set(ControlMode.MotionProfileArc, setValue.value);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -159,8 +153,7 @@ public class FollowTrajectory extends Command {
 			return false;
 		}
 		boolean leftComplete = leftStatus.activePointValid && leftStatus.isLast;
-		boolean rightComplete = rightStatus.activePointValid && rightStatus.isLast;
-		boolean trajectoryComplete = leftComplete && rightComplete;
+		boolean trajectoryComplete = leftComplete;
 		if (trajectoryComplete) {
 			System.out.println("Finished trajectory");
 		}
@@ -170,7 +163,6 @@ public class FollowTrajectory extends Command {
 	// Called once after isFinished returns true
 	protected void end() {
 		loadLeftBuffer.stop();
-		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
 		resetTalon(Robot.drivetrain.getLeft(), ControlMode.PercentOutput, 0);
 	}
@@ -179,7 +171,6 @@ public class FollowTrajectory extends Command {
 	// subsystems is scheduled to run
 	protected void interrupted() {
 		loadLeftBuffer.stop();
-		loadRightBuffer.stop();
 		resetTalon(Robot.drivetrain.getRight(), ControlMode.PercentOutput, 0);
 		resetTalon(Robot.drivetrain.getLeft(), ControlMode.PercentOutput, 0);
 	}	
@@ -196,7 +187,7 @@ public class FollowTrajectory extends Command {
 	private void resetTalon(TalonSRX talon, ControlMode controlMode, double setValue) {
 		talon.clearMotionProfileTrajectories();
 		talon.clearMotionProfileHasUnderrun(10);
-		talon.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
+		talon.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
 		talon.set(controlMode, setValue);
 	}
 }
