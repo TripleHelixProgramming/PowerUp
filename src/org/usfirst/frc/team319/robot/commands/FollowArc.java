@@ -50,11 +50,16 @@ public class FollowArc extends Command {
 		private TalonSRX talon;
 		private SrxMotionProfile prof;
 		private final boolean flipped;
+		private double startPosition = 0;
+		private double startHeading = 0;
 		
-		public BufferLoader(TalonSRX talon, SrxMotionProfile prof, boolean flipped) {
+		public BufferLoader(TalonSRX talon, SrxMotionProfile prof, boolean flipped, 
+				double startPosition, double startHeading) {
 			this.talon = talon;
 			this.prof = prof;
 			this.flipped = flipped;
+			this.startPosition = startPosition;
+			this.startHeading = startHeading;
 		}
 		
 		public void run() {
@@ -67,18 +72,13 @@ public class FollowArc extends Command {
 			while(!talon.isMotionProfileTopLevelBufferFull() && lastPointSent < prof.numPoints) {
 				TrajectoryPoint point = new TrajectoryPoint();
 				/* for each point, fill our structure and pass it to API */
-				point.position = prof.points[lastPointSent][0];
+				point.position = prof.points[lastPointSent][0] + startPosition;
 				point.velocity = prof.points[lastPointSent][1];
 				point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-				point.auxiliaryPos = (flipped ? -1 : 1) * prof.points[lastPointSent][3];
+				point.auxiliaryPos = (flipped ? -1 : 1) * (prof.points[lastPointSent][3] + startHeading);
 				point.profileSlotSelect0 = 0; 
 				point.profileSlotSelect1 = 1;
 				point.zeroPos = false;
-				if (lastPointSent == 0) {
-					point.zeroPos = true; /* set this to true on the first point */
-					System.out.println("Loaded first trajectory point");
-				}
-
 				point.isLastPoint = false;
 				if ((lastPointSent + 1) == prof.numPoints) {
 					point.isLastPoint = true; /** set this to true on the last point */
@@ -115,7 +115,10 @@ public class FollowArc extends Command {
 		loadLeftBuffer = new Notifier(
 				new BufferLoader(Robot.drivetrain.getRight(), 
 						trajectoryToFollow.centerProfile, 
-						trajectoryToFollow.flipped));
+						trajectoryToFollow.flipped,
+						(Robot.drivetrain.getLeft().getSelectedSensorPosition(0)
+								+ Robot.drivetrain.getRight().getSelectedSensorPosition(0)) / 2,
+						Robot.drivetrain.getAngle()));
 		
 		loadLeftBuffer.startPeriodic(.005);
 	}

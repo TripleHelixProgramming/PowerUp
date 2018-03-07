@@ -7,7 +7,6 @@ import static org.usfirst.frc.team2363.robot.RobotMap.MIDDLE_RIGHT_TALON_ID;
 import static org.usfirst.frc.team2363.robot.RobotMap.REAR_LEFT_TALON_ID;
 import static org.usfirst.frc.team2363.robot.RobotMap.REAR_RIGHT_TALON_ID;
 
-import org.junit.jupiter.engine.Constants;
 import org.usfirst.frc.team2363.robot.Robot;
 import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
@@ -208,7 +207,9 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public double getAngle() {
-		return pigeon.getFusedHeading();
+		double[] ypr = new double[3];
+		pigeon.getYawPitchRoll(ypr);
+		return ypr[0];
 	}
 
 	public void resetAngle() {
