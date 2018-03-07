@@ -49,10 +49,12 @@ public class FollowArc extends Command {
 		private int lastPointSent = 0;
 		private TalonSRX talon;
 		private SrxMotionProfile prof;
+		private final boolean flipped;
 		
-		public BufferLoader(TalonSRX talon, SrxMotionProfile prof) {
+		public BufferLoader(TalonSRX talon, SrxMotionProfile prof, boolean flipped) {
 			this.talon = talon;
 			this.prof = prof;
+			this.flipped = flipped;
 		}
 		
 		public void run() {
@@ -68,7 +70,7 @@ public class FollowArc extends Command {
 				point.position = prof.points[lastPointSent][0];
 				point.velocity = prof.points[lastPointSent][1];
 				point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-				point.headingDeg = prof.points[lastPointSent][3];
+				point.auxiliaryPos = (flipped ? -1 : 1) * prof.points[lastPointSent][3];
 				point.profileSlotSelect0 = 0; 
 				point.profileSlotSelect1 = 1;
 				point.zeroPos = false;
@@ -110,7 +112,10 @@ public class FollowArc extends Command {
 		Robot.drivetrain.getRight().set(ControlMode.MotionProfileArc, setValue.value);
 		Robot.drivetrain.getLeft().follow(Robot.drivetrain.getRight(), FollowerType.AuxOutput1);
 
-		loadLeftBuffer = new Notifier(new BufferLoader(Robot.drivetrain.getRight(), this.trajectoryToFollow.centerProfile));
+		loadLeftBuffer = new Notifier(
+				new BufferLoader(Robot.drivetrain.getRight(), 
+						trajectoryToFollow.centerProfile, 
+						trajectoryToFollow.flipped));
 		
 		loadLeftBuffer.startPeriodic(.005);
 	}
