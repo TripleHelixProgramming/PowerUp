@@ -15,6 +15,7 @@ import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team319.paths.Baseline;
 import org.usfirst.frc.team319.paths.OppositeSideScale;
+import org.usfirst.frc.team319.paths.turning_calibration;
 import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -118,6 +119,7 @@ public class Robot extends IterativeRobot {
 		
 		
 		autonomousCommand = AutoRoutines.getAutoRoutine();
+//		autonomousCommand = new FollowTrajectory(new turning_calibration());
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 		

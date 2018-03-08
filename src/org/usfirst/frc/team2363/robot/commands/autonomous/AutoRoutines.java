@@ -188,8 +188,8 @@ public class AutoRoutines {
 		switch (autoType) {
 			case OPPOSITE_SIDE_SCALE:
 				return new OppositeSideScalePhase2(flipped);
-			case SAME_SIDE_SCALE:
-				return new SameSideScalePhase2(flipped);
+//			case SAME_SIDE_SCALE:
+//				return new SameSideScalePhase2(flipped);
 			case SAME_SIDE_SWITCH:
 				return new SameSideSwitchPhase2(flipped);
 			case SCALE_TO_SWITCH:
