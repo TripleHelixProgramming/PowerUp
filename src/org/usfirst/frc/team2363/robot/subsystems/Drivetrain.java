@@ -130,14 +130,12 @@ public class Drivetrain extends Subsystem {
 		
 		frontRight.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor0, 0);
 		frontRight.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.QuadEncoder, 0);
-		frontRight.configSensorTerm(SensorTerm.Diff1, FeedbackDevice.RemoteSensor0, 0);
-		frontRight.configSensorTerm(SensorTerm.Diff0, FeedbackDevice.QuadEncoder, 0);
 		/* select sum for distance(0), different for turn(1) */
 		
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.SensorSum, 0, 0);
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 1, 0);
 
-		frontLeft.configSelectedFeedbackCoefficient(1, 0, 0); //Coefficient for Distance
+		frontRight.configSelectedFeedbackCoefficient(1, 0, 0); //Coefficient for Distance
 		frontRight.configSelectedFeedbackCoefficient(3600 / 8192, 1, 0); //Coefficient for Pigeon to convert to 360
 		
 		frontLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
