@@ -96,6 +96,14 @@ public class Elevator extends Subsystem {
 		goTo(height.getHeight());
 	}
 	
+	public void setPower(double power) {
+		leftMotor.set(ControlMode.PercentOutput, power);
+	}
+	
+	public boolean atBottom() {
+		return leftMotor.getSensorCollection().isRevLimitSwitchClosed();
+	}
+	
 	public void goTo(double height) {
 		leftMotor.set(ControlMode.MotionMagic, height);
 	}
@@ -118,7 +126,7 @@ public class Elevator extends Subsystem {
 	}
 
 	public void stop() {
-		leftMotor.set(ControlMode.PercentOutput, 0);
+		leftMotor.set(ControlMode.PercentOutput, 0.05);
 	}
 
 	public void reset() {

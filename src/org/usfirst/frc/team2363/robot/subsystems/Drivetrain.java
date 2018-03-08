@@ -50,6 +50,9 @@ public class Drivetrain extends Subsystem {
 		Robot.LOG.addSource("DRIVETRAIN LEFT2 Current", middleLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		Robot.LOG.addSource("DRIVETRAIN LEFT3 Current", rearLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		
+		Robot.LOG.addSource("Left Drivetrain Error", frontLeft, f -> "" + ((TalonSRX)(f)).getClosedLoopError(0));
+		Robot.LOG.addSource("Right Drivetrain Error", frontRight, f -> "" + ((TalonSRX)(f)).getClosedLoopError(0));
+		
 		Robot.LOG.addSource("DRIVETRAIN LEFT1 Voltage", frontLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("DRIVETRAIN LEFT2 Voltage", middleLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("DRIVETRAIN LEFT3 Voltage", rearLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
@@ -72,13 +75,14 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
 		frontLeft.config_kF(0, 2, 10);
-		frontLeft.config_kP(0, 7, 10);
+		frontLeft.config_kP(0, 7.25, 10);
 
 		frontLeft.setInverted(true);
 		middleLeft.setInverted(true);
 		rearLeft.setInverted(true);
 		
-		/* status 10 provides the trajectory target for motion profile AND motion magic */
+		/* status 10 provid[]\
+		 * trajectory target for motion profile AND motion magic */
 		frontLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 
 		// Configure Front Right Master
@@ -92,7 +96,7 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
 		frontRight.config_kF(0, 2, 10);
-		frontRight.config_kP(0, 7, 10);
+		frontRight.config_kP(0, 7.25, 10);
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 
@@ -220,7 +224,7 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public void adjustForHeight(double heightPercentage) {
-		frontRight.configOpenloopRamp(0.7 + (0.3 * heightPercentage), 0);//0.4, 0.6
-		frontLeft.configOpenloopRamp(0.7 + (0.3 * heightPercentage), 0);
+		frontRight.configOpenloopRamp(0.5 + (0.3 * heightPercentage), 0);//0.4, 0.6
+		frontLeft.configOpenloopRamp(0.5 + (0.3 * heightPercentage), 0);
 	}
 }

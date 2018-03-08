@@ -12,6 +12,7 @@ package org.usfirst.frc.team319.robot.commands;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.io.IOException;
 
@@ -178,6 +179,9 @@ public class FollowTrajectory extends Command {
 		
 		Robot.drivetrain.getLeft().set(ControlMode.MotionProfile, setValue.value);
 		Robot.drivetrain.getRight().set(ControlMode.MotionProfile, setValue.value);
+		
+		SmartDashboard.putNumber("Left Error", Robot.drivetrain.getLeft().getClosedLoopError(0));
+		SmartDashboard.putNumber("Right Error", Robot.drivetrain.getRight().getClosedLoopError(0)); 
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
