@@ -121,12 +121,12 @@ public class OI {
 	
 	// speed
 	public double getThrottle () {
-		return driverController.getRawAxis(LEFT_STICK_Y);
+		return driverController.getRawAxis(1); //originally LEFT_STICK_Y
 	}
 	
 	// turn angle
 	public double getTurn() {
-		return driverController.getRawAxis(RIGHT_STICK_X) * getTurnScaling(getFullSpeedPercentage());
+		return driverController.getRawAxis(4) * getTurnScaling(getFullSpeedPercentage());//originally RIGHT_STICK_X
 	}
 	
 	public double getElevatorPower() {

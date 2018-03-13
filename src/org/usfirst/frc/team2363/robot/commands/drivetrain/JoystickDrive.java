@@ -34,7 +34,9 @@ public class JoystickDrive extends Command {
 		} else {
 	    	double throttle, turn;
 	    	
-	    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3);
+//	    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3);
+//	    	throttle = oi.getThrottle() * 0.6;//xbox controller throttle
+	    	throttle = oi.getThrottle() * 0.8;//flight sim controller
 	    	turn = oi.getTurn() * ((0.3 * (1 - Robot.elevator.getHeightPercentage())) + 0.7); //original: 0.4, 0.6;
 	    	
 	    	drivetrain.arcadeDrive(throttle, turn, false);
