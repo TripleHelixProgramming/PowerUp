@@ -27,16 +27,14 @@ public class Tramps extends Subsystem {
 	private TalonSRX frontRight = new TalonSRX(FRONT_RIGHT_TRAMP);
 	private BaseMotorController rearLeft = new VictorSPX(REAR_LEFT_TRAMP);
 	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TRAMP);
-
-	//Slaves need to be inverted
 	
 	public Tramps() {
 		rearLeft.follow(frontLeft);
 		rearRight.follow(frontRight);
-		frontLeft.setInverted(false);
-		frontRight.setInverted(true);
-		rearLeft.setInverted(true);
-		rearRight.setInverted(false);
+		frontLeft.setInverted(true);
+		frontRight.setInverted(false);
+		rearLeft.setInverted(false);
+		rearRight.setInverted(true);
 	}
 
     public void initDefaultCommand() {
@@ -57,11 +55,14 @@ public class Tramps extends Subsystem {
 //    	right2.set(DoubleSolenoid.Value.kForward);
     }
     
-    public void setLeftPower(double power) {
+  //NOTE: On the physical robot configuration, the RIGHT motors are lifting the LEFT trap.
+  	//		The LEFT motors are lifting the RIGHT trap.
+    
+    public void setRightPower(double power) {
 	    frontLeft.set(ControlMode.PercentOutput, power);
     }
     
-    public void setRightPower(double power) {
+    public void setLeftPower(double power) {
 	    frontRight.set(ControlMode.PercentOutput, power);
     }
     

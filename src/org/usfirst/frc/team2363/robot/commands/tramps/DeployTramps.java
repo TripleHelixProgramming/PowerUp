@@ -13,12 +13,12 @@ public class DeployTramps extends Command {
 
     public DeployTramps() {
     	requires(Robot.tramps);
+    	requires(Robot.elevator);//required to disable manual elevator and free the joystick for tramp control
     }
 
     protected void initialize() {
     	HelixEvents.addEvent("TRAMPS", "Starting to deploy tramps");
     	Robot.tramps.deploy();
-    	new StopElevator(); //Disables the manual elevator control on the left joystick for tramps
     }
 
     protected void execute() {

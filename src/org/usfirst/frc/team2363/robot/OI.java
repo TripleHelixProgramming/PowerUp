@@ -52,6 +52,8 @@ public class OI {
 //		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
 //		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
 		
+		new JoystickButton(operatorController, RobotMap.LOGO_LEFT).whenPressed(new ResetElevator());
+		
 		Button drive = new Button() {
 
 			@Override
@@ -87,14 +89,14 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.SCALE));
 		
-		new Button() {
+/*		new Button() {
 
 			@Override
 			public boolean get() {
 				return operatorController.getRawAxis(LEFT_TRIGGER) >= 0.5;
 			}
 			 
-		}.whenPressed(new ResetElevator());
+		}.whenPressed(new ResetElevator());*/
 		
 		new Button() {
 

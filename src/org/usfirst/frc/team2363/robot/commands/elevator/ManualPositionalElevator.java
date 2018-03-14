@@ -24,7 +24,6 @@ public class ManualPositionalElevator extends Command {
     protected void initialize() {
     	position = Robot.elevator.getPosition();
     	HelixEvents.addEvent("ELEVATOR", "Starting to move elevator");
-    	new RetractTramps();
     }
 
     // Called repeatedly when this Command is scheduled to run
