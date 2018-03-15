@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import static org.usfirst.frc.team2363.robot.Robot.*;
 
 import org.iif.th.util.logger.HelixEvents;
-import org.usfirst.frc.team2363.robot.Robot;
 
 /**
  *
  */
-public class RaiseWrist extends Command {
+public class AutoEject extends Command {
 
-    public RaiseWrist() {
+	
+    public AutoEject() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(gripper);
@@ -19,15 +19,13 @@ public class RaiseWrist extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	HelixEvents.addEvent("GRIPPER", "Starting to raise wrist");
+    	HelixEvents.addEvent("GRIPPER", "Starting to shoot cube");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.gripper.raise();
-    	Robot.gripper.stop();
+    	gripper.autoEject();
     }
-
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;
@@ -35,7 +33,7 @@ public class RaiseWrist extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	HelixEvents.addEvent("GRIPPER", "Finished raising wrist");
+    	HelixEvents.addEvent("GRIPPER", "Finished shooting cube");
     }
 
     // Called when another command which requires one or more of the same

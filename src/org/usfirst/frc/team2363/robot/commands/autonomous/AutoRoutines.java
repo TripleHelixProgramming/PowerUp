@@ -90,8 +90,12 @@ public class AutoRoutines {
 		
 		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + flipped);
 		
-		if (selectedAutoType == AutoType.BASELINE) {
+		if (selectedAutoType == AutoType.BASELINE || selectedAutoType == AutoType.OPPOSITE_SIDE_SCALE) {
 			return new FollowTrajectory(getPath(selectedAutoType, flipped));
+		}
+		
+		if (selectedAutoType == AutoType.SAME_SIDE_SWITCH) {
+				return new SameSideSwitchGroup(flipped);
 		}
 		
 		return new AutoGroup(
@@ -184,8 +188,8 @@ public class AutoRoutines {
 		switch (autoType) {
 			case OPPOSITE_SIDE_SCALE:
 				return new OppositeSideScalePhase2(flipped);
-			case SAME_SIDE_SCALE:
-				return new SameSideScalePhase2(flipped);
+//			case SAME_SIDE_SCALE:
+//				return new SameSideScalePhase2(flipped);
 			case SAME_SIDE_SWITCH:
 				return new SameSideSwitchPhase2(flipped);
 			case SCALE_TO_SWITCH:

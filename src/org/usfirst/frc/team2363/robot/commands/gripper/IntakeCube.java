@@ -21,7 +21,7 @@ public class IntakeCube extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	gripper.lower();
+//    	gripper.lower();
     	HelixEvents.addEvent("GRIPPER", "Starting to intake cube");
     }
 
@@ -34,19 +34,27 @@ public class IntakeCube extends Command {
     		stalledCount = 0;
     	}
 		gripper.intake();
+		
+		if (stalledCount > 10) {
+			if (!rumbleCommand.isRunning()) {
+				rumbleCommand.start();
+			}
+		}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return stalledCount > 5;
+    	
+//        return stalledCount > 5;
+    	return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	HelixEvents.addEvent("GRIPPER", "Finished intaking cube");
-    	if (!rumbleCommand.isRunning()) {
-			rumbleCommand.start();
-		}
+//    	if (!rumbleCommand.isRunning()) {
+//			rumbleCommand.start();
+//		}
     }
 
     // Called when another command which requires one or more of the same

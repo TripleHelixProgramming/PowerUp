@@ -58,7 +58,6 @@ public class Elevator extends Subsystem {
 		Robot.LOG.addSource("ELEVATOR Velocity", this, f -> "" + ((Elevator)(f)).getVelocity());
 		Robot.LOG.addSource("ELEVATOR Limit Switch State", leftMotor, f -> "" + ((TalonSRX)(f)).getSensorCollection().isRevLimitSwitchClosed());
 		Robot.LOG.addSource("ELEVATOR Height", this, f -> "" + ((Elevator)(f)).getHeightPercentage());
-		
 		rightMotor.follow(leftMotor);
 		rightMotor.setNeutralMode(NeutralMode.Brake);
 		rightMotor.configOpenloopRamp(0.2, 0);
@@ -70,6 +69,7 @@ public class Elevator extends Subsystem {
 		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		leftMotor.configMotionCruiseVelocity(700, 0);
 		leftMotor.configMotionAcceleration(5000, 0);
+		leftMotor.configContinuousCurrentLimit(60, 0);
 	}
 
 	@Override
@@ -96,6 +96,14 @@ public class Elevator extends Subsystem {
 		goTo(height.getHeight());
 	}
 	
+	public void setPower(double power) {
+		leftMotor.set(ControlMode.PercentOutput, power);
+	}
+	
+	public boolean atBottom() {
+		return leftMotor.getSensorCollection().isRevLimitSwitchClosed();
+	}
+	
 	public void goTo(double height) {
 		leftMotor.set(ControlMode.MotionMagic, height);
 	}
@@ -118,7 +126,7 @@ public class Elevator extends Subsystem {
 	}
 
 	public void stop() {
-		leftMotor.set(ControlMode.PercentOutput, 0);
+		leftMotor.set(ControlMode.PercentOutput, 0.05);
 	}
 
 	public void reset() {

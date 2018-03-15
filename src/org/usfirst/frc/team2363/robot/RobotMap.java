@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 public class RobotMap {
 	
 	public static final double HIGH_SPEED_SCALING = 0.3;//original 0.50
-	public static final double LOW_SPEED_SCALING = 0.45;//original 0.75
+	public static final double LOW_SPEED_SCALING = 0.70;//original 0.75
 		
 	//Controllers
 	public static final int DRIVER_PORT = 0;
@@ -55,13 +55,20 @@ public class RobotMap {
 	public static final int ANALOG_INPUT = 0;
 
 	//Tramp Solenoids
-	public static final int TRAMPS = 4;
+	public static final int TRAMPS_DEPLOY = 2;
+	public static final int TRAMPS_RETRACT = 5;
+	public static final int LEFT1_TRAMP_RAISE = 3;
+	public static final int LEFT1_TRAMP_LOWER = 4;
+	public static final int LEFT2_TRAMP_RAISE = 3;
+	public static final int LEFT2_TRAMP_LOWER = 4;
+	public static final int RIGHT1_TRAMP_RAISE = 0;
+	public static final int RIGHT1_TRAMP_LOWER = 7;
+	public static final int RIGHT2_TRAMP_RAISE = 1;
+	public static final int RIGHT2_TRAMP_LOWER = 6;
 
 	//Gripper Solenoids
 	public static final int CLAW_OPEN = 6;
 	public static final int CLAW_CLOSE = 1;
-	public static final int GRIPPER_RAISE = 0;
-	public static final int GRIPPER_LOWER = 7;
 	
 	//Digital IO -Gripper
 	public static final int HAS_CUBE = 0;

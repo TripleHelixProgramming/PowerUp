@@ -1,40 +1,38 @@
-package org.usfirst.frc.team2363.robot.commands.gripper;
-
-import edu.wpi.first.wpilibj.command.Command;
-import static org.usfirst.frc.team2363.robot.Robot.*;
+package org.usfirst.frc.team2363.robot.commands.elevator;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  *
  */
-public class LowerWrist extends Command {
+public class ResetElevator extends Command {
 
-    public LowerWrist() {
+    public ResetElevator() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(gripper);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	HelixEvents.addEvent("GRIPPER", "Starting to lower wrist");
+    	HelixEvents.addEvent("ELEVATOR", "Starting to reset elevator");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.gripper.lower();
+    	Robot.elevator.setPower(-0.15);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.elevator.atBottom();
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	HelixEvents.addEvent("GRIPPER", "Finished lowering wrist");
+    	HelixEvents.addEvent("ELEVATOR", "Finished resetting elevator");
     }
 
     // Called when another command which requires one or more of the same
