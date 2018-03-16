@@ -20,6 +20,8 @@ public class RetractTramps extends Command {
 
     protected void execute() {
     	Robot.tramps.retract();
+    	Robot.tramps.setLeftPower(0);
+    	Robot.tramps.setRightPower(0);
     }
 
     protected boolean isFinished() {

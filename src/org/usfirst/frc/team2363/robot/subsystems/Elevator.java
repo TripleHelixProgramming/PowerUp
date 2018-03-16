@@ -109,7 +109,6 @@ public class Elevator extends Subsystem {
 	}
 	
 	protected void initDefaultCommand() {
-		// sets the default drive mode to Colson drive
   		setDefaultCommand(new StopElevator());
 	}
 	

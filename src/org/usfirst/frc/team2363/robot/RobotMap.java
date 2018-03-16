@@ -64,6 +64,12 @@ public class RobotMap {
 	public static final int RIGHT1_TRAMP_LOWER = 7;
 	public static final int RIGHT2_TRAMP_RAISE = 1;
 	public static final int RIGHT2_TRAMP_LOWER = 6;
+	
+	//Tramp Motors
+	public static final int FRONT_LEFT_TRAMP = 40;
+	public static final int REAR_LEFT_TRAMP = 42;
+	public static final int FRONT_RIGHT_TRAMP = 41;
+	public static final int REAR_RIGHT_TRAMP = 43;
 
 	//Gripper Solenoids
 	public static final int CLAW_OPEN = 6;
