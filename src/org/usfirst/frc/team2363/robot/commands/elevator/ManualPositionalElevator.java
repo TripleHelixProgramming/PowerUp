@@ -2,6 +2,7 @@ package org.usfirst.frc.team2363.robot.commands.elevator;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
+import org.usfirst.frc.team2363.robot.commands.tramps.RetractTramps;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -55,5 +56,6 @@ public class ManualPositionalElevator extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	HelixEvents.addEvent("ELEVATOR", "finished moving elevator");
     }
 }

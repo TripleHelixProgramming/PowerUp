@@ -1,13 +1,6 @@
 package org.usfirst.frc.team2363.robot;
 
-import static org.usfirst.frc.team2363.robot.RobotMap.DRIVER_PORT;
-import static org.usfirst.frc.team2363.robot.RobotMap.HIGH_SPEED_SCALING;
-import static org.usfirst.frc.team2363.robot.RobotMap.LEFT_STICK_Y;
-import static org.usfirst.frc.team2363.robot.RobotMap.LEFT_TRIGGER;
-import static org.usfirst.frc.team2363.robot.RobotMap.LOW_SPEED_SCALING;
-import static org.usfirst.frc.team2363.robot.RobotMap.OPERATOR_PORT;
-import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
-import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_TRIGGER;
+import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
 import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
 import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
@@ -51,12 +44,15 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
 		//tramp controls
-		new JoystickButton(operatorController, RobotMap.RIGHT_STICK_BUTTON).whenPressed(new DeployTramps());
-		new JoystickButton(operatorController, RobotMap.LOGO_RIGHT).whenPressed(new DeployLeftTramps());
-		new JoystickButton(operatorController, RobotMap.LOGO_LEFT).whenPressed(new DeployRightTramps());
+//		new JoystickButton(operatorController, RobotMap.RIGHT_STICK_BUTTON).whenPressed(new DeployTramps());
+//		new JoystickButton(operatorController, RobotMap.LOGO_RIGHT).whenPressed(new DeployLeftTramps());
+//		new JoystickButton(operatorController, RobotMap.LOGO_LEFT).whenPressed(new DeployRightTramps());
+		new JoystickButton(operatorController, RobotMap.LOGO_RIGHT).whenPressed(new DeployTramps());
 		
 //		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
 //		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
+		
+		new JoystickButton(operatorController, RobotMap.LOGO_LEFT).whenPressed(new ResetElevator());
 		
 		Button drive = new Button() {
 
@@ -93,14 +89,14 @@ public class OI {
 			}
 		}.whenPressed(new RaiseElevator(Height.SCALE));
 		
-		new Button() {
+/*		new Button() {
 
 			@Override
 			public boolean get() {
 				return operatorController.getRawAxis(LEFT_TRIGGER) >= 0.5;
 			}
 			 
-		}.whenPressed(new ResetElevator());
+		}.whenPressed(new ResetElevator());*/
 		
 		new Button() {
 
@@ -146,7 +142,24 @@ public class OI {
 		return -Math.abs(LOW_SPEED_SCALING - HIGH_SPEED_SCALING) * Math.abs(x) + LOW_SPEED_SCALING;
 	}
 	
+	//Tramp Power
+	public double getLeftTrampPower() {
+		double stick = -operatorController.getRawAxis(RIGHT_STICK_Y);
+		stick *= Math.abs(stick);
+		if (Math.abs(stick) < 0.05) {
+			stick = 0;
+		}
+		return stick;
+	}
 	
+	public double getRightTrampPower() {
+		double stick = -operatorController.getRawAxis(LEFT_STICK_Y);
+		stick *= Math.abs(stick);
+		if (Math.abs(stick) < 0.05) {
+			stick = 0;
+		}
+		return stick;
+	}
 	
 	/**
 	 * Turns on and off the rumble function on the driver and operator controllers
