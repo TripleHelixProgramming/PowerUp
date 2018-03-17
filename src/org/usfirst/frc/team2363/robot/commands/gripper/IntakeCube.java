@@ -35,7 +35,7 @@ public class IntakeCube extends Command {
     	}
 		gripper.intake();
 		
-		if (stalledCount > 10) {
+		if (stalledCount > 20) {
 			if (!rumbleCommand.isRunning()) {
 				rumbleCommand.start();
 			}
