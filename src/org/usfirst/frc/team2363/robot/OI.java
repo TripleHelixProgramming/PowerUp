@@ -1,19 +1,24 @@
 package org.usfirst.frc.team2363.robot;
 
-import static org.usfirst.frc.team2363.robot.RobotMap.*;
+import static org.usfirst.frc.team2363.robot.RobotMap.DRIVER_PORT;
+import static org.usfirst.frc.team2363.robot.RobotMap.HIGH_SPEED_SCALING;
+import static org.usfirst.frc.team2363.robot.RobotMap.LEFT_STICK_Y;
+import static org.usfirst.frc.team2363.robot.RobotMap.LOW_SPEED_SCALING;
+import static org.usfirst.frc.team2363.robot.RobotMap.OPERATOR_PORT;
+import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
+import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_Y;
+import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_TRIGGER;
 
 import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
 import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
-import org.usfirst.frc.team2363.robot.commands.drivetrain.SlowJoystickDrive;
+import org.usfirst.frc.team2363.robot.commands.drivetrain.TurboDrive;
 import org.usfirst.frc.team2363.robot.commands.elevator.ManualPositionalElevator;
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.commands.elevator.ResetElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.ShootCube;
-import org.usfirst.frc.team2363.robot.commands.tramps.DeployLeftTramps;
-import org.usfirst.frc.team2363.robot.commands.tramps.DeployRightTramps;
 import org.usfirst.frc.team2363.robot.commands.tramps.DeployTramps;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 
@@ -54,16 +59,27 @@ public class OI {
 		
 		new JoystickButton(operatorController, RobotMap.LOGO_LEFT).whenPressed(new ResetElevator());
 		
-		Button drive = new Button() {
+//		Button drive = new Button() {
+//
+//			@Override
+//			public boolean get() {
+//				return driverController.getRawAxis(RIGHT_TRIGGER) >= 0.5;
+//			}
+//		};
+//		drive.whenPressed(new SlowJoystickDrive());
+//		
+//		drive.whenReleased(new JoystickDrive());
+		
+		Button turbo = new Button() {
 
 			@Override
 			public boolean get() {
 				return driverController.getRawAxis(RIGHT_TRIGGER) >= 0.5;
 			}
 		};
-		drive.whenPressed(new SlowJoystickDrive());
+		turbo.whenPressed(new TurboDrive());
 		
-		drive.whenReleased(new JoystickDrive());
+		turbo.whenReleased(new JoystickDrive());
 		
 		new Button() {
 

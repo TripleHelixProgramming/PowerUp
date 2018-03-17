@@ -1,19 +1,18 @@
 package org.usfirst.frc.team2363.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.command.Command;
-import static org.usfirst.frc.team2363.robot.Robot.*;
+import static org.usfirst.frc.team2363.robot.Robot.drivetrain;
+import static org.usfirst.frc.team2363.robot.Robot.oi;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
-import org.usfirst.frc.team2363.robot.commands.gripper.RumbleController;
+
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
 public class JoystickDrive extends Command {
 
-	Command SlowDrive = new SlowJoystickDrive();
-	
     public JoystickDrive() {
         // Use requires() here to declare subsystem dependencies
         requires(drivetrain);
@@ -27,21 +26,14 @@ public class JoystickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-		if (Robot.elevator.getPosition() > Robot.elevator.getSlowHeight()) {
-	    	if (!SlowDrive.isRunning()) {
-				SlowDrive.start();
-			}
-		} else {
 	    	double throttle, turn;
 	    	
 //	    	throttle = oi.getThrottle() * ((0.7 * (1 - Robot.elevator.getHeightPercentage())) + 0.3);
-//	    	throttle = oi.getThrottle() * 0.6;//xbox controller throttle
-	    	throttle = oi.getThrottle() * 0.8;//flight sim controller
+	    	throttle = oi.getThrottle() * 0.65;//xbox controller throttle
+//	    	throttle = oi.getThrottle() * 0.8;//flight sim controller
 	    	turn = oi.getTurn() * ((0.3 * (1 - Robot.elevator.getHeightPercentage())) + 0.7); //original: 0.4, 0.6;
 	    	
 	    	drivetrain.arcadeDrive(throttle, turn, false);
-	    	drivetrain.adjustForHeight(elevator.getHeightPercentage());
-		}
     }
 
     // Make this return true when this Command no longer needs to run execute()
