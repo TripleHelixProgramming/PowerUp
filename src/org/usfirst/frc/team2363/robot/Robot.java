@@ -77,10 +77,10 @@ public class Robot extends IterativeRobot {
     		
 		elevator.reset();
 		CameraServer.getInstance().startAutomaticCapture();
-		drivetrain.getRight().setSelectedSensorPosition(0, 0, 0);
-		drivetrain.getRight().setSelectedSensorPosition(0, 1, 0);
-		drivetrain.getRight().getSensorCollection().setQuadraturePosition(0, 0);
-		drivetrain.getLeft().getSensorCollection().setQuadraturePosition(0, 0);
+//		drivetrain.getRight().setSelectedSensorPosition(0, 0, 0);
+//		drivetrain.getRight().setSelectedSensorPosition(0, 1, 0);
+//		drivetrain.getRight().getSensorCollection().setQuadraturePosition(0, 0);
+//		drivetrain.getLeft().getSensorCollection().setQuadraturePosition(0, 0);
 	}
 
 	/**
