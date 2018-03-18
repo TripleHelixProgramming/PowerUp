@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Gripper extends Subsystem {
 	
 	private TalonSRX leftWheel = new TalonSRX(RobotMap.GRIPPER_LEFT_WHEEL);
-	private TalonSRX rightWheel = new TalonSRX(RobotMap.GRIPPER_RIGHT_WHEEL);
+	public TalonSRX rightWheel = new TalonSRX(RobotMap.GRIPPER_RIGHT_WHEEL);
 //	private BaseMotorController leftWheel = new VictorSPX(RobotMap.GRIPPER_LEFT_WHEEL);
 //	private BaseMotorController rightWheel = new VictorSPX(RobotMap.GRIPPER_RIGHT_WHEEL);
 	

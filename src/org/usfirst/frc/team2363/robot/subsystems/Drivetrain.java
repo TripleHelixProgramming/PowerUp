@@ -46,7 +46,7 @@ public class Drivetrain extends Subsystem {
 	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TALON_ID);
 
 	// navX Gryo
-	private PigeonIMU pigeon = new PigeonIMU(RobotMap.PIGEON_ID);
+	private PigeonIMU pigeon = new PigeonIMU(Robot.gripper.rightWheel);
 	
 	public Drivetrain() {
 
@@ -54,8 +54,8 @@ public class Drivetrain extends Subsystem {
 		Robot.LOG.addSource("DRIVETRAIN LEFT2 Current", middleLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		Robot.LOG.addSource("DRIVETRAIN LEFT3 Current", rearLeft, f -> "" + ((BaseMotorController)(f)).getOutputCurrent());
 		
-		Robot.LOG.addSource("Left Drivetrain Error", frontLeft, f -> "" + ((TalonSRX)(f)).getClosedLoopError(0));
-		Robot.LOG.addSource("Right Drivetrain Error", frontRight, f -> "" + ((TalonSRX)(f)).getClosedLoopError(0));
+		Robot.LOG.addSource("Drivetrain Error", frontRight, f -> "" + ((TalonSRX)(f)).getClosedLoopError(0));
+		Robot.LOG.addSource("Heading Drivetrain Error", frontRight, f -> "" + ((TalonSRX)(f)).getClosedLoopError(1));
 		
 		Robot.LOG.addSource("DRIVETRAIN LEFT1 Voltage", frontLeft, f -> "" + ((TalonSRX)(f)).getMotorOutputVoltage());
 		Robot.LOG.addSource("DRIVETRAIN LEFT2 Voltage", middleLeft, f -> "" + ((BaseMotorController)(f)).getMotorOutputVoltage());
@@ -78,10 +78,12 @@ public class Drivetrain extends Subsystem {
 		frontLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
-		frontLeft.config_kF(0, 2, 10);
+//		frontLeft.config_kF(0, 2, 10);
+		frontLeft.config_kF(0, 0 , 10);
 
 //		frontLeft.config_kP(0, 7.25, 10);//original p values
-		frontLeft.config_kP(0, 30.0, 10);
+//		frontLeft.config_kP(0, 30.0, 10);
+		frontLeft.config_kP(0, 0.0, 10);
 		//25
 		frontLeft.config_kD(0, 0.0, 10);
 		
@@ -100,14 +102,20 @@ public class Drivetrain extends Subsystem {
 		
 		frontRight.selectProfileSlot(0, 0);
 		frontRight.configOpenloopRamp(0.4, 10);
-		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+//		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
-		frontRight.config_kF(0, 2, 10);
+//		frontRight.config_kF(0, 2, 10);
+		frontRight.config_kF(0, 0, 10);
 //		
 //		frontRight.config_kP(0, 7.25, 10);//original p values
-		frontRight.config_kP(0, 30.0, 10);
+//		frontRight.config_kP(0, 30.0, 10);
+		frontRight.config_kP(0, 0, 0);
 		frontRight.config_kD(0, 0.0, 10);
+		
+		frontRight.config_kP(1, 0.6, 10);
+		frontRight.config_kD(1, 0.0, 10);
+		
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
 
@@ -145,13 +153,18 @@ public class Drivetrain extends Subsystem {
 		
 		frontRight.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor0, 0);
 		frontRight.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.QuadEncoder, 0);
+		frontRight.configSensorTerm(SensorTerm.Diff0, FeedbackDevice.RemoteSensor0, 0);
+		frontRight.configSensorTerm(SensorTerm.Diff1, FeedbackDevice.QuadEncoder, 0);
 		/* select sum for distance(0), different for turn(1) */
 		
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.SensorSum, 0, 0);
 		frontRight.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 1, 0);
+//		frontRight.configSelectedFeedbackSensor(FeedbackDevice.SensorDifference, 1, 0);
 
 		frontRight.configSelectedFeedbackCoefficient(0.5, 0, 0); //Coefficient for Distance
-		frontRight.configSelectedFeedbackCoefficient(3600 / 8192, 1, 0); //Coefficient for Pigeon to convert to 360
+		frontRight.configSelectedFeedbackCoefficient(3600.0 / 8192, 1, 0); //Coefficient for Pigeon to convert to 3600
+//		frontRight.configSelectedFeedbackCoefficient(3600.0 / 5600, 1, 0); //Coefficient for Pigeon to convert to 3600
+//		frontRight.configSelectedFeedbackCoefficient(0.020, 1, 0); //Coefficient for Pigeon to convert to 3600
 		
 		frontLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
 		frontRight.configAuxPIDPolarity(false, 0);
@@ -160,8 +173,8 @@ public class Drivetrain extends Subsystem {
 	public void periodic() {
 		SmartDashboard.putNumber("Drivetrain Left RPM", getRPM(frontLeft.getSelectedSensorVelocity(0)));
 		SmartDashboard.putNumber("Drivetrain Right RPM", getRPM(frontRight.getSelectedSensorVelocity(0)));
-		SmartDashboard.putNumber("Drivetrain Left Error", getLeftError());
-		SmartDashboard.putNumber("Drivetrain Right Error", getRightError());
+		SmartDashboard.putNumber("Drivetrain Error", getDrivetrainError());
+		SmartDashboard.putNumber("Heading Error", getHeadingError());
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
@@ -239,12 +252,12 @@ public class Drivetrain extends Subsystem {
 		return frontRight;
 	}
 	
-	public double getLeftError() {
-		return frontLeft.getClosedLoopError(0);
+	public double getDrivetrainError() {
+		return frontRight.getClosedLoopError(0);
 	}
 
-	public double getRightError() {
-		return frontRight.getClosedLoopError(0);
+	public double getHeadingError() {
+		return frontRight.getClosedLoopError(1);
 	}	
 	
 	public double getRobotSpeedPercent() {
@@ -265,5 +278,10 @@ public class Drivetrain extends Subsystem {
 	public void adjustForHeight(double heightPercentage) {
 		frontRight.configOpenloopRamp(0.5 + (0.3 * heightPercentage), 0);//0.4, 0.6
 		frontLeft.configOpenloopRamp(0.5 + (0.3 * heightPercentage), 0);
+	}
+
+	public double getDistance() {
+		return (frontLeft.getSensorCollection().getQuadraturePosition()
+				+ frontRight.getSensorCollection().getQuadraturePosition()) / 2;
 	}
 }

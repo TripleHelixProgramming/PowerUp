@@ -4,19 +4,13 @@ package org.usfirst.frc.team2363.robot;
 import org.iif.th.util.logger.HelixEvents;
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
-import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
-import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.subsystems.Claws;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
-import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
-import org.usfirst.frc.team319.paths.OppositeSideScale;
-import org.usfirst.frc.team319.paths.SameSideScale;
-import org.usfirst.frc.team319.paths.scaling_calibration;
-import org.usfirst.frc.team319.paths.turning_calibration;
-import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
+import org.usfirst.frc.team319.arcs.turning_calibrationArc;
+import org.usfirst.frc.team319.robot.commands.FollowArc;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -61,11 +55,11 @@ public class Robot extends IterativeRobot {
       
 		LOG = new HelixLogger();
 	  
+		gripper = new Gripper();
 		drivetrain = new Drivetrain();
 		tramps = new Tramps();
 		elevator = new Elevator();
 		claws = new Claws();
-		gripper = new Gripper();
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
 		LOG.addSource("COMPRESSOR State", compressor, f -> "" + ((Compressor)f).enabled());
@@ -83,6 +77,10 @@ public class Robot extends IterativeRobot {
     		
 		elevator.reset();
 		CameraServer.getInstance().startAutomaticCapture();
+		drivetrain.getRight().setSelectedSensorPosition(0, 0, 0);
+		drivetrain.getRight().setSelectedSensorPosition(0, 1, 0);
+		drivetrain.getRight().getSensorCollection().setQuadraturePosition(0, 0);
+		drivetrain.getLeft().getSensorCollection().setQuadraturePosition(0, 0);
 	}
 
 	/**
@@ -113,12 +111,12 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2(false));
 //		autonomousCommand = new FollowTrajectory(new Baseline());
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
-		if (!autoOverride.get()) {
+//		if (!autoOverride.get()) {
 //			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
-			autonomousCommand = null;
-		} else {
-			autonomousCommand = AutoRoutines.getAutoRoutine();
-		}
+			autonomousCommand = new FollowArc(new turning_calibrationArc());
+//		} else {
+//			autonomousCommand = AutoRoutines.getAutoRoutine();
+//		}
 		
 //		autonomousCommand = new FollowTrajectory(new SameSideScale(true));
 //		autonomousCommand = new RaiseElevator(Height.DROP);
@@ -135,7 +133,7 @@ public class Robot extends IterativeRobot {
 		// makes sure only one command per subsystems runs at a time
 		Scheduler.getInstance().run();
 
-		LOG.saveLogs();
+//		LOG.saveLogs();
 	}
 
 	@Override
