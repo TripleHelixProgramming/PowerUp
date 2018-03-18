@@ -114,8 +114,8 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new FollowTrajectory(new Baseline());
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
 		if (!autoOverride.get()) {
-//			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
-			autonomousCommand = null;
+			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
+//			autonomousCommand = null;
 		} else {
 			autonomousCommand = AutoRoutines.getAutoRoutine();
 		}

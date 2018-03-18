@@ -25,7 +25,7 @@ public class AutoRoutines {
 		SAME_SIDE_SWITCH(Height.SWITCH, 3),
 		SAME_SIDE_SCALE(Height.SCALE, 2.5),
 		SCALE_TO_SWITCH(Height.SCALE, 2.5),
-		OPPOSITE_SIDE_SCALE(Height.SCALE, 6),
+		OPPOSITE_SIDE_SCALE(Height.SCALE, 5),
 		BASELINE(Height.GROUND, 0);
 		
 		private Height height;
@@ -90,9 +90,9 @@ public class AutoRoutines {
 		
 		HelixEvents.addEvent("ROBOT", "Selected Auto Mode: " + selectedAutoType.name() + ", flipped: " + flipped);
 		
-		if (selectedAutoType == AutoType.OPPOSITE_SIDE_SCALE) {
-			return new FollowTrajectory(new OppositeSideScale(flipped));
-		}
+//		if (selectedAutoType == AutoType.OPPOSITE_SIDE_SCALE) {
+//			return new FollowTrajectory(new OppositeSideScale(flipped));
+//		}
 		
 		switch (selectedAutoType) {
 		case BASELINE:
@@ -108,25 +108,29 @@ public class AutoRoutines {
 					new OppositeSideScale(flipped), 
 					selectedAutoType.getHeight(),
 					selectedAutoType.getDelay(),
-					new OppositeSideScalePhase2(flipped));
+//					new OppositeSideScalePhase2(flipped));
+					null);
 		case SAME_SIDE_SCALE:
 			return new AutoGroup(
 					new SameSideScale(flipped), 
 					selectedAutoType.getHeight(),
 					selectedAutoType.getDelay(),
 					new SameSideScalePhase2(flipped));
+//					null);
 		case SAME_SIDE_SWITCH:
 			return new AutoGroup(
 					new SameSideSwitch(flipped), 
 					selectedAutoType.getHeight(),
 					selectedAutoType.getDelay(),
-					new SameSideSwitchPhase2(flipped));
+//					new SameSideSwitchPhase2(flipped));
+					null);
 		case SCALE_TO_SWITCH:
 			return new AutoGroup(
 					new SameSideScale(flipped), 
 					selectedAutoType.getHeight(),
 					selectedAutoType.getDelay(),
-					new ScaleToSwitchPhase2(flipped));
+//					new ScaleToSwitchPhase2(flipped));
+					null);
 		default:
 			return new BaselineAutoGroup(flipped);
 		}

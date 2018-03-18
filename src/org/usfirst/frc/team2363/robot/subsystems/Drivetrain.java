@@ -75,8 +75,8 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
 		frontLeft.config_kF(0, 2, 10);
-//		frontLeft.config_kP(0, 7.25, 10);//original p values
-		frontLeft.config_kP(0, 30.0, 10);
+		frontLeft.config_kP(0, 7.25, 10);//original p values
+//		frontLeft.config_kP(0, 10.0, 10);
 		//25
 		frontLeft.config_kD(0, 0.0, 10);
 		
@@ -99,8 +99,8 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
 		frontRight.config_kF(0, 2, 10);
-//		frontRight.config_kP(0, 7.25, 10);//original p values
-		frontRight.config_kP(0, 30.0, 10);
+		frontRight.config_kP(0, 7.25, 10);//original p values
+//		frontRight.config_kP(0, 10.0, 10);
 		frontRight.config_kD(0, 0.0, 10);
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
@@ -136,6 +136,8 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Drivetrain Right RPM", getRPM(frontRight.getSelectedSensorVelocity(0)));
 		SmartDashboard.putNumber("Drivetrain Left Error", getLeftError());
 		SmartDashboard.putNumber("Drivetrain Right Error", getRightError());
+//		SmartDashboard.putNumber("Drivetrain Left Trajectory", frontLeft.getActiveTrajectoryPosition());
+//		SmartDashboard.putNumber("Drivetrain Right Trajectory", frontRight.getActiveTrajectoryPosition());
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
