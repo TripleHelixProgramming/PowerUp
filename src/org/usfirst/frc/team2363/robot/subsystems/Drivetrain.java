@@ -101,6 +101,7 @@ public class Drivetrain extends Subsystem {
 //		frontRight.configEncoderCodesPerRev(DrivetrainMath.ticksPerWheelRotation(ENCODER_TICKS, GEAR_RATIO));	
 		
 		frontRight.selectProfileSlot(0, 0);
+		frontRight.selectProfileSlot(1, 1);
 		frontRight.configOpenloopRamp(0.4, 10);
 //		frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 		// Make sure to set Sensor phase appropriately for each master 
@@ -113,7 +114,7 @@ public class Drivetrain extends Subsystem {
 		frontRight.config_kP(0, 0, 0);
 		frontRight.config_kD(0, 0.0, 10);
 		
-		frontRight.config_kP(1, 1, 10);
+		frontRight.config_kP(1, 0.1, 10);
 		frontRight.config_kD(1, 0.0, 10);
 		
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
@@ -148,8 +149,8 @@ public class Drivetrain extends Subsystem {
 		frontRight.configRemoteFeedbackFilter(frontLeft.getDeviceID(),
 				RemoteSensorSource.TalonSRX_SelectedSensor, 0, 0);
 		/* Remote 1 will be a pigeon */
-		frontRight.configRemoteFeedbackFilter(pigeon.getDeviceID(),
-				RemoteSensorSource.Pigeon_Yaw, 1, 0);
+		frontRight.configRemoteFeedbackFilter(Robot.gripper.rightWheel.getDeviceID(),
+				RemoteSensorSource.GadgeteerPigeon_Yaw, 1, 0);
 		
 		frontRight.configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor0, 0);
 		frontRight.configSensorTerm(SensorTerm.Sum0, FeedbackDevice.QuadEncoder, 0);
@@ -175,6 +176,8 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Drivetrain Right RPM", getRPM(frontRight.getSelectedSensorVelocity(0)));
 //		SmartDashboard.putNumber("Drivetrain Error", getDrivetrainError());
 //		SmartDashboard.putNumber("Heading Error", getHeadingError());
+		SmartDashboard.putNumber("Heading", getAngle());
+		SmartDashboard.putNumber("Profile point", frontRight.getActiveTrajectoryHeading());
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
