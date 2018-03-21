@@ -55,7 +55,7 @@ public class HelixLogger {
 			}
 			Files.createFile(file);
 			saveTitles();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (output != null) {

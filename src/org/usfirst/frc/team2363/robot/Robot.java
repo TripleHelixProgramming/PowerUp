@@ -111,12 +111,12 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2(false));
 //		autonomousCommand = new FollowTrajectory(new Baseline());
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
-//		if (!autoOverride.get()) {
+		if (!autoOverride.get()) {
 //			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
 			autonomousCommand = new FollowArc(new turning_calibrationArc());
-//		} else {
-//			autonomousCommand = AutoRoutines.getAutoRoutine();
-//		}
+		} else {
+			autonomousCommand = AutoRoutines.getAutoRoutine();
+		}
 		
 //		autonomousCommand = new FollowTrajectory(new SameSideScale(true));
 //		autonomousCommand = new RaiseElevator(Height.DROP);

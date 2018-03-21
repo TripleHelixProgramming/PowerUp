@@ -163,8 +163,6 @@ public class Drivetrain extends Subsystem {
 
 		frontRight.configSelectedFeedbackCoefficient(0.5, 0, 0); //Coefficient for Distance
 		frontRight.configSelectedFeedbackCoefficient(3600.0 / 8192, 1, 0); //Coefficient for Pigeon to convert to 3600
-//		frontRight.configSelectedFeedbackCoefficient(3600.0 / 5600, 1, 0); //Coefficient for Pigeon to convert to 3600
-//		frontRight.configSelectedFeedbackCoefficient(0.020, 1, 0); //Coefficient for Pigeon to convert to 3600
 		
 		frontLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
 		frontRight.configAuxPIDPolarity(false, 0);
