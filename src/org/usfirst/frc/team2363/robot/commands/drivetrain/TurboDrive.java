@@ -34,7 +34,7 @@ public class TurboDrive extends Command {
 				SlowDrive.start();
 			}
 		} else {
-	    	double throttle, turn;
+	    	double throttle;
 	    	
 	    	throttle = oi.getThrottle() * 1.0;
 //	    	turn = oi.getTurn() * ((0.3 * (1 - Robot.elevator.getHeightPercentage())) + 0.7); //original: 0.4, 0.6;

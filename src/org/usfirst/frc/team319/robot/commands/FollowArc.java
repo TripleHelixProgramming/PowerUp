@@ -1,8 +1,6 @@
 package org.usfirst.frc.team319.robot.commands;
 
 import org.usfirst.frc.team2363.robot.Robot;
-import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team319.models.BobTalonSRX;
 import org.usfirst.frc.team319.models.SrxMotionProfile;
 import org.usfirst.frc.team319.models.SrxTrajectory;
 
@@ -95,6 +93,8 @@ public class FollowArc extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		
+		Robot.drivetrain.reset();
 		
 		setUpTalon(leftTalon);
 		setUpTalon(rightTalon);

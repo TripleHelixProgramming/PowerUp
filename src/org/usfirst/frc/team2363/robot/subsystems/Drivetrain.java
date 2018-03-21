@@ -8,7 +8,6 @@ import static org.usfirst.frc.team2363.robot.RobotMap.REAR_LEFT_TALON_ID;
 import static org.usfirst.frc.team2363.robot.RobotMap.REAR_RIGHT_TALON_ID;
 
 import org.usfirst.frc.team2363.robot.Robot;
-import org.usfirst.frc.team2363.robot.RobotMap;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -286,5 +285,11 @@ public class Drivetrain extends Subsystem {
 	public double getDistance() {
 		return (frontLeft.getSensorCollection().getQuadraturePosition()
 				+ frontRight.getSensorCollection().getQuadraturePosition()) / 2;
+	}
+
+	public void reset() {
+		frontLeft.getSensorCollection().setQuadraturePosition(0, 0);
+		frontRight.getSensorCollection().setQuadraturePosition(0, 0);
+		pigeon.setYaw(0, 0);
 	}
 }

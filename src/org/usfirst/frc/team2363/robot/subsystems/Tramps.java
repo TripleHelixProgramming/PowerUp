@@ -1,6 +1,12 @@
 package org.usfirst.frc.team2363.robot.subsystems;
 
-import static org.usfirst.frc.team2363.robot.RobotMap.*;
+import static org.usfirst.frc.team2363.robot.RobotMap.FRONT_LEFT_TRAMP;
+import static org.usfirst.frc.team2363.robot.RobotMap.FRONT_RIGHT_TRAMP;
+import static org.usfirst.frc.team2363.robot.RobotMap.REAR_LEFT_TRAMP;
+import static org.usfirst.frc.team2363.robot.RobotMap.REAR_RIGHT_TRAMP;
+import static org.usfirst.frc.team2363.robot.RobotMap.TRAMPS_DEPLOY;
+import static org.usfirst.frc.team2363.robot.RobotMap.TRAMPS_RETRACT;
+
 import org.usfirst.frc.team2363.robot.commands.tramps.RetractTramps;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -9,7 +15,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 

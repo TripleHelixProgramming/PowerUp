@@ -2,7 +2,6 @@ package org.usfirst.frc.team2363.robot.commands.tramps;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.usfirst.frc.team2363.robot.Robot;
-import org.usfirst.frc.team2363.robot.commands.elevator.StopElevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
