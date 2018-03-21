@@ -84,7 +84,7 @@ public class HelixEvents {
 					String event = events.remove();
 					System.out.println(event);
 					Files.write(file, event.getBytes(), StandardOpenOption.APPEND);
-				} catch (IOException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

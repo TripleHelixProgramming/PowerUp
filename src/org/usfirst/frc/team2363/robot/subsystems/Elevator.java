@@ -24,6 +24,7 @@ public class Elevator extends Subsystem {
 	public enum Height {
 		
 		GROUND(0),
+		DROP(300),
 		ROTATE(390),
 		SWITCH(1500),//original switch height at 1500, currently set for cube rotation 390
 		SCALE(4700),
@@ -58,7 +59,6 @@ public class Elevator extends Subsystem {
 		Robot.LOG.addSource("ELEVATOR Velocity", this, f -> "" + ((Elevator)(f)).getVelocity());
 		Robot.LOG.addSource("ELEVATOR Limit Switch State", leftMotor, f -> "" + ((TalonSRX)(f)).getSensorCollection().isRevLimitSwitchClosed());
 		Robot.LOG.addSource("ELEVATOR Height", this, f -> "" + ((Elevator)(f)).getHeightPercentage());
-		
 		rightMotor.follow(leftMotor);
 		rightMotor.setNeutralMode(NeutralMode.Brake);
 		rightMotor.configOpenloopRamp(0.2, 0);
@@ -70,6 +70,11 @@ public class Elevator extends Subsystem {
 		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		leftMotor.configMotionCruiseVelocity(700, 0);
 		leftMotor.configMotionAcceleration(5000, 0);
+		
+		leftMotor.configContinuousCurrentLimit(40, 0);
+		leftMotor.configPeakCurrentLimit(60, 0);
+		leftMotor.configPeakCurrentDuration(100, 0);
+		leftMotor.enableCurrentLimit(true);
 	}
 
 	@Override
