@@ -111,10 +111,10 @@ public class Drivetrain extends Subsystem {
 //		
 //		frontRight.config_kP(0, 7.25, 10);//original p values
 //		frontRight.config_kP(0, 30.0, 10);
-		frontRight.config_kP(0, 0, 0);
+		frontRight.config_kP(0, 0.0, 0); //pid0 drivetrain and velocity speed
 		frontRight.config_kD(0, 0.0, 10);
 		
-		frontRight.config_kP(1, 0.1, 10);
+		frontRight.config_kP(1, 5.0, 10);
 		frontRight.config_kD(1, 0.0, 10);
 		
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
@@ -177,7 +177,7 @@ public class Drivetrain extends Subsystem {
 //		SmartDashboard.putNumber("Drivetrain Error", getDrivetrainError());
 //		SmartDashboard.putNumber("Heading Error", getHeadingError());
 		SmartDashboard.putNumber("Heading", getAngle());
-		SmartDashboard.putNumber("Profile point", frontRight.getActiveTrajectoryHeading());
+//		SmartDashboard.putNumber("Profile point", frontRight.getActiveTrajectoryHeading());
 	}
 
 	public void arcadeDrive(double throttle, double turn, boolean squaredInputs) {
