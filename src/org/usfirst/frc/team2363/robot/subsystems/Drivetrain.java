@@ -83,7 +83,7 @@ public class Drivetrain extends Subsystem {
 
 //		frontLeft.config_kP(0, 7.25, 10);//original p values
 //		frontLeft.config_kP(0, 30.0, 10);
-		frontLeft.config_kP(0, 0.0, 10);
+		frontLeft.config_kP(0, 1.0, 10);
 		//25
 		frontLeft.config_kD(0, 0.0, 10);
 		
@@ -109,13 +109,13 @@ public class Drivetrain extends Subsystem {
 //		frontRight.config_kF(0, 2, 10);
 		frontRight.config_kF(0, 0, 10);
 //		
-//		frontRight.config_kP(0, 7.25, 10);//original p values
+//		frontRight.config_kP(0, 7.25, 10);		//original p values
 //		frontRight.config_kP(0, 30.0, 10);
-		frontRight.config_kP(0, 0.0, 0); //pid0 drivetrain and velocity speed
+		frontRight.config_kP(0, 1.0, 0); 		//pid0 drivetrain and velocity speed
 		frontRight.config_kD(0, 0.0, 10);
 		
-		frontRight.config_kP(1, 5.0, 10);
-		frontRight.config_kD(1, 0.0, 10);
+		frontRight.config_kP(1, 9.0, 10);		//pid1 calculates robot heading
+		frontRight.config_kD(1, 0.44, 10);
 		
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
@@ -136,6 +136,7 @@ public class Drivetrain extends Subsystem {
 		frontLeft.configMotionProfileTrajectoryPeriod(0, 10);
 		frontRight.configMotionProfileTrajectoryPeriod(0, 10);
 		
+		//current limiting
 		frontLeft.configContinuousCurrentLimit(40, 0);
 		frontLeft.configPeakCurrentLimit(60, 0);
 		frontLeft.configPeakCurrentDuration(100, 0);
@@ -177,6 +178,7 @@ public class Drivetrain extends Subsystem {
 //		SmartDashboard.putNumber("Drivetrain Error", getDrivetrainError());
 //		SmartDashboard.putNumber("Heading Error", getHeadingError());
 		SmartDashboard.putNumber("Heading", getAngle());
+		SmartDashboard.putNumber("Pigeon Temperature", getTemp());
 //		SmartDashboard.putNumber("Profile point", frontRight.getActiveTrajectoryHeading());
 	}
 
@@ -242,9 +244,17 @@ public class Drivetrain extends Subsystem {
 		pigeon.getYawPitchRoll(ypr);
 		return ypr[0];
 	}
-
+	
+	public double getTemp() {
+		return pigeon.getTemp();
+	}
+	
+//	public double CalibrationMode() {
+//	pigeon.EnterCalibrationMode(CalibrationMode.Temperature);
+//	}
+	
 	public void resetAngle() {
-		pigeon.setYaw(0, 0);
+		pigeon.setYaw(0.0, 0);
 	}
 
 	public TalonSRX getLeft() {

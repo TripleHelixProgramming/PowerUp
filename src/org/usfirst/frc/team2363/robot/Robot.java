@@ -12,6 +12,11 @@ import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team319.arcs.turning_calibrationArc;
 import org.usfirst.frc.team319.robot.commands.FollowArc;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
+
+//import com.ctre.phoenix.sensors.PigeonIMU;
+//import com.ctre.phoenix.sensors.PigeonIMU.CalibrationMode;
+
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -77,6 +82,8 @@ public class Robot extends IterativeRobot {
     		
 		elevator.reset();
 		CameraServer.getInstance().startAutomaticCapture();
+//		PigeonIMU.EnterCalibrationMode(CalibrationMode.Temperature);
+//		PigeonIMU.EnableTemperatureCompensation(false);
 //		drivetrain.getRight().setSelectedSensorPosition(0, 0, 0);
 //		drivetrain.getRight().setSelectedSensorPosition(0, 1, 0);
 //		drivetrain.getRight().getSensorCollection().setQuadraturePosition(0, 0);
@@ -104,6 +111,8 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+		drivetrain.resetAngle();
+	
 			
 //		autonomousCommand = new FollowTrajectory(new SameSideScalePart2());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new SameSideScalePhase2());
@@ -122,6 +131,7 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new RaiseElevator(Height.DROP);
 		if (autonomousCommand != null)
 			autonomousCommand.start();
+		
 		
 	}
 
