@@ -52,24 +52,10 @@ public class RobotMap {
 	
 	//Analog Switch
 	public static final int ANALOG_INPUT = 0;
-
-	//Tramp Solenoids
-	public static final int TRAMPS_DEPLOY = 2;
-	public static final int TRAMPS_RETRACT = 5;
-	public static final int LEFT1_TRAMP_RAISE = 3;
-	public static final int LEFT1_TRAMP_LOWER = 4;
-	public static final int LEFT2_TRAMP_RAISE = 3;
-	public static final int LEFT2_TRAMP_LOWER = 4;
-	public static final int RIGHT1_TRAMP_RAISE = 0;
-	public static final int RIGHT1_TRAMP_LOWER = 7;
-	public static final int RIGHT2_TRAMP_RAISE = 1;
-	public static final int RIGHT2_TRAMP_LOWER = 6;
 	
-	//Tramp Motors
-	public static final int FRONT_LEFT_TRAMP = 40;
-	public static final int REAR_LEFT_TRAMP = 42;
-	public static final int FRONT_RIGHT_TRAMP = 41;
-	public static final int REAR_RIGHT_TRAMP = 43;
+	//Climber Motors
+	public static final int FRONT_CLIMBER = 40;
+	public static final int REAR_CLIMBER = 41;
 
 	//Gripper Solenoids
 	public static final int CLAW_OPEN = 6;

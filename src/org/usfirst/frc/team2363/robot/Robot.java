@@ -7,11 +7,11 @@ import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
 import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.subsystems.Claws;
+import org.usfirst.frc.team2363.robot.subsystems.Climber;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
-import org.usfirst.frc.team2363.robot.subsystems.Tramps;
 import org.usfirst.frc.team319.paths.OppositeSideScale;
 import org.usfirst.frc.team319.paths.SameSideScale;
 import org.usfirst.frc.team319.paths.scaling_calibration;
@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
 	private final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	private final Compressor compressor = new Compressor();
 	public static Gripper gripper;
-	public static Tramps tramps;
+	public static Climber climber;
 	public static Elevator elevator;
 	public static Claws claws;
 	
@@ -62,7 +62,7 @@ public class Robot extends IterativeRobot {
 		LOG = new HelixLogger();
 	  
 		drivetrain = new Drivetrain();
-		tramps = new Tramps();
+		climber = new Climber();
 		elevator = new Elevator();
 		claws = new Claws();
 		gripper = new Gripper();
