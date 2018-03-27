@@ -79,11 +79,11 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
 //		frontLeft.config_kF(0, 2, 10);
-		frontLeft.config_kF(0, 0 , 10);
+		frontLeft.config_kF(0, 0.0, 10);
 
 //		frontLeft.config_kP(0, 7.25, 10);//original p values
 //		frontLeft.config_kP(0, 30.0, 10);
-		frontLeft.config_kP(0, 1.0, 10);
+		frontLeft.config_kP(0, 0.0, 10);
 		//25
 		frontLeft.config_kD(0, 0.0, 10);
 		
@@ -107,15 +107,15 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
 //		frontRight.config_kF(0, 2, 10);
-		frontRight.config_kF(0, 0, 10);
+		frontRight.config_kF(0, 2, 10);
 //		
 //		frontRight.config_kP(0, 7.25, 10);		//original p values
 //		frontRight.config_kP(0, 30.0, 10);
-		frontRight.config_kP(0, 1.0, 0); 		//pid0 drivetrain and velocity speed
+		frontRight.config_kP(0, 0.1, 0); 	//pid0 drivetrain and velocity speed
 		frontRight.config_kD(0, 0.0, 10);
 		
 		frontRight.config_kP(1, 9.0, 10);		//pid1 calculates robot heading
-		frontRight.config_kD(1, 0.44, 10);
+		frontRight.config_kD(1, 0.445, 10);
 		
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
 		frontRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 10);
