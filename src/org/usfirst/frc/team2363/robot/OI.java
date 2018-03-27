@@ -19,7 +19,6 @@ import org.usfirst.frc.team2363.robot.commands.elevator.ResetElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.ShootCube;
-import org.usfirst.frc.team2363.robot.commands.tramps.DeployTramps;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -48,11 +47,6 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
-		//tramp controls
-//		new JoystickButton(operatorController, RobotMap.RIGHT_STICK_BUTTON).whenPressed(new DeployTramps());
-//		new JoystickButton(operatorController, RobotMap.LOGO_RIGHT).whenPressed(new DeployLeftTramps());
-//		new JoystickButton(operatorController, RobotMap.LOGO_LEFT).whenPressed(new DeployRightTramps());
-		new JoystickButton(operatorController, RobotMap.LOGO_RIGHT).whenPressed(new DeployTramps());
 		
 //		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
 //		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
@@ -158,18 +152,9 @@ public class OI {
 		return -Math.abs(LOW_SPEED_SCALING - HIGH_SPEED_SCALING) * Math.abs(x) + LOW_SPEED_SCALING;
 	}
 	
-	//Tramp Power
-	public double getLeftTrampPower() {
+	//Climber Power
+	public double getClimberPower() {
 		double stick = -operatorController.getRawAxis(RIGHT_STICK_Y);
-		stick *= Math.abs(stick);
-		if (Math.abs(stick) < 0.05) {
-			stick = 0;
-		}
-		return stick;
-	}
-	
-	public double getRightTrampPower() {
-		double stick = -operatorController.getRawAxis(LEFT_STICK_Y);
 		stick *= Math.abs(stick);
 		if (Math.abs(stick) < 0.05) {
 			stick = 0;
