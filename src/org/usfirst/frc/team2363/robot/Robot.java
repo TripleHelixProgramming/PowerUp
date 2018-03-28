@@ -9,6 +9,7 @@ import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team2363.robot.subsystems.Tramps;
+import org.usfirst.frc.team319.arcs.SameSideSwitchArc;
 import org.usfirst.frc.team319.arcs.scaling_calibrationArc;
 import org.usfirst.frc.team319.arcs.turning_calibrationArc;
 import org.usfirst.frc.team319.robot.commands.FollowArc;
@@ -123,7 +124,7 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
 //		if (!autoOverride.get()) {
 //			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
-			autonomousCommand = new FollowArc(new scaling_calibrationArc());
+			autonomousCommand = new FollowArc(new SameSideSwitchArc());
 //		} else {
 //			autonomousCommand = AutoRoutines.getAutoRoutine();
 //		}
