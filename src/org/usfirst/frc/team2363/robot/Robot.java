@@ -5,6 +5,7 @@ import org.iif.th.util.logger.HelixEvents;
 import org.iif.th.util.logger.HelixLogger;
 import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
 import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
+import org.usfirst.frc.team2363.robot.commands.autonomous.SameSideSwitchGroup;
 import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
 import org.usfirst.frc.team2363.robot.subsystems.Claws;
 import org.usfirst.frc.team2363.robot.subsystems.Climber;
@@ -14,6 +15,7 @@ import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
 import org.usfirst.frc.team319.paths.OppositeSideScale;
 import org.usfirst.frc.team319.paths.SameSideScale;
+import org.usfirst.frc.team319.paths.SameSideSwitch;
 import org.usfirst.frc.team319.paths.scaling_calibration;
 import org.usfirst.frc.team319.paths.turning_calibration;
 import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
@@ -114,7 +116,7 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new FollowTrajectory(new Baseline());
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
 		if (!autoOverride.get()) {
-			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
+			autonomousCommand = new SameSideSwitchGroup(true);
 //			autonomousCommand = null;
 		} else {
 			autonomousCommand = AutoRoutines.getAutoRoutine();

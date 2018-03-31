@@ -17,9 +17,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class SameSideSwitchGroup extends CommandGroup {
 
     public SameSideSwitchGroup(boolean flipped) {
+    	addSequential(new RaiseElevator(Height.DROP));
     	addSequential(new FollowTrajectory(new SameSideSwitch(flipped)));
+    	addSequential(new RaiseElevator(Height.SWITCH));
     	addSequential(new FollowTrajectory(new SameSideSwitchPart1point3(flipped)));
-    	addParallel(new RaiseElevator(Height.SWITCH));
     	addSequential(new FollowTrajectory(new SameSideSwitchPart1point6(flipped)));
     	addSequential(new AutoEject());
     	

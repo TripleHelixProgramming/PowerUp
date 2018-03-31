@@ -1,16 +1,11 @@
 package org.usfirst.frc.team2363.robot;
 
-import static org.usfirst.frc.team2363.robot.RobotMap.DRIVER_PORT;
-import static org.usfirst.frc.team2363.robot.RobotMap.HIGH_SPEED_SCALING;
-import static org.usfirst.frc.team2363.robot.RobotMap.LEFT_STICK_Y;
-import static org.usfirst.frc.team2363.robot.RobotMap.LOW_SPEED_SCALING;
-import static org.usfirst.frc.team2363.robot.RobotMap.OPERATOR_PORT;
-import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_X;
-import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_STICK_Y;
-import static org.usfirst.frc.team2363.robot.RobotMap.RIGHT_TRIGGER;
+import static org.usfirst.frc.team2363.robot.RobotMap.*;
 
 import org.usfirst.frc.team2363.robot.commands.claws.CloseClaw;
 import org.usfirst.frc.team2363.robot.commands.claws.OpenClaw;
+import org.usfirst.frc.team2363.robot.commands.climber.ExtendClimber;
+import org.usfirst.frc.team2363.robot.commands.climber.RetractClimber;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.JoystickDrive;
 import org.usfirst.frc.team2363.robot.commands.drivetrain.TurboDrive;
 import org.usfirst.frc.team2363.robot.commands.elevator.ManualPositionalElevator;
@@ -19,6 +14,7 @@ import org.usfirst.frc.team2363.robot.commands.elevator.ResetElevator;
 import org.usfirst.frc.team2363.robot.commands.gripper.EjectCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.IntakeCube;
 import org.usfirst.frc.team2363.robot.commands.gripper.ShootCube;
+import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -47,7 +43,6 @@ public class OI {
 		new JoystickButton(operatorController, RobotMap.RB).whenPressed(new OpenClaw());
 		new JoystickButton(operatorController, RobotMap.LB).whenPressed(new CloseClaw());
 		new JoystickButton(operatorController, RobotMap.A).whenPressed(new ManualPositionalElevator());
-		
 //		new JoystickButton(driverController, RobotMap.RB).whenPressed(new SlowJoystickDrive());
 //		new JoystickButton(driverController, RobotMap.RB).whenReleased(new JoystickDrive());
 		
@@ -71,9 +66,29 @@ public class OI {
 				return driverController.getRawAxis(RIGHT_TRIGGER) >= 0.5;
 			}
 		};
+		
+		Button climberElevator = new Button() {
+
+			@Override
+			public boolean get() {
+				return operatorController.getRawAxis(RIGHT_TRIGGER) >= 0.5;
+			}
+		};
+//		Button climberRetract = new Button() {
+//
+//			@Override
+//			public boolean get() {
+//				return operatorController.getRawAxis(LEFT_TRIGGER) >= 0.5;
+//			}
+//		};
+		
 		turbo.whenPressed(new TurboDrive());
 		
 		turbo.whenReleased(new JoystickDrive());
+		
+		climberElevator.whenPressed(new RaiseElevator(Elevator.Height.CLIMBER));
+		
+//		climberRetract.whenPressed(new RetractClimber());
 		
 		new Button() {
 

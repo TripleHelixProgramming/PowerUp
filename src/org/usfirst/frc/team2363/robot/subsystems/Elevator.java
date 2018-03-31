@@ -27,6 +27,7 @@ public class Elevator extends Subsystem {
 		DROP(300),
 		ROTATE(390),
 		SWITCH(1500),//original switch height at 1500, currently set for cube rotation 390
+		CLIMBER(3890),
 		SCALE(4700),
 		RUNG(4700);
 		

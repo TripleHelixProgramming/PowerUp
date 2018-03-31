@@ -104,7 +104,7 @@ public class AutoRoutines {
 					selectedAutoType.getDelay(),
 					null);
 		case OPPOSITE_SIDE_SCALE:
-			return new AutoGroup(
+			return new AutoGroupNoDeliver(
 					new OppositeSideScale(flipped), 
 					selectedAutoType.getHeight(),
 					selectedAutoType.getDelay(),
@@ -118,12 +118,13 @@ public class AutoRoutines {
 					new SameSideScalePhase2(flipped));
 //					null);
 		case SAME_SIDE_SWITCH:
-			return new AutoGroup(
-					new SameSideSwitch(flipped), 
-					selectedAutoType.getHeight(),
-					selectedAutoType.getDelay(),
+			return new SameSideSwitchGroup(
+					flipped);
+//					new SameSideSwitch(flipped), 
+//					selectedAutoType.getHeight(),
+//					selectedAutoType.getDelay(),
 //					new SameSideSwitchPhase2(flipped));
-					null);
+//					null);
 		case SCALE_TO_SWITCH:
 			return new AutoGroup(
 					new SameSideScale(flipped), 

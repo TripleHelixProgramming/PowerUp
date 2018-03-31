@@ -56,6 +56,10 @@ public class RobotMap {
 	//Climber Motors
 	public static final int FRONT_CLIMBER = 40;
 	public static final int REAR_CLIMBER = 41;
+	
+	//Climber Solenoids
+	public static final int CLIMBER_EXTEND = 2;
+	public static final int CLIMBER_RETRACT = 5;
 
 	//Gripper Solenoids
 	public static final int CLAW_OPEN = 6;

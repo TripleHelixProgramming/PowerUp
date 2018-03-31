@@ -20,16 +20,16 @@ public class SameSideScalePhase2 extends CommandGroup {
 
 
     public SameSideScalePhase2(boolean flipped) {
-    	addParallel(new RaiseElevator(Height.GROUND));
         addSequential(new FollowTrajectory(new SameSideScalePart2(flipped)));
+        addParallel(new RaiseElevator(Height.GROUND));
         addParallel(new IntakeCube());
         addSequential(new FollowTrajectory(new SameSideScalePart3(flipped)));
-        addParallel(new StopWheels());
+//        addParallel(new StopWheels());
         addSequential(new FollowTrajectory(new SameSideScalePart4(flipped)));
+        addParallel(new StopWheels());
         addParallel(new RaiseElevator(Height.SCALE));
         addSequential(new FollowTrajectory(new SameSideScalePart5(flipped)));
-        addParallel(new AutoEject());
-        
+//        addParallel(new AutoEject());
     }
     
 }
