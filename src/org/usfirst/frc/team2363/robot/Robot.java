@@ -13,11 +13,13 @@ import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator;
 import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
 import org.usfirst.frc.team2363.robot.subsystems.Gripper;
+//import org.usfirst.frc.team319.arcs.turning_calibrationArc;
 import org.usfirst.frc.team319.paths.OppositeSideScale;
 import org.usfirst.frc.team319.paths.SameSideScale;
 import org.usfirst.frc.team319.paths.SameSideSwitch;
 import org.usfirst.frc.team319.paths.scaling_calibration;
 import org.usfirst.frc.team319.paths.turning_calibration;
+//import org.usfirst.frc.team319.robot.commands.FollowArc;
 import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -108,19 +110,20 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-			
+		
+		autonomousCommand =  new FollowTrajectory(new turning_calibration());
 //		autonomousCommand = new FollowTrajectory(new SameSideScalePart2());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new SameSideScalePhase2());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new ScaleToSwitchPhase2());
 //		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2(false));
 //		autonomousCommand = new FollowTrajectory(new Baseline());
 //		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
-		if (!autoOverride.get()) {
+/*		if (!autoOverride.get()) {
 			autonomousCommand = new SameSideSwitchGroup(true);
 //			autonomousCommand = null;
 		} else {
 			autonomousCommand = AutoRoutines.getAutoRoutine();
-		}
+		}*/
 		
 //		autonomousCommand = new FollowTrajectory(new SameSideScale(true));
 //		autonomousCommand = new RaiseElevator(Height.DROP);

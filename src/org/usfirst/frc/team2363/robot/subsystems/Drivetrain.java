@@ -240,10 +240,10 @@ public class Drivetrain extends Subsystem {
 		frontRight.configOpenloopRamp(0.5 + (0.3 * heightPercentage), 0);//0.4, 0.6
 		frontLeft.configOpenloopRamp(0.5 + (0.3 * heightPercentage), 0);
 	}
-/*
+
 	public void setSpeed(int i) {
 		// TODO Auto-generated method stub
 		
 	}
-*/
+
 }
