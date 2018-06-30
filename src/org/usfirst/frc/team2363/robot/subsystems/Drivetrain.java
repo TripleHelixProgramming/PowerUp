@@ -246,4 +246,9 @@ public class Drivetrain extends Subsystem {
 		
 	}
 */
+
+	public void setSpeed(int i) {
+		// TODO Auto-generated method stub
+		
+	}
 }
