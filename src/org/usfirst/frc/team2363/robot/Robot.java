@@ -128,7 +128,7 @@ public class Robot extends IterativeRobot {
 //		autonomousCommand = new FollowTrajectory(new SameSideScale(true));
 //		autonomousCommand = new RaiseElevator(Height.DROP);
 		if (autonomousCommand != null)
-			autonomousCommand.start();
+				autonomousCommand.start();
 		
 	}
 
