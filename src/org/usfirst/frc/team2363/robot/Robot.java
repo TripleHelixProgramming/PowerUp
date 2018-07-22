@@ -3,24 +3,24 @@ package org.usfirst.frc.team2363.robot;
 
 import org.iif.th.util.logger.HelixEvents;
 import org.iif.th.util.logger.HelixLogger;
-import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
-import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
-import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
-import org.usfirst.frc.team2363.robot.subsystems.Claws;
-import org.usfirst.frc.team2363.robot.subsystems.Climber;
+//import org.usfirst.frc.team2363.robot.commands.autonomous.AutoRoutines;
+//import org.usfirst.frc.team2363.robot.commands.autonomous.PathTesting;
+//import org.usfirst.frc.team2363.robot.commands.elevator.RaiseElevator;
+//import org.usfirst.frc.team2363.robot.subsystems.Claws;
+//import org.usfirst.frc.team2363.robot.subsystems.Climber;
 import org.usfirst.frc.team2363.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team2363.robot.subsystems.Elevator;
-import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
-import org.usfirst.frc.team2363.robot.subsystems.Gripper;
-import org.usfirst.frc.team319.paths.OppositeSideScale;
-import org.usfirst.frc.team319.paths.SameSideScale;
-import org.usfirst.frc.team319.paths.scaling_calibration;
-import org.usfirst.frc.team319.paths.turning_calibration;
-import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
+//import org.usfirst.frc.team2363.robot.subsystems.Elevator;
+//import org.usfirst.frc.team2363.robot.subsystems.Elevator.Height;
+//import org.usfirst.frc.team2363.robot.subsystems.Gripper;
+//import org.usfirst.frc.team319.paths.OppositeSideScale;
+//import org.usfirst.frc.team319.paths.SameSideScale;
+//import org.usfirst.frc.team319.paths.scaling_calibration;
+//import org.usfirst.frc.team319.paths.turning_calibration;
+//import org.usfirst.frc.team319.robot.commands.FollowTrajectory;
 
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.CameraServer;
+//import edu.wpi.first.wpilibj.Compressor;
+//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -42,6 +42,8 @@ public class Robot extends IterativeRobot {
 	// Subsystems
 	public static Drivetrain drivetrain;
 	private final PowerDistributionPanel pdp = new PowerDistributionPanel();
+	
+	/* deleted subsystems not present on programming bot
 	private final Compressor compressor = new Compressor();
 	public static Gripper gripper;
 	public static Climber climber;
@@ -50,6 +52,7 @@ public class Robot extends IterativeRobot {
 	
 	public static AutoRoutines autoRoutines = new AutoRoutines();
 	private static DigitalInput autoOverride = new DigitalInput(6);  // default
+	 */	
 	
 	// declare SmartDashboard tools
 	Command autonomousCommand;
@@ -62,14 +65,17 @@ public class Robot extends IterativeRobot {
 		LOG = new HelixLogger();
 	  
 		drivetrain = new Drivetrain();
+		
+		/* deleted not present on programming bot
 		climber = new Climber();
 		elevator = new Elevator();
 		claws = new Claws();
 		gripper = new Gripper();
+		 */
 		
 		LOG.addSource("Total Current", pdp, f -> "" + ((PowerDistributionPanel)f).getTotalCurrent());
-		LOG.addSource("COMPRESSOR State", compressor, f -> "" + ((Compressor)f).enabled());
-		LOG.addSource("COMPRESSOR Current", compressor, f -> "" + ((Compressor)(f)).getCompressorCurrent());
+		//LOG.addSource("COMPRESSOR State", compressor, f -> "" + ((Compressor)f).enabled());
+		//LOG.addSource("COMPRESSOR Current", compressor, f -> "" + ((Compressor)(f)).getCompressorCurrent());
 	}
     
 	/**
@@ -81,8 +87,8 @@ public class Robot extends IterativeRobot {
 		// Create the controller interface
 		oi = new OI();
     		
-		elevator.reset();
-		CameraServer.getInstance().startAutomaticCapture();
+		//elevator.reset();
+		//CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**
@@ -99,32 +105,33 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 		// makes sure only one command per subsystems runs at a time
 		Scheduler.getInstance().run();
-		elevator.goTo(elevator.getPosition());
+		//elevator.goTo(elevator.getPosition());
 		
-		AutoRoutines.updateGameState();
+		//AutoRoutines.updateGameState();
 	}
 
 	@Override
 	public void autonomousInit() {
-			
-//		autonomousCommand = new FollowTrajectory(new SameSideScalePart2());
-//		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new SameSideScalePhase2());
-//		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new ScaleToSwitchPhase2());
-//		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2(false));
-//		autonomousCommand = new FollowTrajectory(new Baseline());
-//		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
+		
+		/* deleted all of autonomous
+		autonomousCommand = new FollowTrajectory(new SameSideScalePart2());
+		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new SameSideScalePhase2());
+		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new ScaleToSwitchPhase2());
+		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2(false));
+		autonomousCommand = new FollowTrajectory(new Baseline());
+		autonomousCommand = new AutoGroup(new SameSideSwitch(), Height.SWITCH, 3, new SameSideSwitchPhase2());
 		if (!autoOverride.get()) {
 			autonomousCommand = new FollowTrajectory(new SameSideScale(true));
-//			autonomousCommand = null;
+			autonomousCommand = null;
 		} else {
 			autonomousCommand = AutoRoutines.getAutoRoutine();
 		}
 		
-//		autonomousCommand = new FollowTrajectory(new SameSideScale(true));
-//		autonomousCommand = new RaiseElevator(Height.DROP);
+		autonomousCommand = new FollowTrajectory(new SameSideScale(true));
+		autonomousCommand = new RaiseElevator(Height.DROP);
 		if (autonomousCommand != null)
 			autonomousCommand.start();
-		
+		 */
 	}
 
 	/**

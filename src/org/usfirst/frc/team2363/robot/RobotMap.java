@@ -16,7 +16,7 @@ public class RobotMap {
 		
 	//Controllers
 	public static final int DRIVER_PORT = 0;
-	public static final int OPERATOR_PORT = 1;
+	//public static final int OPERATOR_PORT = 1;
 		
 	//XboxOne Joysticks
 	public static final int LEFT_STICK_X = 0;
@@ -39,17 +39,18 @@ public class RobotMap {
 	public static final int RIGHT_STICK_BUTTON = 10;
 
 	//Drivetrain Talons
-	public static final int FRONT_LEFT_TALON_ID = 10;
+	public static final int FRONT_LEFT_TALON_ID = 14;
 	public static final int MIDDLE_LEFT_TALON_ID = 12;
-	public static final int REAR_LEFT_TALON_ID = 14;
-	public static final int FRONT_RIGHT_TALON_ID = 11;
+	public static final int REAR_LEFT_TALON_ID = 10;
+	public static final int FRONT_RIGHT_TALON_ID = 15;
 	public static final int MIDDLE_RIGHT_TALON_ID = 13;
-	public static final int REAR_RIGHT_TALON_ID = 15;
+	public static final int REAR_RIGHT_TALON_ID = 11;
 
 	//PCMs Currently using PCM_0 but is ready for use in the event that we could need 2 PCMs
-	public static final int PCM_0 = 0;
-	public static final int PCM_1 = 1;
-	
+	public static final int PCM_0 = 60;
+	//public static final int PCM_1 = 61;
+
+	/*	deleted items not present on programming bot
 	//Analog Switch
 	public static final int ANALOG_INPUT = 0;
 	
@@ -64,7 +65,7 @@ public class RobotMap {
 	//Digital IO -Gripper
 	public static final int HAS_CUBE = 0;
   
-  //Elevator Digital IO
+  	//Elevator Digital IO
 	public static final int DEFAULT_POSITION = 1;
   
 	// Gripper TalonSRX
@@ -78,7 +79,7 @@ public class RobotMap {
 	//LIMIT SWITCHES
 	public static final int ELEVATOR_GROUND_LIMIT_CHANNEL = 2;
 	public static final int ELEVATOR_UPPER_LIMIT_CHANNEL = 3;
-
+*/
 }
 
 
