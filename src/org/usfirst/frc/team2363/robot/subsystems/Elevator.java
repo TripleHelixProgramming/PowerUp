@@ -67,7 +67,7 @@ public class Elevator extends Subsystem {
 		leftMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 		leftMotor.overrideLimitSwitchesEnable(true);
 		leftMotor.config_kP(0, 5, 10);
-		leftMotor.config_kD(0, 4000, 10);
+		leftMotor.config_kD(0, 4500, 10);
 		leftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		leftMotor.configMotionCruiseVelocity(700, 0);
 		leftMotor.configMotionAcceleration(5000, 0);

@@ -30,16 +30,16 @@ public class Drivetrain extends Subsystem {
 	
 	// Talons
 	private TalonSRX frontLeft = new TalonSRX(FRONT_LEFT_TALON_ID);
-	private BaseMotorController middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
-	private BaseMotorController rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
-//	private BaseMotorController middleLeft = new VictorSPX(MIDDLE_LEFT_TALON_ID);
-//	private BaseMotorController rearLeft = new VictorSPX(REAR_LEFT_TALON_ID);
+//	private BaseMotorController middleLeft = new TalonSRX(MIDDLE_LEFT_TALON_ID);
+//	private BaseMotorController rearLeft = new TalonSRX(REAR_LEFT_TALON_ID);
+	private BaseMotorController middleLeft = new VictorSPX(MIDDLE_LEFT_TALON_ID);
+	private BaseMotorController rearLeft = new VictorSPX(REAR_LEFT_TALON_ID);
 	
 	private TalonSRX frontRight = new TalonSRX(FRONT_RIGHT_TALON_ID);
-	private BaseMotorController middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
-	private BaseMotorController rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
-//	private BaseMotorController middleRight = new VictorSPX(MIDDLE_RIGHT_TALON_ID);
-//	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TALON_ID);
+//	private BaseMotorController middleRight = new TalonSRX(MIDDLE_RIGHT_TALON_ID);
+//	private BaseMotorController rearRight = new TalonSRX(REAR_RIGHT_TALON_ID);
+	private BaseMotorController middleRight = new VictorSPX(MIDDLE_RIGHT_TALON_ID);
+	private BaseMotorController rearRight = new VictorSPX(REAR_RIGHT_TALON_ID);
 
 	// navX Gryo
 	private static AHRS ahrs;
@@ -75,7 +75,7 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontLeft.setSensorPhase(true);
 		frontLeft.config_kF(0, 2, 10);
-		frontLeft.config_kP(0, 7.25, 10);//original p values
+		frontLeft.config_kP(0, 7.16, 10);//original p values
 //		frontLeft.config_kP(0, 10.0, 10);
 		//25
 		frontLeft.config_kD(0, 0.0, 10);
@@ -99,7 +99,7 @@ public class Drivetrain extends Subsystem {
 		// Make sure to set Sensor phase appropriately for each master 
 		frontRight.setSensorPhase(true); 
 		frontRight.config_kF(0, 2, 10);
-		frontRight.config_kP(0, 7.25, 10);//original p values
+		frontRight.config_kP(0, 7.16, 10);//original p values
 //		frontRight.config_kP(0, 10.0, 10);
 		frontRight.config_kD(0, 0.0, 10);
 		/* status 10 provides the trajectory target for motion profile AND motion magic */

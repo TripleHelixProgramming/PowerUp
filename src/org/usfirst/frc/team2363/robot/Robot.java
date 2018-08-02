@@ -109,7 +109,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 			
-//		autonomousCommand = new FollowTrajectory(new SameSideScalePart2());
+//		autonomousCommand = new FollowTrajectory(new turning_calibration());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new SameSideScalePhase2());
 //		autonomousCommand = new AutoGroup(new SameSideScale(), Height.SCALE, 2.5, new ScaleToSwitchPhase2());
 //		autonomousCommand = new AutoGroup(new OppositeSideScale(), Height.SCALE, 7.5, new OppositeSideScalePhase2(false));

@@ -102,7 +102,8 @@ public class AutoRoutines {
 					new CenterSwitch(flipped), 
 					selectedAutoType.getHeight(),
 					selectedAutoType.getDelay(),
-					null);
+					new CenterSwitchPhase2(flipped));
+//					null);
 		case OPPOSITE_SIDE_SCALE:
 			return new AutoGroupNoDeliver(
 					new OppositeSideScale(flipped), 
