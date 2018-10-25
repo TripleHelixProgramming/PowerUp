@@ -26,10 +26,11 @@ public class CenterSwitchPhase2 extends CommandGroup {
 	        addParallel(new CloseClaw());
 //	        addParallel(new StopWheels());
 	        addSequential(new FollowTrajectory(new CenterSwitchPart4(flipped)));
+//	        addParallel(new CloseClaw());
 	        addParallel(new StopWheels());
 	        addParallel(new RaiseElevator(Height.SWITCH));
 	        addSequential(new FollowTrajectory(new CenterSwitchPart5(flipped)));
-	        addSequential(new AutoEject());
+//	        addSequential(new AutoEject());
 	    }
 
 }
